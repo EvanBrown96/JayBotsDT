@@ -31,10 +31,13 @@ pointer_id = canvas.create_oval(CANVAS_SIZE/2-10, CANVAS_SIZE/2-10, CANVAS_SIZE/
 
 
 def update_pos(event):
-    canvas.coords(pointer_id, round(event.x-10, -1), round(event.y-10, -1), round(event.x+10, -1), round(event.y+10, -1))
-    send = "{},{}".format(-1*(event.y-CANVAS_SIZE/2), event.x-CANVAS_SIZE/2)
+    global conn_state, conn
+    raw_x = round(event.x, -1)
+    raw_y = round(event.y, -1)
+    canvas.coords(pointer_id, raw_x-10, raw_y-10, raw_x+10, raw_y+10)
+    msg = "{},{}\n".format(-1*(raw_x-CANVAS_SIZE/2), raw_y-CANVAS_SIZE/2)
     try:
-        conn.send(send.encode('utf-8'))
+        conn.send(msg.encode('utf-8'))
     except ConnectionError:
         conn_state = False
         conn_text.configure(text='No connection')
@@ -47,7 +50,7 @@ def check_state():
     global conn_state, conn
     if conn_state:
         try:
-            conn.send(b"persist")
+            conn.send(b"persist\n")
         except ConnectionError:
             conn_state = False
             conn_text.configure(text='No connection')
