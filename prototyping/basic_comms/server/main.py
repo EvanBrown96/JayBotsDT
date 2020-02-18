@@ -4,12 +4,10 @@ import tkinter.ttk as ttk
 
 # setup socket
 PORT = 10001
+addr = input("Enter IP Address of rover")
 sock = socket.socket()
-sock.bind(('', PORT))
-sock.listen()
 
 conn_state = False
-conn = None
 
 # setup GUI
 master = tk.Tk()
@@ -31,13 +29,13 @@ pointer_id = canvas.create_oval(CANVAS_SIZE/2-10, CANVAS_SIZE/2-10, CANVAS_SIZE/
 
 
 def update_pos(event):
-    global conn_state, conn
+    global conn_state, sock
     raw_x = round(event.x, -1)
     raw_y = round(event.y, -1)
     canvas.coords(pointer_id, raw_x-10, raw_y-10, raw_x+10, raw_y+10)
-    msg = "{},{}\n".format(-1*(raw_x-CANVAS_SIZE/2), raw_y-CANVAS_SIZE/2)
+    msg = "{},{}\n".format(raw_x-CANVAS_SIZE/2, -1*(raw_y-CANVAS_SIZE/2))
     try:
-        conn.send(msg.encode('utf-8'))
+        sock.send(msg.encode('utf-8'))
     except ConnectionError:
         conn_state = False
         conn_text.configure(text='No connection')
@@ -47,30 +45,25 @@ canvas.bind('<Button-1>', update_pos)
 
 
 def check_state():
-    global conn_state, conn
+    global conn_state, sock
     if conn_state:
         try:
-            conn.send(b"persist\n")
+            sock.send(b"persist\n")
         except ConnectionError:
             conn_state = False
             conn_text.configure(text='No connection')
     else:
-        conn, addr = sock.accept()
-        conn_state = True
-        conn_text.configure(text='Connected to {}'.format(addr))
+        try:
+            sock.connect((addr, PORT))
+        except ConnectionRefusedError:
+            pass
+        else:
+            conn_state = True
+            conn_text.configure(text='Connected to {}'.format(addr))
 
     master.after(1000, check_state)
 
-master.after(1000, check_state)
 
+master.after(0, check_state)
 
 master.mainloop()
-#
-# while True:
-#
-#     conn, addr = sock.accept()
-#     print("Connected to rover.")
-#
-#     conn.send(b"Connected to Server")
-#
-#     conn.close()
