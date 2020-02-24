@@ -33,7 +33,7 @@ def update_pos(event):
     raw_x = round(event.x, -1)
     raw_y = round(event.y, -1)
     canvas.coords(pointer_id, raw_x-10, raw_y-10, raw_x+10, raw_y+10)
-    msg = "{},{}\n".format(raw_x-CANVAS_SIZE/2, -1*(raw_y-CANVAS_SIZE/2))
+    msg = "{},{}".format(raw_x-CANVAS_SIZE/2, -1*(raw_y-CANVAS_SIZE/2))
     try:
         sock.send(msg.encode('utf-8'))
     except ConnectionError:
@@ -48,7 +48,7 @@ def check_state():
     global conn_state, sock
     if conn_state:
         try:
-            sock.send(b"persist\n")
+            sock.send(b"persist")
         except ConnectionError:
             conn_state = False
             conn_text.configure(text='No connection')
