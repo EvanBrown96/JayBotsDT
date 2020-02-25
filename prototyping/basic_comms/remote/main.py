@@ -18,22 +18,29 @@ conn_text.grid(row=0, column=0)
 divider = ttk.Separator(master, orient='horizontal')
 divider.grid(row=1, column=0, sticky=tk.W+tk.E)
 
-CANVAS_SIZE = 200
+CANVAS_SIZE = 400
+MIDDLE = CANVAS_SIZE/2
 canvas = tk.Canvas(master, height=CANVAS_SIZE, width=CANVAS_SIZE)
 canvas.grid(row=2, column=0)
 
 
-canvas.create_line(CANVAS_SIZE/2, 0, CANVAS_SIZE/2, CANVAS_SIZE)
-canvas.create_line(0, CANVAS_SIZE/2, CANVAS_SIZE, CANVAS_SIZE/2)
-pointer_id = canvas.create_oval(CANVAS_SIZE/2-10, CANVAS_SIZE/2-10, CANVAS_SIZE/2+10, CANVAS_SIZE/2+10, fill='black')
+canvas.create_line(MIDDLE, 0, MIDDLE, CANVAS_SIZE)
+canvas.create_line(0, MIDDLE, CANVAS_SIZE, MIDDLE)
+canvas.create_polygon([0, 0, MIDDLE, 0, 0, MIDDLE, 0, 0], fill='black')
+canvas.create_polygon([CANVAS_SIZE, 0, CANVAS_SIZE, MIDDLE, MIDDLE, 0, CANVAS_SIZE, 0], fill='black')
+canvas.create_polygon([CANVAS_SIZE, CANVAS_SIZE, CANVAS_SIZE, MIDDLE, MIDDLE, CANVAS_SIZE, CANVAS_SIZE, CANVAS_SIZE], fill='black')
+canvas.create_polygon([0, CANVAS_SIZE, MIDDLE, CANVAS_SIZE, 0, MIDDLE, 0, CANVAS_SIZE], fill='black')
+pointer_id = canvas.create_oval(MIDDLE-10, MIDDLE-10, MIDDLE+10, MIDDLE+10, fill='black')
 
 
 def update_pos(event):
     global conn_state, sock
     raw_x = round(event.x, -1)
     raw_y = round(event.y, -1)
+    if raw_x+raw_y > MIDDLE:
+        return
     canvas.coords(pointer_id, raw_x-10, raw_y-10, raw_x+10, raw_y+10)
-    msg = "{},{}".format(raw_x-CANVAS_SIZE/2, -1*(raw_y-CANVAS_SIZE/2))
+    msg = "{},{}".format(raw_x-MIDDLE, -1*(raw_y-MIDDLE))
     try:
         sock.send(msg.encode('utf-8'))
     except ConnectionError:
@@ -55,7 +62,7 @@ def check_state():
     else:
         try:
             sock.connect((addr, PORT))
-        except ConnectionRefusedError:
+        except Exception:
             pass
         else:
             conn_state = True

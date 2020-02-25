@@ -22,24 +22,31 @@ while True:
         if not data:
             break
         if data != "persist":
-            velocity = int(data.split(',')[0])
-            angle = int(data.split(',')[1])
+            x = int(data.split(',')[0])
+            y = int(data.split(',')[1])
 
-            if velocity > 0:
+            left_velocity = (y+x)/2
+            right_velocity = (y-x)/2
+
+            left_spd.value = float(abs(left_velocity))/200
+            right_spd.value = float(abs(right_velocity))/200
+
+            if left_velocity > 0:
                 left_fwd.on()
-                right_fwd.on()
                 left_bck.off()
-                right_bck.off()
-                left_spd.value = float(velocity)/100
-                right_spd.value = float(velocity)/100
-            elif velocity < 0:
+            elif left_velocity < 0:
                 left_fwd.off()
-                right_fwd.off()
                 left_bck.on()
+            else:
+                left_fwd.off()
+                left_fwd.on()
+
+            if right_velocity > 0:
+                right_fwd.on()
+                right_bck.off()
+            elif right_velocity < 0:
+                right_fwd.off()
                 right_bck.on()
-                left_spd.value = float(velocity)/100
-                right_spd.value = float(velocity)/100
-
-
-
-
+            else:
+                right_fwd.off()
+                right_bck.on()
