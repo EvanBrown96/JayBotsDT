@@ -28,8 +28,8 @@ while True:
             left_velocity = (y+x)/2
             right_velocity = (y-x)/2
 
-            left_spd.value = float(abs(left_velocity))/200
-            right_spd.value = float(abs(right_velocity))/200
+            left_spd.value = float(abs(left_velocity))/100
+            right_spd.value = float(abs(right_velocity))/100
 
             if left_velocity > 0:
                 left_fwd.on()
