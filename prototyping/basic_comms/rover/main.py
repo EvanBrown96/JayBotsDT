@@ -22,8 +22,8 @@ while True:
         if not data:
             break
         if data != "persist":
-            x = int(data.split(',')[0])
-            y = int(data.split(',')[1])
+            x = int(float(data.split(',')[0]))
+            y = int(float(data.split(',')[1]))
 
             left_velocity = (y+x)/2
             right_velocity = (y-x)/2

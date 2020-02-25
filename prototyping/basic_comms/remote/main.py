@@ -37,8 +37,7 @@ def update_pos(event):
     global conn_state, sock
     raw_x = round(event.x, -1)
     raw_y = round(event.y, -1)
-    if raw_x+raw_y > MIDDLE:
-        return
+
     canvas.coords(pointer_id, raw_x-10, raw_y-10, raw_x+10, raw_y+10)
     msg = "{},{}".format(raw_x-MIDDLE, -1*(raw_y-MIDDLE))
     try:
