@@ -8,11 +8,11 @@ sock.listen()
 
 left_fwd = DigitalOutputDevice(20)
 left_bck = DigitalOutputDevice(21)
-left_spd = PWMOutputDevice(12, frequency=800)
+left_spd = PWMOutputDevice(12, frequency=500)
 
 right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
-right_spd = PWMOutputDevice(13, frequency=800)
+right_spd = PWMOutputDevice(13, frequency=500)
 
 while True:
     conn, addr = sock.accept()
