@@ -1,4 +1,8 @@
-from gpiozero import DigitalOutputDevice
+from gpiozero import DistanceSensor
+import time
 
-trigger = DigitalOutputDevice(17)
-trigger.blink(on_time=0.00001, off_time=1)
+test = DistanceSensor(24, 23, max_distance=2.0)
+
+while True:
+    print(test.distance)
+    time.sleep(0.5)
