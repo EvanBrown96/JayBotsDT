@@ -16,6 +16,9 @@ namespace RoverController
     public partial class Form1 : Form
     {
 
+        /// <summary>
+        /// A list of rover abstractions which can be used to interact with each rover
+        /// </summary>
         private List<RoverContainer> rovers = new List<RoverContainer>();
 
         public Form1()
@@ -23,6 +26,11 @@ namespace RoverController
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Prompt user for connection details upon clicking "Add Connection" button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addConn_Click(object sender, EventArgs e)
         {
             IP_Dialog dialog = new IP_Dialog(this);
@@ -30,6 +38,11 @@ namespace RoverController
             dialog.Focus();
         }
 
+        /// <summary>
+        /// Create a new rover object in the GUI and initialize the connection
+        /// </summary>
+        /// <param name="name">Reference name of the rover</param>
+        /// <param name="ip_addr">IP address of the rover</param>
         public void do_addConn(string name, string ip_addr)
         {
             RoverContainer container = new RoverContainer(name, ip_addr, groupBox1);
@@ -38,13 +51,22 @@ namespace RoverController
             container.info_control.Show();
         }
 
+        /// <summary>
+        /// Cleans up rover connection threads upon application closure
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Console.WriteLine("CLOSING");
             foreach (RoverContainer container in rovers)
             {
                 container.stop_socket_clean();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            rovers[0].enqueue_command("Hi There");
         }
     }
 }
