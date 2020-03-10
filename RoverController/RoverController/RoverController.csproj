@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RoverContainer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +67,12 @@
     <Compile Include="RoverInfo.Designer.cs">
       <DependentUpon>RoverInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="RoverTab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoverTab.Designer.cs">
+      <DependentUpon>RoverTab.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,6 +91,9 @@
     </Compile>
     <EmbeddedResource Include="RoverInfo.resx">
       <DependentUpon>RoverInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoverTab.resx">
+      <DependentUpon>RoverTab.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
