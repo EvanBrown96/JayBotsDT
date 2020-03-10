@@ -48,53 +48,62 @@ namespace RoverController
             info.Parent = groupBox1;
             info.Controls.Find("label1", false)[0].Text = name;
             info.Controls.Find("label2", false)[0].Text = ip_addr;
-            info.Location = new Point(7, 22+53*infos.Count);
+            info.Location = new Point(7, 22 + 53 * infos.Count);
             infos.Add(info);
             info.Show();
 
-            BackgroundWorker bg = new BackgroundWorker();
-            bg.DoWork += Bg_DoWork;
-
-            bg.RunWorkerAsync(new bgWorkerArgs(ip_addr, info));
+            Thread SocketThread = new Thread(new ParameterizedThreadStart(start_socket));
+            SocketThread.Start(new bgWorkerArgs(ip_addr, info));
 
         }
 
-        private void Bg_DoWork(object sender, DoWorkEventArgs e)
-        { 
-            bgWorkerArgs args = e.Argument as bgWorkerArgs;
-            string ip_addr = args.ip_addr;
-            RoverInfo info = args.info;
-            PictureBox indicator = info.Controls.Find("pictureBox1", false)[0] as PictureBox;
-            IPAddress addr = IPAddress.Parse(ip_addr);
-            IPEndPoint ep = new IPEndPoint(addr, 10001);
-            Socket client = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            bool connected = false;
-
-            while (true)
+        private void start_socket(object raw_args)
+        {
             {
-                try
-                {
-                    client.Connect(ep);
-                    connected = true;
-                    indicator.Image = Properties.Resources.wifi;
+                bgWorkerArgs args = raw_args as bgWorkerArgs;
+                string ip_addr = args.ip_addr;
+                RoverInfo info = args.info;
+                PictureBox indicator = info.Controls.Find("pictureBox1", false)[0] as PictureBox;
+                IPAddress addr = IPAddress.Parse(ip_addr);
+                IPEndPoint ep = new IPEndPoint(addr, 10001);
+                Socket client = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-                    while (true)
-                    {
-                        client.Send(Encoding.UTF8.GetBytes("HELLO"));
-                        Thread.Sleep(1000);
-                    }
+                bool connected = false;
 
-                }
-                catch
+                while (true)
                 {
-                    if (connected)
+                    try
                     {
-                        connected = false;
-                        indicator.Image = Properties.Resources.nowifi;
-                        Thread.Sleep(1000);
+                        client.Connect(ep);
+                        connected = true;
+
+                        // thread safety - updates GUI on main thread, instead of BG thread
+                        indicator.Invoke((MethodInvoker)delegate
+                        {
+                            indicator.Image = Properties.Resources.wifi;
+                        });
+
+                        while (true)
+                        {
+                            client.Send(Encoding.UTF8.GetBytes("HELLO"));
+                            Thread.Sleep(1000);
+                        }
+
+                    }
+                    catch
+                    {
+                        if (connected)
+                        {
+                            connected = false;
+                            indicator.Invoke((MethodInvoker)delegate
+                            {
+                                indicator.Image = Properties.Resources.nowifi;
+                            });
+                            Thread.Sleep(1000);
+                        }
                     }
                 }
+
             }
 
         }
