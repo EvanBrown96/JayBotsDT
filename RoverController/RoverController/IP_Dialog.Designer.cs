@@ -31,9 +31,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -66,14 +66,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // maskedTextBox1
-            // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(12, 80);
-            this.maskedTextBox1.Mask = "900.900.900.900";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(175, 22);
-            this.maskedTextBox1.TabIndex = 4;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -90,6 +82,13 @@
             this.textBox1.Size = new System.Drawing.Size(176, 22);
             this.textBox1.TabIndex = 6;
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(11, 80);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(174, 22);
+            this.textBox2.TabIndex = 7;
+            // 
             // IP_Dialog
             // 
             this.AcceptButton = this.button1;
@@ -98,9 +97,9 @@
             this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(197, 142);
             this.ControlBox = false;
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -118,8 +117,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }

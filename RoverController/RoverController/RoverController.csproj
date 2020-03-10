@@ -104,5 +104,9 @@
   <ItemGroup>
     <None Include="Resources\wifi.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="attribution.txt" />
+    <None Include="Resources\nowifi.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

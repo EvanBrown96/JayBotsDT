@@ -73,6 +73,16 @@ namespace RoverController.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap nowifi {
+            get {
+                object obj = ResourceManager.GetObject("nowifi", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap wifi {
             get {
                 object obj = ResourceManager.GetObject("wifi", resourceCulture);
