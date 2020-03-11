@@ -45,10 +45,12 @@ namespace RoverController
         /// <param name="ip_addr">IP address of the rover</param>
         public void do_addConn(string name, string ip_addr)
         {
-            RoverContainer container = new RoverContainer(name, ip_addr, groupBox1);
+            RoverContainer container = new RoverContainer(name, ip_addr, groupBox1, tabControl1);
             container.info_control.Location = new Point(6, 22 + 53 * rovers.Count);
             rovers.Add(container);
             container.info_control.Show();
+            container.rover_tab_page.Show();
+            container.rover_tab.Show();
         }
 
         /// <summary>

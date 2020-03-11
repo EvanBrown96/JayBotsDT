@@ -20,6 +20,9 @@ namespace RoverController
         /// </summary>
         public RoverInfo info_control;
 
+        public TabPage rover_tab_page;
+        public RoverTab rover_tab;
+
         /// <summary>
         /// The reference name and IP address of this rover
         /// </summary>
@@ -51,16 +54,27 @@ namespace RoverController
         /// <param name="name">Name of the rover</param>
         /// <param name="ip_addr">IP address of the rover</param>
         /// <param name="info_parent">Parent control to put the rover info into</param>
-        public RoverContainer(string name, string ip_addr, Control info_parent)
+        public RoverContainer(string name, string ip_addr, Control info_parent, TabControl tab_parent)
         {
             this.name = name;
             this.ip_addr = ip_addr;
-            this.info_control = new RoverInfo();
-            this.info_control.Parent = info_parent;
-            this.info_control.Controls.Find("label1", false)[0].Text = name;
-            this.info_control.Controls.Find("label2", false)[0].Text = ip_addr;
-            this.info_control.Margin = new Padding(3);
-            this.info_control.Size = new Size(info_parent.Width - 12, info_control.Size.Height);
+
+            info_control = new RoverInfo();
+            info_control.Parent = info_parent;
+            info_control.Controls.Find("label1", false)[0].Text = name;
+            info_control.Controls.Find("label2", false)[0].Text = ip_addr;
+            info_control.Margin = new Padding(3);
+            info_control.Width = info_parent.Width - 12;
+
+            rover_tab_page = new TabPage(name);
+            rover_tab_page.Parent = tab_parent;
+            rover_tab = new RoverTab();
+            rover_tab.Parent = rover_tab_page;
+            rover_tab.Width = rover_tab.Width - 12;
+            rover_tab.Height = rover_tab.Height - 12;
+            rover_tab.Location = new Point(6, 6);
+            rover_tab_page.Show();
+            rover_tab.Show();
 
             // start connection thread
             conn_thread = new Thread(new ThreadStart(socket_code));
