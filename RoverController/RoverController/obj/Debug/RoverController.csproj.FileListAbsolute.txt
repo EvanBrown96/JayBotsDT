@@ -10,3 +10,4 @@ C:\Users\EvanB\Desktop\school\542\code\RoverController\RoverController\obj\Debug
 C:\Users\EvanB\Desktop\school\542\code\RoverController\RoverController\obj\Debug\RoverController.IP_Dialog.resources
 C:\Users\EvanB\Desktop\school\542\code\RoverController\RoverController\obj\Debug\RoverController.RoverInfo.resources
 C:\Users\EvanB\Desktop\school\542\code\RoverController\RoverController\obj\Debug\RoverController.RoverTab.resources
+C:\Users\EvanB\Desktop\school\542\code\RoverController\RoverController\obj\Debug\RoverController.ManualController.resources

@@ -73,6 +73,12 @@
     <Compile Include="RoverTab.Designer.cs">
       <DependentUpon>RoverTab.cs</DependentUpon>
     </Compile>
+    <Compile Include="ManualController.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ManualController.Designer.cs">
+      <DependentUpon>ManualController.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -94,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RoverTab.resx">
       <DependentUpon>RoverTab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManualController.resx">
+      <DependentUpon>ManualController.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
