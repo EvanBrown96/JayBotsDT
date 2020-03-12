@@ -15,6 +15,7 @@ namespace RoverController
     {
         private Dictionary<Keys, bool> key_states = new Dictionary<Keys, bool>();
         private Keys[] control_keys = { Keys.Up, Keys.Down, Keys.Left, Keys.Right, Keys.Space };
+        private RoverContainer container;
 
         public void ManualController_KeyDown(object sender, KeyEventArgs e)
         {
@@ -24,6 +25,7 @@ namespace RoverController
                 {
                     key_states[e.KeyCode] = true;
                     Refresh();
+                    send_message();
                 }
             }
         }
@@ -34,13 +36,15 @@ namespace RoverController
             {
                 key_states[e.KeyCode] = false;
                 Refresh();
+                send_message();
             }
         }
 
-        public ManualController()
+        public ManualController(RoverContainer container)
         {
             InitializeComponent();
             //this.TabStop = true;
+            this.container = container;
 
             foreach (Keys k in control_keys)
             {
@@ -107,6 +111,19 @@ namespace RoverController
             }
 
             e.Graphics.FillEllipse(black, pos_rect);
+        }
+
+        private void send_message()
+        {
+            StringBuilder message = new StringBuilder("m-ss");
+            if (!key_states[Keys.Space])
+            {
+                if (key_states[Keys.Up] && !key_states[Keys.Down]) message[2] = 'f';
+                else if (!key_states[Keys.Up] && key_states[Keys.Down]) message[2] = 'b';
+                if (key_states[Keys.Left] && !key_states[Keys.Right]) message[3] = 'l';
+                else if (!key_states[Keys.Left] && key_states[Keys.Right]) message[3] = 'r';
+            }
+            container.enqueue_command(message.ToString());
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Net.Sockets;
 
 namespace RoverController
 {
-    class RoverContainer
+    public class RoverContainer
     {
 
         /// <summary>
@@ -68,11 +68,14 @@ namespace RoverController
 
             rover_tab_page = new TabPage(name);
             rover_tab_page.Parent = tab_parent;
-            rover_tab = new RoverTab();
+            rover_tab_page.BackColor = Color.White;
+            rover_tab = new RoverTab(this);
             rover_tab.Parent = rover_tab_page;
-            rover_tab.Width = rover_tab.Width - 12;
-            rover_tab.Height = rover_tab.Height - 12;
+            rover_tab.Width = rover_tab_page.Width - 12;
+            rover_tab.Height = rover_tab_page.Height - 12;
             rover_tab.Location = new Point(6, 6);
+            rover_tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            rover_tab.BackColor = Color.White;
             rover_tab_page.Show();
             rover_tab.Show();
 
