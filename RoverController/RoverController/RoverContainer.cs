@@ -19,7 +19,9 @@ namespace RoverController
         /// The sidebar information panel for this rover
         /// </summary>
         public RoverInfo info_control;
+        public Control info_parent;
 
+        public TabControl tab_parent;
         public TabPage rover_tab_page;
         public RoverTab rover_tab;
 
@@ -59,6 +61,7 @@ namespace RoverController
             this.name = name;
             this.ip_addr = ip_addr;
 
+            this.info_parent = info_parent;
             info_control = new RoverInfo();
             info_control.Parent = info_parent;
             info_control.Controls.Find("label1", false)[0].Text = name;
@@ -66,6 +69,7 @@ namespace RoverController
             info_control.Margin = new Padding(3);
             info_control.Width = info_parent.Width - 12;
 
+            this.tab_parent = tab_parent;
             rover_tab_page = new TabPage(name);
             rover_tab_page.Parent = tab_parent;
             rover_tab_page.BackColor = Color.White;
@@ -82,6 +86,14 @@ namespace RoverController
             // start connection thread
             conn_thread = new Thread(new ThreadStart(socket_code));
             conn_thread.Start();
+        }
+
+        public void destroy()
+        {
+            info_parent.Controls.Remove(info_control);
+            info_control.Dispose();
+            tab_parent.Controls.Remove(rover_tab_page);
+            rover_tab_page.Dispose();
         }
 
         /// <summary>

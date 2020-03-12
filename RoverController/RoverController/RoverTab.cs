@@ -20,11 +20,10 @@ namespace RoverController
             InitializeComponent();
             this.container = container;
 
-            int controller_size = groupBox2.Height - 21 - 6;
             mc = new ManualController(container);
             mc.Parent = groupBox2;
-            mc.Size = new Size(controller_size, controller_size);
-            mc.Location = new Point((groupBox2.Width - controller_size) / 2, 21);
+            mc.Size = new Size(groupBox2.Width - 12, groupBox2.Height - 21 - 6);
+            mc.Location = new Point(6, 21);
             mc.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             mc.Hide();
         }
@@ -33,6 +32,11 @@ namespace RoverController
         {
             if ((sender as RadioButton).Checked) mc.Show();
             else mc.Hide();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            container.destroy();
         }
     }
 }

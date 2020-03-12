@@ -43,7 +43,8 @@ namespace RoverController
         public ManualController(RoverContainer container)
         {
             InitializeComponent();
-            //this.TabStop = true;
+            // setting these flags prevents control from flickering on redraw
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.container = container;
 
             foreach (Keys k in control_keys)
@@ -65,12 +66,22 @@ namespace RoverController
 
         private void ManualController_Paint(object sender, PaintEventArgs e)
         {
-
-            int size = this.Width;
-            int half_size = this.Width / 2;
-            int border_size = this.Width / 20;
-            int dot_dist = (3 * this.Width) / 8;
-            int diag_dist = (int) ((3 * this.Width) / (8 * Math.Sqrt(2)));
+            int size, width_start = 0, height_start = 0;
+            if(this.Width > this.Height)
+            {
+                size = this.Height;
+                width_start = (this.Width - this.Height) / 2;
+            }
+            else
+            {
+                size = this.Width;
+                height_start = (this.Height - this.Width) / 2;
+            }
+            
+            int half_size = size / 2;
+            int border_size = size / 20;
+            int dot_dist = (3 * size) / 8;
+            int diag_dist = (int) ((3 * size) / (8 * Math.Sqrt(2)));
             int dot_radius = 10;
             int dot_diameter = dot_radius * 2;
             int mid_radius = 5;
@@ -78,11 +89,11 @@ namespace RoverController
             SolidBrush light_slate_gray = new SolidBrush(Color.LightSlateGray);
             SolidBrush black = new SolidBrush(Color.Black);
             SolidBrush red = new SolidBrush(Color.LightSalmon);
-            e.Graphics.FillEllipse(black, new Rectangle(0, 0, size, size));
-            e.Graphics.FillEllipse(light_slate_gray, new Rectangle(border_size, border_size, size - border_size * 2, size - border_size * 2));
-            e.Graphics.FillEllipse(red, new Rectangle(half_size - mid_radius, half_size - mid_radius, mid_radius * 2, mid_radius * 2));
+            e.Graphics.FillEllipse(black, new Rectangle(width_start, height_start, size, size));
+            e.Graphics.FillEllipse(light_slate_gray, new Rectangle(width_start + border_size, height_start + border_size, size - border_size * 2, size - border_size * 2));
+            e.Graphics.FillEllipse(red, new Rectangle(width_start + half_size - mid_radius, height_start + half_size - mid_radius, mid_radius * 2, mid_radius * 2));
 
-            Rectangle pos_rect = new Rectangle(half_size - dot_radius, half_size - dot_radius, dot_diameter, dot_diameter);
+            Rectangle pos_rect = new Rectangle(width_start + half_size - dot_radius, height_start + half_size - dot_radius, dot_diameter, dot_diameter);
             if (!key_states[Keys.Space])
             {
                 bool fwd = false, bck = false, left = false, right = false;
@@ -93,20 +104,20 @@ namespace RoverController
 
                 if (fwd)
                 {
-                    if (left) pos_rect = new Rectangle(half_size - diag_dist - dot_radius, half_size - diag_dist - dot_radius, dot_diameter, dot_diameter);
-                    else if (right) pos_rect = new Rectangle(half_size + diag_dist - dot_radius, half_size - diag_dist - dot_radius, dot_diameter, dot_diameter);
-                    else pos_rect = new Rectangle(half_size - dot_radius, half_size - dot_dist - dot_radius, dot_diameter, dot_diameter);
+                    if (left) pos_rect = new Rectangle(width_start + half_size - diag_dist - dot_radius, height_start + half_size - diag_dist - dot_radius, dot_diameter, dot_diameter);
+                    else if (right) pos_rect = new Rectangle(width_start + half_size + diag_dist - dot_radius, height_start + half_size - diag_dist - dot_radius, dot_diameter, dot_diameter);
+                    else pos_rect = new Rectangle(width_start + half_size - dot_radius, height_start + half_size - dot_dist - dot_radius, dot_diameter, dot_diameter);
                 }
                 else if (bck)
                 {
-                    if (left) pos_rect = new Rectangle(half_size - diag_dist - dot_radius, half_size + diag_dist - dot_radius, dot_diameter, dot_diameter);
-                    else if (right) pos_rect = new Rectangle(half_size + diag_dist - dot_radius, half_size + diag_dist - dot_radius, dot_diameter, dot_diameter);
-                    else pos_rect = new Rectangle(half_size - dot_radius, half_size + dot_dist - dot_radius, dot_diameter, dot_diameter);
+                    if (left) pos_rect = new Rectangle(width_start + half_size - diag_dist - dot_radius, height_start + half_size + diag_dist - dot_radius, dot_diameter, dot_diameter);
+                    else if (right) pos_rect = new Rectangle(width_start + half_size + diag_dist - dot_radius, height_start + half_size + diag_dist - dot_radius, dot_diameter, dot_diameter);
+                    else pos_rect = new Rectangle(width_start + half_size - dot_radius, height_start + half_size + dot_dist - dot_radius, dot_diameter, dot_diameter);
                 }
                 else
                 {
-                    if (left) pos_rect = new Rectangle(half_size - dot_dist - dot_radius, half_size - dot_radius, dot_diameter, dot_diameter);
-                    else if (right) pos_rect = new Rectangle(half_size + dot_dist - dot_radius, half_size - dot_radius, dot_diameter, dot_diameter);
+                    if (left) pos_rect = new Rectangle(width_start + half_size - dot_dist - dot_radius, height_start + half_size - dot_radius, dot_diameter, dot_diameter);
+                    else if (right) pos_rect = new Rectangle(width_start + half_size + dot_dist - dot_radius, height_start + half_size - dot_radius, dot_diameter, dot_diameter);
                 }
             }
 
