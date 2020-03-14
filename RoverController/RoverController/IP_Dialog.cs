@@ -13,9 +13,9 @@ namespace RoverController
 {
     public partial class IP_Dialog : Form
     {
-        private Form1 original_form;
+        private Master original_form;
 
-        public IP_Dialog(Form1 original_form)
+        public IP_Dialog(Master original_form)
         {
             this.original_form = original_form;
             InitializeComponent();

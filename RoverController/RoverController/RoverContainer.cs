@@ -94,6 +94,9 @@ namespace RoverController
             info_control.Dispose();
             tab_parent.Controls.Remove(rover_tab_page);
             rover_tab_page.Dispose();
+            stop_socket_clean();
+            Master.rovers.Remove(this);
+            Master.reorder_info();
         }
 
         /// <summary>

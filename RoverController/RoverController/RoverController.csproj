@@ -47,11 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RoverContainer.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Master.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Master.Designer.cs">
+      <DependentUpon>Master.cs</DependentUpon>
     </Compile>
     <Compile Include="IP_Dialog.cs">
       <SubType>Form</SubType>
@@ -79,8 +79,8 @@
     <Compile Include="ManualController.Designer.cs">
       <DependentUpon>ManualController.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Master.resx">
+      <DependentUpon>Master.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IP_Dialog.resx">
       <DependentUpon>IP_Dialog.cs</DependentUpon>

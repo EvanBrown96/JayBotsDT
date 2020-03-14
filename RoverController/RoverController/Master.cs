@@ -13,17 +13,30 @@ using System.Windows.Forms;
 
 namespace RoverController
 {
-    public partial class Form1 : Form
+    public partial class Master : Form
     {
 
         /// <summary>
         /// A list of rover abstractions which can be used to interact with each rover
         /// </summary>
-        private List<RoverContainer> rovers = new List<RoverContainer>();
+        public static List<RoverContainer> rovers = new List<RoverContainer>();
 
-        public Form1()
+        public Master()
         {
             InitializeComponent();
+        }
+
+        public static void reorder_info()
+        {
+            for(int i = 0; i < rovers.Count(); i++)
+            {
+                rovers[i].info_control.Location = get_info_location(i);
+            }
+        }
+
+        private static Point get_info_location(int index)
+        {
+            return new Point(6, 22 + 53 * index);
         }
 
         /// <summary>
@@ -46,7 +59,7 @@ namespace RoverController
         public void do_addConn(string name, string ip_addr)
         {
             RoverContainer container = new RoverContainer(name, ip_addr, groupBox1, tabControl1);
-            container.info_control.Location = new Point(6, 22 + 53 * rovers.Count);
+            container.info_control.Location = get_info_location(rovers.Count);
             rovers.Add(container);
             container.info_control.Show();
             container.rover_tab_page.Show();
@@ -65,11 +78,7 @@ namespace RoverController
                 container.stop_socket_clean();
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            rovers[0].enqueue_command("Hi There");
-        }
+       
     }
 }
 

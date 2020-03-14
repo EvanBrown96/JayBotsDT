@@ -1,6 +1,6 @@
 ﻿namespace RoverController
 {
-    partial class Form1
+    partial class Master
     {
         /// <summary>
         /// Required designer variable.
