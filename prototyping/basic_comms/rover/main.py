@@ -39,8 +39,8 @@ while True:
                 left_velocity = spd_mappings[data][0]
                 right_velocity = spd_mappings[data][1]
 
-                left_spd.value = abs(left_velocity)
-                right_spd.value = abs(right_velocity)
+                left_spd.value = 0.5*abs(left_velocity)
+                right_spd.value = 0.5*abs(right_velocity)
             else:
                 x = int(float(data.split(',')[0]))
                 y = int(float(data.split(',')[1]))
