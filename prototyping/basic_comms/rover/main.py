@@ -1,5 +1,6 @@
 import socket
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
+import sys
 
 PORT = 10001
 sock = socket.socket()
@@ -74,5 +75,6 @@ while True:
 
     except KeyboardInterrupt:
         conn.close()
+        sys.exit(0);
     except:
         pass
