@@ -1,5 +1,4 @@
 .idea
 venv
 RoverController/.vs/
-RoverController/RoverController/bin/Debug/
-RoverController/RoverController/obj/
+catkin_ws_test/
