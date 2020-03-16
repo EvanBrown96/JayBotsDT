@@ -72,5 +72,7 @@ while True:
                     right_fwd.off()
                     right_bck.off()
 
+    except KeyboardInterrupt:
+        conn.close()
     except:
         pass
