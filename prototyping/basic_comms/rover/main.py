@@ -59,7 +59,7 @@ while True:
                 left_bck.on()
             else:
                 left_fwd.off()
-                left_fwd.on()
+                left_bck.off()
 
             if right_velocity > 0:
                 right_fwd.on()
@@ -69,4 +69,4 @@ while True:
                 right_bck.on()
             else:
                 right_fwd.off()
-                right_bck.on()
+                right_bck.off()
