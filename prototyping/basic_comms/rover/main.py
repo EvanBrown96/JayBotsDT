@@ -27,46 +27,50 @@ spd_mappings = {
 }
 
 while True:
-    conn, addr = sock.accept()
+    try:
+        conn, addr = sock.accept()
 
-    while True:
-        data = conn.recv(1024).decode('utf-8')
-        if not data:
-            break
-        if data != "persist":
+        while True:
+            data = conn.recv(1024).decode('utf-8')
+            if not data:
+                break
+            if data != "persist":
 
-            if data in spd_mappings.keys():
-                left_velocity = spd_mappings[data][0]
-                right_velocity = spd_mappings[data][1]
+                if data in spd_mappings.keys():
+                    left_velocity = spd_mappings[data][0]
+                    right_velocity = spd_mappings[data][1]
 
-                left_spd.value = 0.5*abs(left_velocity)
-                right_spd.value = 0.5*abs(right_velocity)
-            else:
-                x = int(float(data.split(',')[0]))
-                y = int(float(data.split(',')[1]))
+                    left_spd.value = 0.5*abs(left_velocity)
+                    right_spd.value = 0.5*abs(right_velocity)
+                else:
+                    x = int(float(data.split(',')[0]))
+                    y = int(float(data.split(',')[1]))
 
-                left_velocity = (y+x)/2
-                right_velocity = (y-x)/2
+                    left_velocity = (y+x)/2
+                    right_velocity = (y-x)/2
 
-                left_spd.value = float(abs(left_velocity))/100
-                right_spd.value = float(abs(right_velocity))/100
+                    left_spd.value = float(abs(left_velocity))/100
+                    right_spd.value = float(abs(right_velocity))/100
 
-            if left_velocity > 0:
-                left_fwd.on()
-                left_bck.off()
-            elif left_velocity < 0:
-                left_fwd.off()
-                left_bck.on()
-            else:
-                left_fwd.off()
-                left_bck.off()
+                if left_velocity > 0:
+                    left_fwd.on()
+                    left_bck.off()
+                elif left_velocity < 0:
+                    left_fwd.off()
+                    left_bck.on()
+                else:
+                    left_fwd.off()
+                    left_bck.off()
 
-            if right_velocity > 0:
-                right_fwd.on()
-                right_bck.off()
-            elif right_velocity < 0:
-                right_fwd.off()
-                right_bck.on()
-            else:
-                right_fwd.off()
-                right_bck.off()
+                if right_velocity > 0:
+                    right_fwd.on()
+                    right_bck.off()
+                elif right_velocity < 0:
+                    right_fwd.off()
+                    right_bck.on()
+                else:
+                    right_fwd.off()
+                    right_bck.off()
+
+    except:
+        pass
