@@ -13,6 +13,165 @@ using System.Text.RegularExpressions;
 
 namespace RoverController
 {
+
+    public enum SocketState
+    {
+        Uninitialized,
+        Connecting,
+        Connected,
+        Broken
+    }
+
+    /*ublic class SocketWrapper
+    {
+        public static int BufferSize = 256;
+
+        public Socket sock = null;
+        public SocketState state = SocketState.Uninitialized;
+
+        private ManualResetEvent connectDone = new ManualResetEvent(true);
+        private ManualResetEvent receiveDone = new ManualResetEvent(true);
+        private ManualResetEvent sendDone = new ManualResetEvent(true);
+
+        private IPEndPoint ep;
+        private bool send, recv;
+        public bool ready_for_send, ready_for_receive;
+        private byte[] recv_buf = new byte[BufferSize];
+
+        public ManualResetEvent Connect()
+        {
+            connectDone.Reset();
+            sock = new Socket(this.ep.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            sock.BeginConnect(ep, new AsyncCallback(connectCallback), null);
+            return connectDone;
+        }
+        private void connectCallback(IAsyncResult ar)
+        {
+            try
+            {
+                sock.EndConnect(ar);
+            }
+            catch (SocketException) 
+            {
+                sock = null;
+            }
+            connectDone.Set();
+        }
+
+        public ManualResetEvent Send(byte[] data, int size)
+        {
+            if (!sendDone.WaitOne(0)) return null;
+
+            sendDone.Reset();
+            try
+            {
+                sock.BeginSend(data, 0, size, SocketFlags.None, sendCallback, null);
+                return sendDone;
+            }
+            catch (SocketException)
+            {
+                sendDone.Set();
+                sock = null;
+                return null;
+            }
+        }
+
+        private void sendCallback(IAsyncResult ar)
+        {
+            try
+            {
+                sock.EndSend(ar);
+            }
+            catch(SocketException)
+            {
+                sock = null;
+            }
+            sendDone.Set();
+        }
+
+        public SocketWrapper(IPAddress addr, int port, bool send=false, bool recv=false)
+        {
+            this.ep = new IPEndPoint(addr, port);
+            this.send = send;
+            this.recv = recv;
+        }
+    }*/
+
+    public enum SocketDirection
+    {
+        Receive,
+        Send
+    }
+
+    public class SocketWrapper
+    {
+
+        public Socket sock = null;
+        public IPEndPoint ep;
+
+        public async virtual Task<(bool, SocketWrapper)> Send()
+        {
+            return (true, this);
+        }
+
+        public async virtual Task<(bool, SocketWrapper)> Receive()
+        {
+            return (true, this);
+        }
+
+        public async Task<(bool, SocketWrapper)> Connect()
+        {
+            try
+            {
+                await sock.ConnectAsync(ep);
+                return (true, this);
+            }
+            catch(SocketException)
+            {
+                return (false, this);
+            }
+        }
+
+        public SocketWrapper(IPAddress addr, int port)
+        {
+            this.ep = new IPEndPoint(addr, port);
+        }
+
+    }
+
+
+    public class MovementSocket : SocketWrapper
+    {
+
+        /// <summary>
+        /// Queue of messages waiting to be sent to the rover
+        /// </summary>
+        public static ConcurrentQueue<byte[]> control_msgs = new ConcurrentQueue<byte[]>();
+
+        public override async Task<(bool, SocketWrapper)> Send()
+        {
+            byte[] cur_msg;
+            if (control_msgs.TryDequeue(out cur_msg))
+            {
+                try
+                {
+                    await this.sock.SendAsync(new ArraySegment<byte>(cur_msg), SocketFlags.None);
+                }
+                catch (SocketException)
+                {
+                    return (false, this);
+                }
+            }
+
+            return (true, this);
+        }
+
+        public MovementSocket(IPAddress addr, int port) : base(addr, port)
+        {
+        }
+
+    }
+
     public class RoverContainer
     {
 
@@ -42,14 +201,9 @@ namespace RoverController
         private volatile bool kill_thread = false;
 
         /// <summary>
-        /// Queue of messages waiting to be sent to the rover
-        /// </summary>
-        ConcurrentQueue<byte[]> control_msgs = new ConcurrentQueue<byte[]>();
-
-        /// <summary>
         /// Event trigger to tell the rover that a message is ready to be sent
         /// </summary>
-        ManualResetEventSlim wait_for_control_msg = new ManualResetEventSlim(false);
+        private volatile bool control_msg_ready = false;
 
         /// <summary>
         /// Create a rover container
@@ -84,12 +238,13 @@ namespace RoverController
             rover_tab_page.Show();
             rover_tab.Show();
 
+            //socket_code();
             // start connection thread
             conn_thread = new Thread(new ThreadStart(socket_code));
             conn_thread.Start();
 
-            conn_thread2 = new Thread(new ThreadStart(socket_code2));
-            conn_thread2.Start();
+            //conn_thread2 = new Thread(new ThreadStart(socket_code2));
+            //conn_thread2.Start();*/
         }
 
         public void destroy()
@@ -109,7 +264,6 @@ namespace RoverController
         public void stop_socket_clean()
         {
             kill_thread = true;
-            wait_for_control_msg.Set();
         }
 
         /// <summary>
@@ -118,19 +272,137 @@ namespace RoverController
         /// <param name="command">The command to send</param>
         public void enqueue_command(string command)
         {
-            control_msgs.Enqueue(Encoding.UTF8.GetBytes(command));
-            wait_for_control_msg.Set();
+            MovementSocket.control_msgs.Enqueue(Encoding.UTF8.GetBytes(command));
+            control_msg_ready = true;
         }
+
+        private async void socket_code()
+        {
+            PictureBox indicator = info_control.Controls.Find("pictureBox1", false)[0] as PictureBox;
+            IPAddress addr = IPAddress.Parse(ip_addr);
+
+            Queue<SocketWrapper> uninitialized = new Queue<SocketWrapper>();
+            Queue<SocketWrapper> connected = new Queue<SocketWrapper>();
+
+            SocketWrapper mvmt_cmd = new MovementSocket(addr, 10001);
+            uninitialized.Enqueue(mvmt_cmd);
+
+            List<Task<(bool, SocketWrapper)>> awaiting = new List<Task<(bool, SocketWrapper)>>();
+
+            SocketWrapper sw;
+            bool success;
+
+            while (true)
+            {
+                while (uninitialized.Count() > 0)
+                {
+                    sw = uninitialized.Dequeue();
+                    sw.sock = new Socket(sw.ep.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    awaiting.Add(sw.Connect());
+                }
+                while (connected.Count() > 0)
+                {
+                    sw = connected.Dequeue();
+                    awaiting.Add(
+                        Task.Run(
+                            async () =>
+                            {
+                                Task<(bool, SocketWrapper)> send = sw.Send();
+                                Task<(bool, SocketWrapper)> recv = sw.Receive();
+                                (bool send_success, _) = await send;
+                                (bool recv_success, _) = await recv;
+                                return (send_success && recv_success, sw);
+                            }
+                        )
+                    );
+                }
+
+                if (awaiting.Count() > 0)
+                {
+                    int task_index = Task.WaitAny(awaiting.ToArray());
+                    Task<(bool, SocketWrapper)> completed = awaiting[task_index] as Task<(bool, SocketWrapper)>;
+                    (success, sw) = await completed;
+                    if (success)
+                    {
+                        connected.Enqueue(sw);
+                    }
+                    else
+                    {
+                        sw.sock.Dispose();
+                        uninitialized.Enqueue(sw);
+                    }
+                    awaiting.RemoveAt(task_index);
+                }
+            }
+        } 
 
         /// <summary>
         /// Socket code running on the connection thread
         /// </summary>
-        private void socket_code()
+        /*private void socket_code()
         {
             PictureBox indicator = info_control.Controls.Find("pictureBox1", false)[0] as PictureBox;
             IPAddress addr = IPAddress.Parse(ip_addr);
-            IPEndPoint ep = new IPEndPoint(addr, 10001);
-            Socket client = null;
+
+            SocketState mvmt_cmd = new SocketState(addr, 10001);
+            List<ManualResetEvent> waiting_events = new List<ManualResetEvent>();
+
+            while (true)
+            {
+                for(Socket in sockets)
+                {
+                    try
+                    {
+                        if (mvmt_cmd.state == SocketState.Uninitialized)
+                        {
+                            waiting_events.Add(mvmt_cmd.Connect());
+                        }
+                        else if (mvmt_cmd.state == SocketState.Connected) 
+                        {
+                            if (mvmt_cmd.ready_for_send) waiting_events.Add(mvmt_cmd.Send());
+                            if (mvmt_cmd.ready_for_receive) waiting_events.Add(mvmt_cmd.Receive());
+                        }
+                    }
+
+
+                    if (mvmt_cmd.sock == null)
+                    {
+                        ManualResetEvent connect_event = mvmt_cmd.Connect();
+                        if(connect_event != null) waiting_events.Add(connect_event);
+                    }
+                    else if (mvmt_cmd.sock.Connected)
+                    {
+                        if ()
+                        {
+                            byte[] send_attempt;
+
+                            ManualResetEvent send_event = mvmt_cmd.Send(control_msgs.TryDequeue())
+                        }
+                        //mvmt_cmd.receiveDone.Reset();
+                        //mvmt_cmd.sock.BeginReceive(mvmt_cmd.msg_buf, 0, SocketState.BufferSize, SocketFlags.None, receiveCallback, mvmt_cmd);
+                        //waiting_events.Add(mvmt_cmd.receiveDone);
+
+                        if(mvmt_cmd.sendDone.)
+                        mvmt_cmd.sendDone.Reset();
+
+                    }
+                    else
+                    {
+                        mvmt_cmd.sock.Dispose();
+                        mvmt_cmd.sock = null;
+                    }
+                    
+                    ManualResetEvent.WaitAny(waiting_events.ToArray());
+
+
+                }
+                else
+                {
+                    client.Shutdown(SocketShutdown.Both);
+                    client.Disconnect(true);
+                }
+                
+            }
 
             bool connected = false;
             byte[] cur_msg;
@@ -185,7 +457,7 @@ namespace RoverController
                     Thread.Sleep(1000);
                 }
             }
-        }
+        }*/
 
         private void socket_code2()
         {
@@ -233,7 +505,7 @@ namespace RoverController
                         connected = false;
                         
                         // clear messages
-                        control_msgs = new ConcurrentQueue<byte[]>();
+                        //control_msgs = new ConcurrentQueue<byte[]>();
 
                         // reset connection
                         client.Shutdown(SocketShutdown.Both);
