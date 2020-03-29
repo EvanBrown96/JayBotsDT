@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoverController.exe" size="47072">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoverController.exe" size="48096">
       <assemblyIdentity name="RoverController" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>BRvykCWB8cVV9HCFV1LzG9SfUaQ08Okoe+FP/jWvCxE=</dsig:DigestValue>
+        <dsig:DigestValue>ikkJ3p2gWTANWD2p87SyRele1UZ+Na4007pCsQOcwk0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
