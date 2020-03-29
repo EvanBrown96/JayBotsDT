@@ -279,6 +279,7 @@ namespace RoverController
         private async void socket_code()
         {
             PictureBox indicator = info_control.Controls.Find("pictureBox1", false)[0] as PictureBox;
+            bool overall_connected = false;
             IPAddress addr = IPAddress.Parse(ip_addr);
 
             Queue<SocketWrapper> uninitialized = new Queue<SocketWrapper>();
@@ -332,6 +333,11 @@ namespace RoverController
                         uninitialized.Enqueue(sw);
                     }
                     awaiting.RemoveAt(task_index);
+                    if (success != overall_connected)
+                    {
+                        overall_connected = success;
+                        indicator.Image = success ? Properties.Resources.wifi : Properties.Resources.nowifi;
+                    }
                 }
             }
         } 
