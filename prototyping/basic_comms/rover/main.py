@@ -44,7 +44,7 @@ def one():
             conn, addr = sock.accept()
 
             while True:
-                data = conn.recv(1024)
+                data = conn.recv(1024).decode('utf-8')
 
                 if not data:
                     break
