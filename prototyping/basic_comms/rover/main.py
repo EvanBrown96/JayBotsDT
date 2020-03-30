@@ -7,13 +7,13 @@ sock = socket.socket()
 sock.bind(('', PORT))
 sock.listen()
 
-# left_fwd = DigitalOutputDevice(20)
-# left_bck = DigitalOutputDevice(21)
-# left_spd = PWMOutputDevice(12, frequency=500)
-#
-# right_fwd = DigitalOutputDevice(5)
-# right_bck = DigitalOutputDevice(6)
-# right_spd = PWMOutputDevice(13, frequency=500)
+left_fwd = DigitalOutputDevice(20)
+left_bck = DigitalOutputDevice(21)
+left_spd = PWMOutputDevice(12, frequency=500)
+
+right_fwd = DigitalOutputDevice(5)
+right_bck = DigitalOutputDevice(6)
+right_spd = PWMOutputDevice(13, frequency=500)
 
 spd_mappings = {
     "m-ss": (0, 0),
@@ -32,9 +32,8 @@ while True:
         conn, addr = sock.accept()
 
         while True:
-            data = conn.recv(1)
-            print(data)
-            continue
+            data = conn.recv(1024).decode('utf-8')
+
             if not data:
                 break
             if data != "persist":
