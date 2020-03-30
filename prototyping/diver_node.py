@@ -23,7 +23,7 @@ def motorsStop():
 
 #moving forward
 def motorsFwd():
-    left_spd.value = 0.505
+    left_spd.value = 0.5
     left_fwd.on()
     left_bck.off()
     right_spd.value = 0.5
