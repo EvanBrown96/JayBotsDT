@@ -1,8 +1,10 @@
-#!/usr/bin/env python
+from gpiozero import DigitalOutputDevice, PWMOutputDevice, DistanceSensor
+import time
 
-import rospy
-from std_msgs.msg import String
-from gpiozero import DigitalOutputDevice, PWMOutputDevice
+DIST_MAX = 2.0
+
+ultrasonic0 = DistanceSensor(24, 23, max_distance = DIST_MAX)
+ultrasonic1 = DistanceSensor(22, 27, max_distance = DIST_MAX)
 
 left_fwd = DigitalOutputDevice(20)
 left_bck = DigitalOutputDevice(21)
@@ -12,8 +14,11 @@ right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
 right_spd = PWMOutputDevice(13, frequency=500)
 
+time.sleep(5)
+
 #motors off
 def motorsStop():
+    print "stop"
     left_spd.value = 0
     left_fwd.off()
     left_bck.off()
@@ -23,6 +28,7 @@ def motorsStop():
 
 #moving forward
 def motorsFwd():
+    print "Forward"
     left_spd.value = 0.5
     left_fwd.on()
     left_bck.off()
@@ -32,6 +38,7 @@ def motorsFwd():
 
 #moving backwards
 def motorsBck():
+    print "Backward"
     left_spd.value = 0.5
     left_fwd.off()
     left_bck.on()
@@ -41,6 +48,7 @@ def motorsBck():
 
 #turning left
 def motorsLeft():
+    print "Left"
     left_spd.value = 0.5
     left_fwd.off()
     left_bck.on()
@@ -50,6 +58,7 @@ def motorsLeft():
 
 #turning right
 def motorsRight():
+    print "Right"
     left_spd.valeu = 0.5
     left_fwd.on()
     left_bck.off()
@@ -57,30 +66,29 @@ def motorsRight():
     right_fwd.off()
     right_bck.on()
 
-#message handler
-def commandCallback(commandMessage):
-    command = commandMessage.data
-    if command == 'forward':
-        print('Moving Forward')
-        motorsFwd()
-    elif command == 'backward':
-        print('Moving Backward')
-        motorsBck()
-    elif command == 'left':
-        print('Turning Left')
-        motorsLeft()
-    elif command =='right':
-        print('Turning Right')
-        motorsRight()
-    elif command == 'stop':
-        print('Stopping')
-        motorsStop()
-    else:
-        print('Invalid command, so stopping instead')
-        motorsStop()
-
-rospy.init_node('driver')
-rospy.Subscriber('command', String, commandCallback)
-rospy.spin()
-print('Shutting down: shutting motors off')
 motorsStop()
+count = 0
+while True:
+    ult0 = 100*ultrasonic0.distance
+    ult1 = 100*ultrasonic1.distance
+    print("1: {}, 2: {}".format(ult0, ult1))
+    time.sleep(0.5)
+    flag = 0
+    if ult0 < 15 or ult1 < 15:
+        count = count + 1
+        motorsStop()
+        time.sleep(1)
+        motorsBck()
+        time.sleep(1.5)
+        if count%3 == 1 & flag == 0:
+            motorsRight()
+            flag = 1
+        else
+            motorsLeft()
+            flag = 0
+        time.sleep(1.5)
+        motorsStop()
+        time.sleep(1)
+    else:
+        motorsFwd()
+        flag = 0

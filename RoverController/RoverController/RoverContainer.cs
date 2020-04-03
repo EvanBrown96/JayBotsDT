@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
-using System.Text.RegularExpressions;
 
 namespace RoverController
 {
@@ -34,7 +33,7 @@ namespace RoverController
         /// <summary>
         /// Thread object running communication operations with the rover
         /// </summary>
-        private Thread conn_thread, conn_thread2;
+        private Thread conn_thread;
 
         /// <summary>
         /// Flag for telling the thread to stop
@@ -87,9 +86,6 @@ namespace RoverController
             // start connection thread
             conn_thread = new Thread(new ThreadStart(socket_code));
             conn_thread.Start();
-
-            conn_thread2 = new Thread(new ThreadStart(socket_code2));
-            conn_thread2.Start();
         }
 
         public void destroy()
@@ -175,63 +171,6 @@ namespace RoverController
                         {
                             indicator.Image = Properties.Resources.nowifi;
                         });
-                        // clear messages
-                        control_msgs = new ConcurrentQueue<byte[]>();
-
-                        // reset connection
-                        client.Shutdown(SocketShutdown.Both);
-                        client.Disconnect(true);
-                    }
-                    Thread.Sleep(1000);
-                }
-            }
-        }
-
-        private void socket_code2()
-        {
-            Label depth_msg = rover_tab.Controls.Find("label1", true)[0] as Label;
-            IPAddress addr = IPAddress.Parse(ip_addr);
-            IPEndPoint ep = new IPEndPoint(addr, 10002);
-            Socket client = null;
-
-            bool connected = false;
-
-            while (true)
-            {
-                // check if the thread has been killed
-                if (kill_thread) return;
-
-                try
-                {
-                    // initiate connection
-                    client = new Socket(addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    client.Connect(ep);
-                    connected = true;
-
-                    while (true)
-                    {
-                        // wait until a message is ready, then send
-                        
-                        byte[] rcv_msg = new byte[32];
-                        if (client.Receive(rcv_msg) > 0)
-                        {
-                            string msg = Encoding.UTF8.GetString(rcv_msg);
-                            msg = "Depth:\n" + msg.Replace(",", "\n");
-                            depth_msg.Invoke((MethodInvoker)delegate
-                            {
-                                depth_msg.Text = msg;
-                            });
-                        }
-                    }
-
-                }
-                catch // an error occurred somewhere in the connection
-                {
-                    if (connected)
-                    {
-                        // update connection indicator on GUI
-                        connected = false;
-                        
                         // clear messages
                         control_msgs = new ConcurrentQueue<byte[]>();
 
