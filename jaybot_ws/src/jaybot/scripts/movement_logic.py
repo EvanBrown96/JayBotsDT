@@ -14,15 +14,17 @@ vel_cmd_pub = None
 def commandCallback(user_command):
     global mode
 
-    if user_command[0] == 'm':
+    cmd = user_command.data
+
+    if cmd[0] == 'm':
         mode = Mode.MANUAL
-        if user_command[2] == 'f':
+        if cmd[2] == 'f':
             vel_cmd_pub.publish('forward')
-        elif user_command[2] == 'b':
+        elif cmd[2] == 'b':
             vel_cmd_pub.publish('backward')
-        elif user_command[3] == 'r':
+        elif cmd[3] == 'r':
             vel_cmd_pub.publish('right')
-        elif user_command[3] == 'l':
+        elif cmd[3] == 'l':
             vel_cmd_pub.publish('left')
         else:
             vel_cmd_pub.publish('stop')
