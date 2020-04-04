@@ -61,26 +61,32 @@ def motorsRight():
 def commandCallback(commandMessage):
     command = commandMessage.data
     if command == 'forward':
-        print('Moving Forward')
+        rospy.loginfo('Moving Forward')
         motorsFwd()
     elif command == 'backward':
-        print('Moving Backward')
+        rospy.loginfo('Moving Backward')
         motorsBck()
     elif command == 'left':
-        print('Turning Left')
+        rospy.loginfo('Turning Left')
         motorsLeft()
     elif command =='right':
-        print('Turning Right')
+        rospy.loginfo('Turning Right')
         motorsRight()
     elif command == 'stop':
-        print('Stopping')
+        rospy.loginfo('Stopping')
         motorsStop()
     else:
-        print('Invalid command, so stopping instead')
+        rospy.logwarn('Invalid command, so stopping instead')
         motorsStop()
 
-rospy.init_node('driver')
-rospy.Subscriber('command', String, commandCallback)
-rospy.spin()
-print('Shutting down: shutting motors off')
-motorsStop()
+def setup_node():
+    rospy.loginfo('Starting motor driver node')
+    rospy.init_node('driver')
+    rospy.Subscriber('vel_cmd', String, commandCallback)
+    rospy.spin()
+    rospy.loginfo('Shutting down: shutting motors off')
+    motorsStop()
+
+if __name__ == '__main__':
+    setup_node()
+

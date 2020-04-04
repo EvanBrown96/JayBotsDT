@@ -5,3 +5,4 @@ catkin_ws_test/
 RoverController/RoverController/obj/
 RoverController/RoverController/bin/Debug/
 jaybot_ws/build/
+.vscode
