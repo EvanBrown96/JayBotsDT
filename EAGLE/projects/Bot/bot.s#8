@@ -845,11 +845,11 @@ Model B+ &amp;nbsp; with 9 &amp;quot;not connected&amp;quot; pins</description>
 </classes>
 <parts>
 <part name="IC1" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="78*" device="T" package3d_urn="urn:adsk.eagle:package:16414/1" technology="05"/>
-<part name="X1" library="raspberrypi_bastelstube_v13" deviceset="RASPI_GPIO_B+" device="_PIN"/>
 <part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="X_1" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
-<part name="X_2" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
+<part name="X2" library="raspberrypi_bastelstube_v13" deviceset="RASPI_GPIO_B+" device="_PIN"/>
+<part name="X_3" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -859,11 +859,9 @@ Model B+ &amp;nbsp; with 9 &amp;quot;not connected&amp;quot; pins</description>
 </plain>
 <instances>
 <instance part="IC1" gate="A1" x="88.9" y="81.28"/>
-<instance part="X1" gate="G$1" x="154.94" y="33.02"/>
 <instance part="JP1" gate="G$1" x="152.4" y="96.52"/>
 <instance part="JP2" gate="G$1" x="53.34" y="81.28" rot="R180"/>
 <instance part="X_1" gate="G$1" x="76.2" y="66.04"/>
-<instance part="X_2" gate="G$1" x="154.94" y="-12.7"/>
 </instances>
 <busses>
 </busses>
@@ -893,11 +891,6 @@ Model B+ &amp;nbsp; with 9 &amp;quot;not connected&amp;quot; pins</description>
 <wire x1="76.2" y1="66.04" x2="76.2" y2="73.66" width="0.1524" layer="91"/>
 <junction x="76.2" y="73.66"/>
 </segment>
-<segment>
-<pinref part="X_2" gate="G$1" pin="0"/>
-<pinref part="X1" gate="G$1" pin="GND"/>
-<wire x1="154.94" y1="-12.7" x2="154.94" y2="-7.62" width="0.1524" layer="91"/>
-</segment>
 </net>
 </nets>
 </sheet>
@@ -905,10 +898,19 @@ Model B+ &amp;nbsp; with 9 &amp;quot;not connected&amp;quot; pins</description>
 <plain>
 </plain>
 <instances>
+<instance part="X2" gate="G$1" x="109.22" y="63.5"/>
+<instance part="X_3" gate="G$1" x="109.22" y="15.24"/>
 </instances>
 <busses>
 </busses>
 <nets>
+<net name="0" class="0">
+<segment>
+<pinref part="X2" gate="G$1" pin="GND"/>
+<pinref part="X_3" gate="G$1" pin="0"/>
+<wire x1="109.22" y1="22.86" x2="109.22" y2="15.24" width="0.1524" layer="91"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
