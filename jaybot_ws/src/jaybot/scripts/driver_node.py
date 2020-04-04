@@ -50,7 +50,7 @@ def motorsLeft():
 
 #turning right
 def motorsRight():
-    left_spd.valeu = 0.5
+    left_spd.value = 0.5
     left_fwd.on()
     left_bck.off()
     right_spd.value = 0.5
