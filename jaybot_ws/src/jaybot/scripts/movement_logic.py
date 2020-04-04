@@ -35,8 +35,9 @@ def setup_node():
 
     rospy.Subscriber('user_cmd', String, commandCallback)
 
-    vel_cmd_pub = rospy.Publisher('vel_cmd', String)
+    vel_cmd_pub = rospy.Publisher('vel_cmd', String, queue_size=10)
 
+    rospy.spin()
 
 if __name__ == '__main__':
     setup_node()

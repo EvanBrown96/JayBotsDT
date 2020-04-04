@@ -9,9 +9,10 @@ PORT = 10001
 def start_node():
     sock = socket.socket()
     sock.bind(('', PORT))
-    sock.listen()
+    sock.listen(0)
 
-    pub = rospy.Publisher('user_cmd', String)
+    rospy.init_node('user_interface')
+    pub = rospy.Publisher('user_cmd', String, queue_size=10)
 
     while not rospy.is_shutdown():
         conn, _ = sock.accept()
@@ -23,14 +24,14 @@ def start_node():
 
                 if len(data) == 0:
                     break
-            
+
                 pub.publish(data)
 
             conn.shutdown(socket.SHUT_RDWR)
 
         except Exception as e:
             rospy.logwarn(e)
-        
+
         conn.close()
 
 if __name__ == '__main__':
