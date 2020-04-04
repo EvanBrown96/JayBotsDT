@@ -35,9 +35,9 @@ def setup_node():
 
     rospy.init_node('movement_logic')
 
-    rospy.Subscriber('user_cmd', String, commandCallback)
+    rospy.Subscriber('/jayrover/user_cmd', String, commandCallback)
 
-    vel_cmd_pub = rospy.Publisher('vel_cmd', String, queue_size=10)
+    vel_cmd_pub = rospy.Publisher('/jayrover/vel_cmd', String, queue_size=10)
 
     rospy.spin()
 
