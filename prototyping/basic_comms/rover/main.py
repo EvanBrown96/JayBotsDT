@@ -41,7 +41,7 @@ while True:
             if len(saved) < 4:
                 continue
 
-            data = saved[:3]
+            data = saved[:4]
             saved = saved[4:]
 
             if data != "persist":
