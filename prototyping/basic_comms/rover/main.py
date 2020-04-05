@@ -17,7 +17,7 @@ right_spd = PWMOutputDevice(13, frequency=500)
 
 spd_mappings = {
     "m-ss": (0, 0),
-    "m-fs": (1, 1),
+    "m-fs": (1.1, 1),
     "m-bs": (-1, -1),
     "m-sr": (1, -1),
     "m-fr": (1, 0.5),
@@ -31,11 +31,19 @@ while True:
     try:
         conn, addr = sock.accept()
 
+        saved = ""
         while True:
-            data = conn.recv(1024).decode('utf-8')
-
-            if not data:
+            current = conn.recv(1024).decode('utf-8')
+            if not current:
                 break
+
+            saved += current
+            if len(saved) < 4:
+                continue
+
+            data = saved[:3]
+            saved = saved[4:]
+
             if data != "persist":
 
                 if data in spd_mappings.keys():
