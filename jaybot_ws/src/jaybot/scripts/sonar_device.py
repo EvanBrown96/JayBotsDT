@@ -3,6 +3,7 @@ from gpiozero import DistanceSensor
 import rospy
 from std_msgs.msg import Bool
 from sensor_msgs.msg import Range
+import math
 
 class SonarDevice():
 
@@ -23,7 +24,7 @@ class SonarDevice():
         self.threshold_pub = rospy.Publisher(threshold_topic_name, Bool, queue_size=10)
         self.threshold_state = False
 
-        rospy.loginfo("Publisher set with topic {}".format(topic_name))
+        rospy.loginfo("Publishers set with topics {}, {}".format(rate_topic_name, threshold_topic_name))
 
     def scan(self):
 

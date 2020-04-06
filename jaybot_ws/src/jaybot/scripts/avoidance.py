@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 
 from sonar_device import SonarDevice
-from gpiozero import DistanceSensor
-import math
 import rospy
-from std_msgs.msg import Bool
-from sensor_msgs.msg import Range
 
 #-- RIGHT
 SONAR_RIGHT_GPIO_TRIGGER     = 27
