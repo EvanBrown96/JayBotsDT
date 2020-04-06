@@ -44,4 +44,4 @@ class SonarDevice():
             self.threshold_pub.publish(False)
             self.threshold_state = False
 
-        rospy.loginfo("Range {} [m]: {} (in threshold: {})".format(self.name, range_val, self.threshold_state)
+        rospy.loginfo("Range {} [m]: {} (in threshold: {})".format(self.name, range_val, self.threshold_state))
