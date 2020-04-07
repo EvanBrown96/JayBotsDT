@@ -51,9 +51,13 @@ def leftAvoidance(left_status):
     global left_avoiding
     left_avoiding = left_status.data
 
+    rospy.loginfo(mode)
+    rospy.loginfo(movement_state)
+    rospy.loginfo(right_avoiding)
+    rospy.loginfo(left_avoiding)
     if mode == Mode.MANUAL:
         if movement_state == 'forward' and not right_avoiding:
-            if left_status.data:
+            if left_avoiding
                 vel_cmd_pub.publish('stop')
             else:
                 vel_cmd_pub.publish(movement_state)
@@ -70,7 +74,7 @@ def rightAvoidance(right_status):
 
     if mode == Mode.MANUAL:
         if movement_state == 'forward' and not left_avoiding:
-            if right_status.data:
+            if right_avoiding
                 vel_cmd_pub.publish('stop')
             else:
                 vel_cmd_pub.publish(movement_state)
