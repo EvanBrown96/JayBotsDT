@@ -53,10 +53,6 @@ def leftAvoidance(left_status):
 
     left_avoiding = left_status.data
 
-    rospy.loginfo(mode)
-    rospy.loginfo(movement_state)
-    rospy.loginfo(right_avoiding)
-    rospy.loginfo(left_avoiding)
     if mode == Mode.MANUAL:
         if movement_state == 'forward' and not right_avoiding:
             if left_avoiding:
@@ -86,7 +82,7 @@ def rightAvoidance(right_status):
 
 def setup_node():
     global vel_cmd_pub
-    
+
     rospy.init_node('movement_logic')
 
     rospy.Subscriber('/jayrover/user_cmd', String, commandCallback)
