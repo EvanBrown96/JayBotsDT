@@ -16,16 +16,21 @@ def start_node():
 
     while not rospy.is_shutdown():
         conn, _ = sock.accept()
+        saved = ""
 
         try:
             while not rospy.is_shutdown():
 
-                data = conn.recv(4).decode('utf-8')
-
-                if len(data) == 0:
+                current = conn.recv(1024).decode('utf-8')
+                if not current:
                     break
 
-                pub.publish(data)
+                saved += current
+                if len(saved < 4):
+                    continue
+
+                pub.publish(saved[:4])
+                saved = saved[4:]
 
             conn.shutdown(socket.SHUT_RDWR)
 
