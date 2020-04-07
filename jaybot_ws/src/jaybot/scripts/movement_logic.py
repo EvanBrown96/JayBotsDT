@@ -46,7 +46,7 @@ def commandCallback(user_command):
 
 
 def leftAvoidance(left_status):
-    global mode, left_avoiding
+    global mode, left_avoiding, right_avoiding
     callback_lock.acquire()
 
     left_avoiding = left_status.data
@@ -62,7 +62,7 @@ def leftAvoidance(left_status):
 
 
 def rightAvoidance(right_status):
-    global mode, right_avoiding
+    global mode, left_avoiding, right_avoiding
     callback_lock.acquire()
 
     right_avoiding = right_status.data
