@@ -20,7 +20,6 @@ def start_node():
 
         try:
             while not rospy.is_shutdown():
-
                 current = conn.recv(1024).decode('utf-8')
                 if not current:
                     break

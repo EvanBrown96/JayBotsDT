@@ -20,11 +20,11 @@ callback_lock = RLock()
 
 
 def commandCallback(user_command):
-    global mode
 
     cmd = user_command.data
 
     if cmd[0] == 'm':
+        global mode
         mode = Mode.MANUAL
         if cmd[2] == 'f':
             movement_state = 'forward'
@@ -46,9 +46,9 @@ def commandCallback(user_command):
 
 
 def leftAvoidance(left_status):
-    global mode, left_avoiding, right_avoiding
     callback_lock.acquire()
 
+    global left_avoiding
     left_avoiding = left_status.data
 
     if mode == Mode.MANUAL:
@@ -62,9 +62,10 @@ def leftAvoidance(left_status):
 
 
 def rightAvoidance(right_status):
-    global mode, left_avoiding, right_avoiding
+
     callback_lock.acquire()
 
+    global right_avoiding
     right_avoiding = right_status.data
 
     if mode == Mode.MANUAL:
@@ -78,7 +79,6 @@ def rightAvoidance(right_status):
 
 
 def setup_node():
-    global vel_cmd_pub
 
     rospy.init_node('movement_logic')
 
@@ -86,6 +86,7 @@ def setup_node():
     rospy.Subscriber('/jayrover/sonar/left_threshold', Bool, leftAvoidance)
     rospy.Subscriber('/jayrover/sonar/right_threshold', Bool, rightAvoidance)
 
+    global vel_cmd_pub
     vel_cmd_pub = rospy.Publisher('/jayrover/vel_cmd', String, queue_size=10)
 
     rospy.spin()
