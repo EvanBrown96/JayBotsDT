@@ -52,10 +52,10 @@ def leftAvoidance(left_status):
     left_avoiding = left_status.data
 
     if mode == Mode.MANUAL:
-        if not right_avoiding:
+        if movement_state == 'forward' and not right_avoiding:
             if left_status.data:
                 vel_cmd_pub.publish('stop')
-            elif movement_state == 'forward':
+            else:
                 vel_cmd_pub.publish(movement_state)
 
     callback_lock.release()
@@ -68,10 +68,10 @@ def rightAvoidance(right_status):
     right_avoiding = right_status.data
 
     if mode == Mode.MANUAL:
-        if not left_avoiding:
+        if movement_state == 'forward' and not left_avoiding:
             if right_status.data:
                 vel_cmd_pub.publish('stop')
-            elif movement_state == 'forward':
+            else:
                 vel_cmd_pub.publish(movement_state)
 
     callback_lock.release()

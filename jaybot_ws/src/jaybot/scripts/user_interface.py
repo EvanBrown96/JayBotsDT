@@ -26,7 +26,7 @@ def start_node():
                     break
 
                 saved += current
-                if len(saved < 4):
+                if len(saved) < 4:
                     continue
 
                 pub.publish(saved[:4])
