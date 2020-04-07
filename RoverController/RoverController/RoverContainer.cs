@@ -19,27 +19,30 @@ namespace RoverController
 
         public Socket sock = null;
         public IPEndPoint ep;
+        public volatile SocketStatus status = SocketStatus.Disconnected;
 
-        public async virtual Task<(bool, SocketWrapper)> Send()
+        public async virtual Task<SocketWrapper> Send()
         {
-            return (true, this);
+            return this;
         }
 
-        public async virtual Task<(bool, SocketWrapper)> Receive()
+        public async virtual Task<SocketWrapper> Receive()
         {
-            return (true, this);
+            return this;
         }
 
-        public async Task<(bool, SocketWrapper)> Connect()
+        public async Task<SocketWrapper> Connect()
         {
             try
             {
                 await sock.ConnectAsync(ep);
-                return (true, this);
+                status = SocketStatus.Connected;
+                return this;
             }
             catch (SocketException)
             {
-                return (false, this);
+                status = SocketStatus.Disconnected;
+                return this;
             }
         }
 
@@ -48,6 +51,13 @@ namespace RoverController
             this.ep = new IPEndPoint(addr, port);
         }
 
+    }
+
+    public enum SocketStatus
+    {
+        Disconnected,
+        Connected,
+        Closed
     }
 
 
@@ -59,7 +69,7 @@ namespace RoverController
         /// </summary>
         public static ConcurrentQueue<byte[]> control_msgs = new ConcurrentQueue<byte[]>();
 
-        public override async Task<(bool, SocketWrapper)> Send()
+        public override async Task<SocketWrapper> Send()
         {
             byte[] cur_msg;
             if (control_msgs.TryDequeue(out cur_msg))
@@ -67,15 +77,16 @@ namespace RoverController
                 try
                 {
                     int bytes = await this.sock.SendAsync(new ArraySegment<byte>(cur_msg), SocketFlags.None);
-                    Console.WriteLine(bytes);
+                    if(bytes == 0) status = SocketStatus.Closed;
                 }
                 catch (SocketException)
                 {
-                    return (false, this);
+                    status = SocketStatus.Disconnected;
+                    return this;
                 }
             }
 
-            return (true, this);
+            return this;
         }
 
         public MovementSocket(IPAddress addr, int port) : base(addr, port)
@@ -195,7 +206,7 @@ namespace RoverController
             SocketWrapper mvmt_cmd = new MovementSocket(addr, 10001);
             uninitialized.Enqueue(mvmt_cmd);
 
-            List<Task<(bool, SocketWrapper)>> awaiting = new List<Task<(bool, SocketWrapper)>>();
+            List<Task<SocketWrapper>> awaiting = new List<Task<SocketWrapper>>();
 
             SocketWrapper sw;
             bool success;
@@ -215,11 +226,9 @@ namespace RoverController
                         Task.Run(
                             async () =>
                             {
-                                Task<(bool, SocketWrapper)> send = sw.Send();
-                                Task<(bool, SocketWrapper)> recv = sw.Receive();
-                                (bool send_success, _) = await send;
-                                (bool recv_success, _) = await recv;
-                                return (send_success && recv_success, sw);
+                                await sw.Send();
+                                await sw.Receive();
+                                return sw;
                             }
                         )
                     );
@@ -228,16 +237,21 @@ namespace RoverController
                 if (awaiting.Count() > 0)
                 {
                     int task_index = Task.WaitAny(awaiting.ToArray());
-                    Task<(bool, SocketWrapper)> completed = awaiting[task_index] as Task<(bool, SocketWrapper)>;
-                    (success, sw) = await completed;
-                    if (success)
+                    Task<SocketWrapper> completed = awaiting[task_index];
+                    sw = await completed;
+                    if (sw.status == SocketStatus.Connected)
                     {
+                        success = true;
                         connected.Enqueue(sw);
                     }
                     else
                     {
-                        sw.sock.Dispose();
+                        success = false;
+                        if (sw.status == SocketStatus.Closed) sw.sock.Disconnect(false);
+                        else sw.sock.Dispose();
+                        
                         uninitialized.Enqueue(sw);
+                        
                     }
                     awaiting.RemoveAt(task_index);
                     if (success != overall_connected)
@@ -250,10 +264,10 @@ namespace RoverController
             }
 
             Task.WaitAll(awaiting.ToArray());
-            foreach(Task<(bool, SocketWrapper)> t in awaiting)
+            foreach(Task<SocketWrapper> t in awaiting)
             {
-                (success, sw) = await t;
-                if (success) sw.sock.Disconnect(false);
+                sw = await t;
+                if (sw.status != SocketStatus.Disconnected) sw.sock.Disconnect(false);
                 else sw.sock.Dispose();
             }
             foreach (SocketWrapper sw_ in uninitialized) sw_.sock.Dispose();
