@@ -7,6 +7,7 @@ from threading import RLock
 
 class Mode:
     MANUAL = 0
+    AUTONOMOUS = 1
 
 
 mode = Mode.MANUAL
@@ -45,6 +46,21 @@ def commandCallback(user_command):
             vel_cmd_pub.publish(movement_state)
         callback_lock.release()
 
+    elif cmd[0] == 'a':
+
+        mode = Mode.AUTONOMOUS
+        autonomousSet()
+
+def autonomousSet():
+    callback_lock.acquire()
+    if left_avoiding:
+        vel_cmd_pub.publish('right')
+    elif right_avoiding:
+        vel_cmd_pub.publish('left')
+    else:
+        vel_cmd_pub.publish('forward')
+    callback_lock.release()
+
 
 def leftAvoidance(left_status):
     global left_avoiding
@@ -59,6 +75,9 @@ def leftAvoidance(left_status):
                 vel_cmd_pub.publish('stop')
             else:
                 vel_cmd_pub.publish(movement_state)
+
+    elif mode == Mode.AUTONOMOUS:
+        autonomousSet()
 
     callback_lock.release()
 
@@ -76,6 +95,9 @@ def rightAvoidance(right_status):
                 vel_cmd_pub.publish('stop')
             else:
                 vel_cmd_pub.publish(movement_state)
+                
+    elif mode == Mode.AUTONOMOUS:
+        autonomousSet()
 
     callback_lock.release()
 
