@@ -80,8 +80,9 @@ def commandCallback(commandMessage):
         motorsStop()
 
 def setup_node():
-    rospy.loginfo('Starting motor driver node')
+
     rospy.init_node('driver')
+    rospy.loginfo('Starting motor driver node')
     rospy.Subscriber('/jayrover/vel_cmd', String, commandCallback)
     rospy.spin()
     rospy.loginfo('Shutting down: shutting motors off')

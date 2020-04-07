@@ -86,7 +86,7 @@ def setup_node():
     rospy.Subscriber('/jayrover/sonar/left_threshold', Bool, leftAvoidance)
     rospy.Subscriber('/jayrover/sonar/right_threshold', Bool, rightAvoidance)
 
-    vel_cmd_pub = rospy.Publisher('/jayrover/dvel_cmd', String, queue_size=10)
+    vel_cmd_pub = rospy.Publisher('/jayrover/vel_cmd', String, queue_size=10)
 
     rospy.spin()
 
