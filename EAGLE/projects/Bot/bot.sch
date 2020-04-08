@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="mm"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="yes" active="no"/>
@@ -14404,7 +14404,7 @@ Source: AVX .. aphvc.pdf</description>
 <part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="2k"/>
 <part name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="2k"/>
 <part name="X_6" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
-<part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="1k"/>
+<part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="10"/>
 <part name="JP7" library="SparkFun" deviceset="M02" device="PTH4" value="SHIELD_PWR"/>
 <part name="U3" library="SparkFun" deviceset="ARDUINO_SHIELD" device="LABEL"/>
 <part name="X_7" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
@@ -14435,7 +14435,7 @@ Source: AVX .. aphvc.pdf</description>
 <attribute name="VALUE" x="-104.14" y="56.515" size="1.778" layer="96"/>
 </instance>
 <instance part="JP2" gate="G$1" x="-132.08" y="53.34" smashed="yes" rot="R180">
-<attribute name="NAME" x="-125.73" y="47.625" size="1.778" layer="95" rot="R180"/>
+<attribute name="NAME" x="-128.27" y="60.325" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-125.73" y="58.42" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="X_1" gate="G$1" x="-109.22" y="38.1" smashed="yes"/>
