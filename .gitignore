@@ -5,4 +5,7 @@ catkin_ws_test/
 RoverController/RoverController/obj/
 RoverController/RoverController/bin/Debug/
 jaybot_ws/build/
+jaybot_ws/devel/
 .vscode
+*.pyc
+jaybot_ws/src/rplidar_ros/
