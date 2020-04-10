@@ -14404,7 +14404,7 @@ Source: AVX .. aphvc.pdf</description>
 <part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="2k"/>
 <part name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="2k"/>
 <part name="X_6" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
-<part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="1k"/>
+<part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="10"/>
 <part name="JP7" library="SparkFun" deviceset="M02" device="PTH4" value="SHIELD_PWR"/>
 <part name="U3" library="SparkFun" deviceset="ARDUINO_SHIELD" device="LABEL"/>
 <part name="X_7" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
@@ -14849,6 +14849,26 @@ Source: AVX .. aphvc.pdf</description>
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="104,1,25.4,27.94,U$1,VCC,PI_5V,,,"/>
+<approved hash="104,1,25.4,20.32,U$1,GND,0,,,"/>
+<approved hash="104,1,25.4,-22.86,U$2,VCC,PI_5V,,,"/>
+<approved hash="104,1,25.4,-30.48,U$2,GND,0,,,"/>
+<approved hash="104,1,-53.34,35.56,PI,5V0,PI_5V,,,"/>
+<approved hash="104,1,-43.18,35.56,PI,3V3,PI_3V3,,,"/>
+<approved hash="104,1,-48.26,-33.02,PI,GND,0,,,"/>
+<approved hash="103,1,-63.5,0,PI,GPIO05,R_FWD,,,"/>
+<approved hash="103,1,-63.5,-2.54,PI,GPIO06,R_BCK,,,"/>
+<approved hash="103,1,-63.5,-5.08,PI,GPIO12,L_SPD,,,"/>
+<approved hash="103,1,-63.5,-7.62,PI,GPIO13,R_SPD,,,"/>
+<approved hash="103,1,-63.5,-17.78,PI,GPIO20,L_FWD,,,"/>
+<approved hash="103,1,-63.5,-20.32,PI,GPIO21,L_BCK,,,"/>
+<approved hash="113,1,-129.819,54.4872,JP2,,,,,"/>
+<approved hash="113,1,-103.818,8.89,LED1,,,,,"/>
+<approved hash="113,1,-103.818,-8.89,LED2,,,,,"/>
+<approved hash="113,1@TXS0108E,26.0971,44.9461,JP1,,,,,"/>
+<approved hash="113,1@TXS0108E,41.7829,41.9539,JP2,,,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>
