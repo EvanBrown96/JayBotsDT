@@ -14576,6 +14576,9 @@ Source: AVX .. aphvc.pdf</description>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-US" device="025-025X050" package3d_urn="urn:adsk.eagle:package:23629/2" value="100n"/>
 <part name="PI" library="raspberrypi_bastelstube_v13" deviceset="RASPI_BOARD_B+" device="_F" value="RASPI_BOARD_B+_F"/>
 <part name="KK1" library="heatsink" library_urn="urn:adsk.eagle:library:236" deviceset="SK129-PAD" device="" package3d_urn="urn:adsk.eagle:package:14199/1"/>
+<part name="LED3" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="5MM" package3d_urn="urn:adsk.eagle:package:15799/2"/>
+<part name="R6" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:25939/1" value="100"/>
+<part name="X_3" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -14662,6 +14665,15 @@ Source: AVX .. aphvc.pdf</description>
 <attribute name="NAME" x="-90.805" y="56.515" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-90.805" y="53.975" size="1.778" layer="96"/>
 </instance>
+<instance part="LED3" gate="G$1" x="-93.98" y="-25.4" smashed="yes">
+<attribute name="NAME" x="-90.424" y="-29.972" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-88.265" y="-29.972" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="R6" gate="G$1" x="-93.98" y="-40.64" smashed="yes" rot="R90">
+<attribute name="NAME" x="-95.4786" y="-44.45" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="-90.678" y="-44.45" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="X_3" gate="G$1" x="-93.98" y="-50.8" smashed="yes"/>
 </instances>
 <busses>
 </busses>
@@ -14768,6 +14780,11 @@ Source: AVX .. aphvc.pdf</description>
 <pinref part="X_8" gate="G$1" pin="0"/>
 <portref moduleinst="TXS0108E1" port="GND"/>
 <wire x1="-88.9" y1="-91.44" x2="-83.82" y2="-91.44" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="X_3" gate="G$1" pin="0"/>
+<pinref part="R6" gate="G$1" pin="1"/>
+<wire x1="-93.98" y1="-50.8" x2="-93.98" y2="-45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="L_FWD" class="0">
@@ -15007,6 +15024,21 @@ Source: AVX .. aphvc.pdf</description>
 <portref moduleinst="TXS0108E1" port="B7"/>
 <pinref part="U3" gate="G$1" pin="*D9"/>
 <wire x1="-88.9" y1="-86.36" x2="-60.96" y2="-86.36" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="PI" gate="G$1" pin="GPIO25"/>
+<pinref part="LED3" gate="G$1" pin="A"/>
+<wire x1="-63.5" y1="7.62" x2="-93.98" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="-93.98" y1="7.62" x2="-93.98" y2="-22.86" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<pinref part="LED3" gate="G$1" pin="C"/>
+<pinref part="R6" gate="G$1" pin="2"/>
+<wire x1="-93.98" y1="-30.48" x2="-93.98" y2="-35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
