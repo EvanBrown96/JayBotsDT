@@ -1243,9 +1243,9 @@ distributor Buerklin, 11G810</description>
 <wire x1="0" y1="2.667" x2="-2.159" y2="1.524" width="0.1524" layer="51"/>
 <wire x1="2.667" y1="1.2446" x2="2.159" y2="1.524" width="0.1524" layer="51"/>
 <wire x1="-2.667" y1="1.2446" x2="-2.159" y2="1.524" width="0.1524" layer="51"/>
-<wire x1="-1.397" y1="-2.032" x2="-1.143" y2="-1.27" width="0.1524" layer="51"/>
+<wire x1="-1.397" y1="-3.302" x2="-1.143" y2="-1.27" width="0.1524" layer="51"/>
 <wire x1="-1.143" y1="-1.27" x2="1.143" y2="-1.27" width="0.1524" layer="51" curve="-180"/>
-<wire x1="1.143" y1="-1.27" x2="1.397" y2="-2.032" width="0.1524" layer="51"/>
+<wire x1="1.143" y1="-1.27" x2="1.397" y2="-3.302" width="0.1524" layer="51"/>
 <wire x1="0" y1="0.381" x2="1.2892" y2="-2.3014" width="0.1524" layer="51" curve="-128.660783"/>
 <wire x1="-1.2892" y1="-2.3014" x2="0" y2="0.381" width="0.1524" layer="51" curve="-128.660783"/>
 <wire x1="-1.524" y1="2.6924" x2="1.524" y2="2.6924" width="2.1844" layer="29"/>
@@ -1279,9 +1279,9 @@ distributor Buerklin, 11G810</description>
 <wire x1="-2.54" y1="-1.27" x2="2.54" y2="-1.27" width="0.1524" layer="51" curve="-180"/>
 <wire x1="-2.54" y1="-1.27" x2="-1.3799" y2="-3.4025" width="0.1524" layer="51" curve="57.09406"/>
 <wire x1="1.3799" y1="-3.4025" x2="2.54" y2="-1.27" width="0.1524" layer="51" curve="57.09406"/>
-<wire x1="-1.397" y1="-2.032" x2="1.397" y2="-2.032" width="0.1524" layer="51" curve="180"/>
-<pad name="1" x="0" y="-2.6162" drill="1.8034" diameter="2" shape="long"/>
-<pad name="2" x="0" y="-1.1938" drill="1.8034" diameter="2" shape="long"/>
+<wire x1="-1.397" y1="-3.302" x2="1.397" y2="-3.302" width="0.1524" layer="51" curve="180"/>
+<pad name="1" x="0" y="-1.3462" drill="1.4986" diameter="1.6256" shape="long"/>
+<pad name="2" x="0" y="1.3462" drill="1.4986" diameter="1.6256" shape="long"/>
 <text x="4.445" y="-1.27" size="1.778" layer="25" ratio="10">&gt;NAME</text>
 <text x="4.445" y="-3.81" size="1.778" layer="27" ratio="10">&gt;VALUE</text>
 <rectangle x1="-1.27" y1="2.3368" x2="1.27" y2="4.2418" layer="42"/>
