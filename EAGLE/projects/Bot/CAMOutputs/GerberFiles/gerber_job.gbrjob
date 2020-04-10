@@ -1,7 +1,7 @@
 {
     "Header": {
         "Comment": "All values are metric (mm)",
-        "CreationDate": "2020-04-08T21:19:56Z",
+        "CreationDate": "2020-04-10T06:52:55Z",
         "GenerationSoftware": {
             "Application": "EAGLE",
             "Vendor": "Autodesk",
@@ -15,10 +15,6 @@
         "Name": {
             "ProjectId": "bot"
         },
-        "Owner": "Jason Puinton <jasonlee55@gmail.com>",
-        "Size": {
-            "X": 121.9,
-            "Y": 93.65
-        }
+        "Owner": "Jason Puinton <jasonlee55@gmail.com>"
     }
 }
