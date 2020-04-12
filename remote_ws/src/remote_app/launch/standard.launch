@@ -1,0 +1,8 @@
+<launch>
+  <!-- kill the launch file if ROS_IP and ROS_MASTER_URI are not set -->
+  <env name="ROS_IP" value="$(env ROS_IP)" />
+  <env name="ROS_MASTER_URI" value="$(env ROS_MASTER_URI)" />
+
+  <node pkg="remote_app" type="gui.py" name="gui" />
+
+</launch>
