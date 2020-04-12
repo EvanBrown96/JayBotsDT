@@ -3,6 +3,6 @@
   <env name="ROS_IP" value="$(env ROS_IP)" />
   <env name="ROS_MASTER_URI" value="$(env ROS_MASTER_URI)" />
 
-  <node pkg="remote_app" type="gui.py" name="gui" />
+  <node pkg="remote_app" type="gui.py" name="gui" args="$(dirname)" required="true" />
 
 </launch>
