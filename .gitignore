@@ -10,4 +10,4 @@ jaybot_ws/devel/
 *.pyc
 remote_ws/build/
 remote_ws/devel/
-remote_ws/src/RPLidar_Hector_SLAM
+RoverController/packages/

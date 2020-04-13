@@ -9,11 +9,19 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
+using RosSharp.RosBridgeClient;
+using RosSharp.RosBridgeClient.Protocols;
+using std_msgs = RosSharp.RosBridgeClient.MessageTypes.Std;
+
 
 namespace RoverController
 {
     public class RoverContainer
     {
+
+        static readonly string uri = "ws://127.0.0.1:9090";
+        RosSocket ros_socket;
+        String cmd_pub_id;
 
         /// <summary>
         /// The sidebar information panel for this rover
@@ -83,9 +91,11 @@ namespace RoverController
             rover_tab_page.Show();
             rover_tab.Show();
 
+            ros_socket = new RosSocket(new RosSharp.RosBridgeClient.Protocols.WebSocketNetProtocol(uri));
+            cmd_pub_id = ros_socket.Advertise<std_msgs.String>("/jayrover/user_cmd");
             // start connection thread
-            conn_thread = new Thread(new ThreadStart(socket_code));
-            conn_thread.Start();
+            //conn_thread = new Thread(new ThreadStart(socket_code));
+            //conn_thread.Start();
         }
 
         public void destroy()
@@ -114,8 +124,11 @@ namespace RoverController
         /// <param name="command">The command to send</param>
         public void enqueue_command(string command)
         {
-            control_msgs.Enqueue(Encoding.UTF8.GetBytes(command));
-            wait_for_control_msg.Set();
+            std_msgs.String msg = new std_msgs.String { data = command };
+            ros_socket.Publish(cmd_pub_id, msg);
+            
+            /*control_msgs.Enqueue(Encoding.UTF8.GetBytes(command));
+            wait_for_control_msg.Set();*/
         }
 
         /// <summary>
