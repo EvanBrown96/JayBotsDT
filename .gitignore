@@ -8,7 +8,6 @@ jaybot_ws/build/
 jaybot_ws/devel/
 .vscode
 *.pyc
-jaybot_ws/src/rplidar_ros/
 remote_ws/build/
 remote_ws/devel/
 remote_ws/src/RPLidar_Hector_SLAM
