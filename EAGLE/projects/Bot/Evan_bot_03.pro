@@ -1,0 +1,3 @@
+EAGLE AutoRouter Statistics:
+
+Error

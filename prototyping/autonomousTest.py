@@ -18,7 +18,7 @@ time.sleep(5)
 
 #motors off
 def motorsStop():
-    print "stop"
+    print ("stop")
     left_spd.value = 0
     left_fwd.off()
     left_bck.off()
@@ -28,7 +28,7 @@ def motorsStop():
 
 #moving forward
 def motorsFwd():
-    print "Forward"
+    print ("Forward")
     left_spd.value = 0.5
     left_fwd.on()
     left_bck.off()
@@ -48,7 +48,7 @@ def motorsBck():
 
 #turning left
 def motorsLeft():
-    print "Left"
+    print ("Left")
     left_spd.value = 0.5
     left_fwd.off()
     left_bck.on()
@@ -58,7 +58,7 @@ def motorsLeft():
 
 #turning right
 def motorsRight():
-    print "Right"
+    print ("Right")
     left_spd.valeu = 0.5
     left_fwd.on()
     left_bck.off()
