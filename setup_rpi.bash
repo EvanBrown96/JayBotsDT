@@ -3,7 +3,7 @@ source setup.bash
 # sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C3032ED8
 sudo dpkg -i --force-all /var/cache/apt/archives/linux-firmware-raspi2_1.20190819-0ubuntu0.18.04.1_armhf.deb
 sudo apt -y full-upgrade
-sudo apt -y install xrdp openssh-server
+sudo apt -y install xrdp openssh-server ros-melodic-rplidar-ros
 echo "source $HOME/JayBotsDT/jaybot_ws/devel/setup.bash" >> ~/.bashrc
 echo "sudo chmod 666 /dev/ttyUSB0" >> ~/.bashrc
 pip install gpiozero pigpio
