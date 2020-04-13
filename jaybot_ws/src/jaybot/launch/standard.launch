@@ -5,7 +5,6 @@
 	<node name="driver" pkg="jaybot" type="driver_node.py" />
 	<node name="movement_logic" pkg="jaybot" type="movement_logic.py" />
 	<node name="sonar_array" pkg="jaybot" type="avoidance.py" />
-	<node name="rplidarNode" pkg="rplidar_ros" type="rplidarNode" />
 
 	<include file="$(find rplidar_ros)/launch/rplidar.launch" />
 	<include file="$(dirname)/mapping_default.launch" />
