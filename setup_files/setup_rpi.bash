@@ -8,6 +8,5 @@ pip install gpiozero pigpio
 sudo systemctl enable ssh.service
 sudo systemctl start ssh.service
 sudo dpkg-reconfigure openssh-server
-echo "source ~/JayBotsDT/jaybot_ws/devel/setup.bash" >> ~/.bashrc
-echo "source ~/JayBotsDT/env_files/set_ros_ip.bash" >> ~/.bashrc
+echo "source ~/JayBotsDT/env_files/set_env_rpi.bash" >> ~/.bashrc
 echo "sudo chmod 666 /dev/ttyUSB0" >> ~/.bashrc
