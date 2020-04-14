@@ -7,6 +7,6 @@
 
 	<node machine="$(arg machine_name)" name="driver" pkg="jaybot" type="driver_node.py" />
 	<node machine="$(arg machine_name)" name="movement_logic" pkg="jaybot" type="movement_logic.py" />
-	<node machine="$(arg machine_name)" name="sonar_array" pkg="jaybot" type="avoidance.py" />
+	<!--<node machine="$(arg machine_name)" name="sonar_array" pkg="jaybot" type="avoidance.py" />-->
 
 </launch>
