@@ -14,7 +14,6 @@ using RosSharp.RosBridgeClient.Protocols;
 using std_msgs = RosSharp.RosBridgeClient.MessageTypes.Std;
 using rosapi = RosSharp.RosBridgeClient.MessageTypes.Rosapi;
 using RosSharp.RosBridgeClient.MessageTypes.RemoteApp;
-using System.Windows.Forms;
 
 
 namespace RoverController
@@ -95,6 +94,7 @@ namespace RoverController
             rover_tab.Show();
 
             ros_socket = new RosSocket(new RosSharp.RosBridgeClient.Protocols.WebSocketNetProtocol(uri));
+            //cmd_pub_id = ros_socket.Advertise()
             cmd_pub_id = ros_socket.Advertise<std_msgs.String>("/jayrover/user_cmd");
 
             string x = ros_socket.CallService<LaunchRoverRequest, LaunchRoverResponse>(

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RosSharp.RosBridgeClient;
-using RosSharp.RosBridgeClient.Protocols;
-using std_msgs = RosSharp.RosBridgeClient.MessageTypes.Std;
 using System.Threading;
 
 namespace RoverController
