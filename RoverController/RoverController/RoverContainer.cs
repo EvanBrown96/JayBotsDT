@@ -12,6 +12,9 @@ using System.Net.Sockets;
 using RosSharp.RosBridgeClient;
 using RosSharp.RosBridgeClient.Protocols;
 using std_msgs = RosSharp.RosBridgeClient.MessageTypes.Std;
+using rosapi = RosSharp.RosBridgeClient.MessageTypes.Rosapi;
+using RosSharp.RosBridgeClient.MessageTypes.RemoteApp;
+using System.Windows.Forms;
 
 
 namespace RoverController
@@ -41,7 +44,7 @@ namespace RoverController
         /// <summary>
         /// Thread object running communication operations with the rover
         /// </summary>
-        private Thread conn_thread;
+        // private Thread conn_thread;
 
         /// <summary>
         /// Flag for telling the thread to stop
@@ -51,7 +54,7 @@ namespace RoverController
         /// <summary>
         /// Queue of messages waiting to be sent to the rover
         /// </summary>
-        ConcurrentQueue<byte[]> control_msgs = new ConcurrentQueue<byte[]>();
+        // ConcurrentQueue<byte[]> control_msgs = new ConcurrentQueue<byte[]>();
 
         /// <summary>
         /// Event trigger to tell the rover that a message is ready to be sent
@@ -93,9 +96,24 @@ namespace RoverController
 
             ros_socket = new RosSocket(new RosSharp.RosBridgeClient.Protocols.WebSocketNetProtocol(uri));
             cmd_pub_id = ros_socket.Advertise<std_msgs.String>("/jayrover/user_cmd");
+
+            string x = ros_socket.CallService<LaunchRoverRequest, LaunchRoverResponse>(
+                "/launch_rover", LaunchHandler, new LaunchRoverRequest(name, ip_addr));
+
+            //ros_socket.CallService<rosapi.NodesRequest, rosapi.NodesResponse, >
+            //new rosapi.NodesRequest();
             // start connection thread
             //conn_thread = new Thread(new ThreadStart(socket_code));
             //conn_thread.Start();
+        }
+
+        private void LaunchHandler(LaunchRoverResponse response)
+        {
+            if (response.err != "") {
+                MessageBox.Show("An error occurred launching ROS:\n" + response.err,
+                    "Error Launching ROS", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                Console.WriteLine("poo");
+            }
         }
 
         public void destroy()
@@ -114,8 +132,8 @@ namespace RoverController
         /// </summary>
         public void stop_socket_clean()
         {
-            kill_thread = true;
-            wait_for_control_msg.Set();
+            ros_socket.Unadvertise(cmd_pub_id);
+            ros_socket.Close();
         }
 
         /// <summary>
@@ -126,6 +144,7 @@ namespace RoverController
         {
             std_msgs.String msg = new std_msgs.String { data = command };
             ros_socket.Publish(cmd_pub_id, msg);
+            // TODO: add error handling if publish call fails
             
             /*control_msgs.Enqueue(Encoding.UTF8.GetBytes(command));
             wait_for_control_msg.Set();*/
@@ -134,7 +153,7 @@ namespace RoverController
         /// <summary>
         /// Socket code running on the connection thread
         /// </summary>
-        private void socket_code()
+        /*private void socket_code()
         {
             PictureBox indicator = info_control.Controls.Find("pictureBox1", false)[0] as PictureBox;
             IPAddress addr = IPAddress.Parse(ip_addr);
@@ -194,6 +213,6 @@ namespace RoverController
                     Thread.Sleep(1000);
                 }
             }
-        }
+        }*/
     }
 }
