@@ -1,3 +1,4 @@
 string machine_name
 ---
+bool alive
 string err
