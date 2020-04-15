@@ -10,3 +10,6 @@ sudo systemctl start ssh.service
 sudo dpkg-reconfigure openssh-server
 echo "source ~/JayBotsDT/env_files/set_env_rpi.bash" >> ~/.bashrc
 echo "sudo chmod 666 /dev/ttyUSB0" >> ~/.bashrc
+
+cd ~/JayBotsDT/jaybot_ws
+catkin_make
