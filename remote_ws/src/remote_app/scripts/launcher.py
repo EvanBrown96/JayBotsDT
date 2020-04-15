@@ -4,31 +4,43 @@ import subprocess
 import rospy
 import os
 from remote_app.srv import LaunchRover, LaunchRoverResponse, PollRover, PollRoverResponse, KillRover, KillRoverResponse
-import StringIO
+
 
 running = {}
+
 
 def doLaunch(req):
     rospy.loginfo("launching {} at {}".format(req.machine_name, req.ip_addr))
     try:
-        err = StringIO.StringIO()
         proc = subprocess.Popen(
             ['roslaunch', 'remote_app', 'rpi_nodes.launch',
              'machine_name:={}'.format(req.machine_name), 'ip_addr:={}'.format(req.ip_addr)],
-            stderr=err)
-        running[req.machine_name] = (proc, err)
+            stderr=subprocess.PIPE)
+        running[req.machine_name] = proc
         return LaunchRoverResponse("")
-    except e:
+
+    except Exception as e:
         rospy.logerr("failed to launch: {}".format(e))
         return LaunchRoverResponse(str(e))
 
+
 def doPoll(req):
 
-    return KillRoverResponse(running[req.machine_name][1].getvalue())
+    if req.machine_name not in running.keys():
+        return PollRoverResponse(False, "")
+
+    if running[req.machine_name].poll() is not None:
+        out, err = running[req.machine_name].communicate()
+        del running[req.machine_name]
+        return PollRoverResponse(False, err)
+
+    return PollRoverResponse(True, "")
+
 
 def doKill(req):
-    running[req.machine_name][0].terminate()
-    running[req.machine_name][1].close()
+    if req.machine_name in running.keys():
+        running[req.machine_name].terminate()
+        del running[req.machine_name]
     return KillRoverResponse()
 
 
@@ -42,25 +54,11 @@ def setup_node():
     rospy.Service('/poll_rover', PollRover, doPoll)
     rospy.loginfo("started /poll_rover service")
     rospy.Service('/kill_rover', KillRover, doKill)
+    rospy.loginfo("starter /kill_rover service")
 
     rospy.spin()
     rospy.loginfo("stopping node")
 
-
-    # rospy.Subscriber('launch_rover', String, doLaunch)
-    # rospy.Subscriber('kill_rover', String, killRover)
-    #
-    # rate = rospy.Rate(1)
-    #
-    # while not rospy.is_shutdown():
-    #
-    #     for machine_name in running.keys():
-    #         status = running[machine_name].poll()
-    #         if status is not None:
-    #             print(status)
-    #             del running[machine_name]
-    #
-    #     rate.sleep()
 
 if __name__ == '__main__':
     setup_node()
