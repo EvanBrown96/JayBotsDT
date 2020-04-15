@@ -39,7 +39,7 @@ namespace RoverController
 
         private void button1_Click(object sender, EventArgs e)
         {
-            container.destroy();
+            container.simpleDestroy();
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)

@@ -38,7 +38,7 @@ namespace RoverController
         {
             return new Point(6, 22 + 53 * index);
         }
-
+        
         /// <summary>
         /// Prompt user for connection details upon clicking "Add Connection" button
         /// </summary>
@@ -58,7 +58,7 @@ namespace RoverController
         /// <param name="ip_addr">IP address of the rover</param>
         public void do_addConn(string name, string ip_addr)
         {
-            RoverContainer container = new RoverContainer(name, ip_addr, groupBox1, tabControl1);
+            RoverContainer container = new RoverContainer(name, ip_addr, Control.FromHandle(this.Handle), groupBox1, tabControl1);
             container.info_control.Location = get_info_location(rovers.Count);
             rovers.Add(container);
             container.info_control.Show();
@@ -75,7 +75,7 @@ namespace RoverController
         {
             foreach (RoverContainer container in rovers)
             {
-                container.stop_socket_clean();
+                container.simpleDestroy();
             }
         }
        

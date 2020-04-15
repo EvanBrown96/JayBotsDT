@@ -86,8 +86,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RosSharpMessages\RemoteApp\srv\KillRoverRequest.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\KillRoverResponse.cs" />
     <Compile Include="RosSharpMessages\RemoteApp\srv\LaunchRoverRequest.cs" />
     <Compile Include="RosSharpMessages\RemoteApp\srv\LaunchRoverResponse.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\PollRoverRequest.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\PollRoverResponse.cs" />
     <Compile Include="RoverContainer.cs" />
     <Compile Include="Master.cs">
       <SubType>Form</SubType>
