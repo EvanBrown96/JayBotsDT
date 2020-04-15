@@ -1,0 +1,3 @@
+[submodule "RoverController/ros-sharp"]
+	path = RoverController/ros-sharp
+	url = https://github.com/siemens/ros-sharp
