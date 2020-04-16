@@ -10,7 +10,6 @@ project(remote_app)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
-  rviz
   std_msgs
   message_generation
 )
@@ -108,7 +107,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES remote_app
-   CATKIN_DEPENDS roscpp rospy rviz std_msgs message_runtime
+   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -163,7 +162,7 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 # install(PROGRAMS
-#   scripts/my_python_script
+#   scripts/launcher.py
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 

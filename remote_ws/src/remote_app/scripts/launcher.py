@@ -13,9 +13,10 @@ def doLaunch(req):
     rospy.loginfo("launching {} at {}".format(req.machine_name, req.ip_addr))
     try:
         proc = subprocess.Popen(
-            ['roslaunch', 'remote_app', 'rpi_nodes.launch',
-             'machine_name:={}'.format(req.machine_name), 'ip_addr:={}'.format(req.ip_addr)],
-            stderr=subprocess.PIPE)
+            ['ssh', 'pmr@192.168.0.5', '"source ~/JayBotsDT/env_files/set_env_rpi.bash {}; roslaunch jaybot standard.launch"'.format(req.ip_addr)])
+            #['roslaunch', 'remote_app', 'rpi_nodes.launch',
+            # 'machine_name:={}'.format(req.machine_name), 'ip_addr:={}'.format(req.ip_addr)],
+            #stderr=subprocess.PIPE)
         running[req.machine_name] = proc
         return LaunchRoverResponse("")
 
@@ -54,7 +55,7 @@ def setup_node():
     rospy.Service('/poll_rover', PollRover, doPoll)
     rospy.loginfo("started /poll_rover service")
     rospy.Service('/kill_rover', KillRover, doKill)
-    rospy.loginfo("starter /kill_rover service")
+    rospy.loginfo("started /kill_rover service")
 
     rospy.spin()
     rospy.loginfo("stopping node")
