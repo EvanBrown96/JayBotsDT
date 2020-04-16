@@ -2,7 +2,7 @@
 
 import rospy
 from std_msgs.msg import String
-from gpiozero import DigitalOutputDevice, PWMOutputDevice
+from gpiozero import DigitalOutputDevice, PWMOutputDevice, LED
 
 left_fwd = DigitalOutputDevice(20)
 left_bck = DigitalOutputDevice(21)
@@ -11,6 +11,8 @@ left_spd = PWMOutputDevice(12, frequency=500)
 right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
 right_spd = PWMOutputDevice(13, frequency=500)
+
+blinker = LED(25)
 
 #motors off
 def motorsStop():
@@ -83,6 +85,7 @@ def setup_node():
 
     rospy.init_node('driver')
     rospy.loginfo('Starting motor driver node')
+    blinker.on()
     rospy.Subscriber('/jayrover/vel_cmd', String, commandCallback)
     rospy.spin()
     rospy.loginfo('Shutting down: shutting motors off')
@@ -90,4 +93,3 @@ def setup_node():
 
 if __name__ == '__main__':
     setup_node()
-
