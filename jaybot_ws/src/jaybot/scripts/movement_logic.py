@@ -4,7 +4,6 @@ import rospy
 from std_msgs.msg import String, Bool
 from threading import RLock
 
-
 class Mode:
     MANUAL = 0
     AUTONOMOUS = 1
@@ -105,16 +104,22 @@ def rightAvoidance(right_status):
 def setup_node():
     global vel_cmd_pub
 
+    rospy.loginfo("starting node")
     rospy.init_node('movement_logic')
 
     rospy.Subscriber('/jayrover/user_cmd', String, commandCallback)
+    rospy.loginfo("subscribed to /jayrover/user_cmd")    
     rospy.Subscriber('/jayrover/sonar/left_threshold', Bool, leftAvoidance)
+    rospy.loginfo("subscribed to /jayrover/left_threshold")
     rospy.Subscriber('/jayrover/sonar/right_threshold', Bool, rightAvoidance)
+    rospy.loginfo("subscribed to /jayrover/right_threshold")
 
     vel_cmd_pub = rospy.Publisher('/jayrover/vel_cmd', String, queue_size=10)
+    rospy.loginfo("published to /jayrover/vel_cmd")
 
     rospy.spin()
 
 
 if __name__ == '__main__':
     setup_node()
+
