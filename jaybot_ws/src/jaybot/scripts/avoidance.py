@@ -13,7 +13,7 @@ SONAR_LEFT_GPIO_ECHO         = 24
 
 MIN_RANGE = 0.02
 MAX_RANGE = 2.0
-THRESHOLD = 0.3
+THRESHOLD = 0.4
 
 def start_sensors():
 
