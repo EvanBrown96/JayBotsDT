@@ -12,6 +12,6 @@
 	<!--<node machine="$(arg machine_name)" name="sonar_array" pkg="jaybot" type="avoidance.py" />-->
 
 	<include file="$(find rplidar_ros)/launch/rplidar.launch" />
-	<!--<include file="$(dirname)/mapping_default.launch" />-->
+	<include file="$(dirname)/mapping_default.launch" />
 
 </launch>

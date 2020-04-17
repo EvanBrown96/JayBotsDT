@@ -1,5 +1,3 @@
-@echo off
-
 for %%A in ("%USERPROFILE%") do (
     set USERNAME=%%~nxA
 )
@@ -14,8 +12,9 @@ set /P WS_ADDR=<%TEMP_LOC%
 
 rm %TEMP_LOC%
 
-%~dp0\RoverController\bin\Debug\RoverController.exe
+echo %WS_ADDR%
+start %~dp0\RoverController\bin\Debug\RoverController.exe
+
+docker attach %DOCKER_ID%
 
 docker stop %DOCKER_ID%
-
-@echo on
