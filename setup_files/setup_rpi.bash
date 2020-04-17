@@ -19,5 +19,9 @@ sudo dpkg-reconfigure openssh-server
 cd ~/JayBotsDT/jaybot_ws
 catkin_make
 
+sudo echo "#!/bin/bash" > /etc/rc.local
+sudo echo 'chmod 666 /dev/ttyUSB0' >> /etc/rc.local
+sudo chmod +x /etc/rc.local
+
 echo "source ~/JayBotsDT/env_files/rpi_startup.bash" >> ~/.bashrc
-echo "sudo chmod 666 /dev/ttyUSB0" >> ~/.bashrc
+echo "echo Don't forget to set ROS_MASTER_URI !!!" >> ~/.bashrc
