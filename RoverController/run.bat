@@ -1,2 +1,7 @@
 start %~dp0/RoverController/bin/Debug/RoverController.exe
-wsl source ~/JayBotsDT/env_files/set_env_remote.bash ; roslaunch remote_app standard.launch
+@echo off
+For %%A in ("%USERPROFILE%") do (
+    Set username=%%~nxA
+)
+@echo on
+docker run -it --net=host -v /c/Users/%username%/.ssh:/root/.ssh jaybot_remote:latest
