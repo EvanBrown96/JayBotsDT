@@ -14,7 +14,8 @@ set /P WS_ADDR=<%TEMP_LOC%
 
 rm %TEMP_LOC%
 
-%~dp0/RoverController/bin/Debug/RoverController.exe
+echo %WS_ADDR%
+%~dp0\RoverController\bin\Debug\RoverController.exe
 
 docker stop %DOCKER_ID%
 
