@@ -1,7 +1,7 @@
 {
     "Header": {
         "Comment": "All values are metric (mm)",
-        "CreationDate": "2020-04-10T20:46:39Z",
+        "CreationDate": "2020-04-17T03:43:03Z",
         "GenerationSoftware": {
             "Application": "EAGLE",
             "Vendor": "Autodesk",
@@ -13,7 +13,7 @@
         "BoardThickness": 1.57,
         "LayerNumber": 2,
         "Name": {
-            "ProjectId": "bot"
+            "ProjectId": "bot2"
         },
         "Owner": "Jason Puinton <jasonlee55@gmail.com>"
     }

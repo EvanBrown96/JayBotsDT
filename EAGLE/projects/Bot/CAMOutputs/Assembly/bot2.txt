@@ -1,0 +1,19 @@
+Partlist exported from C:/Users/jason/Documents/EAGLE/projects/Bot/bot2.sch at 4/16/2020 10:43 PM
+
+Qty Value               Device              Package             Parts                        Description                                                                                           POPULARITY SPICEPREFIX
+1                       7905T               TO220H              IC1                          Negative VOLTAGE REGULATOR                                                                            0                     
+3                       LED5MM              LED5MM              LED1, LED2, LED3             LED                                                                                                   93                    
+1                       MS243               MS243               S2                           TOGGLE SWITCH                                                                                         3                     
+2                       PINHD-1X10          1X10                TXS0108E1:JP1, TXS0108E1:JP2 PIN HEADER                                                                                            35                    
+1                       PINHD-1X2           1X02                JP2                          PIN HEADER                                                                                                                  
+1   10                  R-US_0207/10        0207/10             R5                           RESISTOR, American symbol                                                                                                   
+1   100                 R-US_0207/10        0207/10             R6                           RESISTOR, American symbol                                                                                                   
+1   100n                C-US025-025X050     C025-025X050        C2                           CAPACITOR, American symbol                                                                            0          C          
+2   1k                  R-US_0207/10        0207/10             R1, R2                       RESISTOR, American symbol                                                                                                   
+2   2k                  R-US_0207/10        0207/10             R3, R4                       RESISTOR, American symbol                                                                                                   
+1   330n                C-US025-025X050     C025-025X050        C1                           CAPACITOR, American symbol                                                                            0          C          
+1   ARDUINO_SHIELDLABEL ARDUINO_SHIELDLABEL DUEMILANOVE_SHIELD  U3                                                                                                                                                       
+1   RASPI_BOARD_B+_F    RASPI_BOARD_B+_F    RASPI_BOARD_B+_FULL PI                           Raspberry Pi GPIO connector with markings for the outer dimensions of the Raspberry Pi board model B+                       
+1   SHIELD_PWR          M02PTH4             1X02_XTRA_BIG       JP7                          Header 2                                                                                                                    
+1   SK129-PAD           SK129-PAD           SK129               KK1                          HEATSINK manufacturer Fischer/distributor Buerklin                                                    3                     
+2   ULTRASONIC-HC-SR04  ULTRASONIC-HC-SR04  ULTRASONIC-HC-SR04  U$1, U$2                     Ultrasonic Ranging Module HC-SR04                                                                                           
