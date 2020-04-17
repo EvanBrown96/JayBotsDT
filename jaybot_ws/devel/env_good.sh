@@ -1,8 +1,18 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+# generated from catkin/cmake/templates/env.sh.in
 
-source ~/JayBotsDT/jaybot_ws/devel/setup.bash
+source ../../env_files/set_ros_ip.bash
 
-export ROS_IP=192.168.0.5
-export ROS_MASTER_URI=http://192.168.0.3:11311
+if [ $# -eq 0 ] ; then
+  /bin/echo "Usage: env.sh COMMANDS"
+  /bin/echo "Calling env.sh without arguments is not supported anymore. Instead spawn a subshell and source a setup file manually."
+  exit 1
+fi
 
+# ensure to not use different shell type which was set before
+CATKIN_SHELL=sh
+
+# source setup.sh from same directory as this file
+_CATKIN_SETUP_DIR=$(cd "`dirname "$0"`" > /dev/null && pwd)
+. "$_CATKIN_SETUP_DIR/setup.sh"
 exec "$@"
