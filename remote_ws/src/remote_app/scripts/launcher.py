@@ -13,10 +13,10 @@ def doLaunch(req):
     rospy.loginfo("launching {} at {}".format(req.machine_name, req.ip_addr))
     try:
         proc = subprocess.Popen(
-            ['ssh', 'pmr@192.168.0.5', '"source ~/JayBotsDT/env_files/set_env_rpi.bash {}; roslaunch jaybot standard.launch"'.format(req.ip_addr)])
-            #['roslaunch', 'remote_app', 'rpi_nodes.launch',
-            # 'machine_name:={}'.format(req.machine_name), 'ip_addr:={}'.format(req.ip_addr)],
-            #stderr=subprocess.PIPE)
+            ['roslaunch', 'remote_app', 'rpi_nodes.launch',
+             'machine_name:={}'.format(req.machine_name),
+             'ip_addr:={}'.format(req.ip_addr)],
+             stderr=subprocess.PIPE)
         running[req.machine_name] = proc
         return LaunchRoverResponse("")
 
