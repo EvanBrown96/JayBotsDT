@@ -41,6 +41,8 @@ def doPoll(req):
 def doKill(req):
     if req.machine_name in running.keys():
         running[req.machine_name].terminate()
+        out, err = running[req.machine_name].communicate()
+        print(err)
         del running[req.machine_name]
     return KillRoverResponse()
 
