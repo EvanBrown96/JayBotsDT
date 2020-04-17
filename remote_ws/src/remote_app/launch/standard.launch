@@ -4,7 +4,7 @@
   <env name="ROS_MASTER_URI" value="$(env ROS_MASTER_URI)" />
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
-    <arg address="$(env ROS_IP)" />
+    <arg name="address" value="$(env ROS_IP)" />
   </include>
   <node pkg="remote_app" type="launcher.py" name="launcher" required="true" />
 
