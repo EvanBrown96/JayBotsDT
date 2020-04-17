@@ -1,5 +1,5 @@
 FROM ros:latest
-RUN apt-get update && apt-get install -y ros-melodic-rosbridge-suite iproute2 openssh-server python-pip
+RUN apt-get update && apt-get install -y ros-melodic-rosbridge-suite iproute2 openssh-server python-pip ros-melodic-rplidar-ros
 RUN pip install pycrypto
 WORKDIR /root
 COPY remote_ws remote_ws
