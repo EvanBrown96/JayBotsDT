@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source ~/JayBotsDT/jaybot_ws/devel/setup.bash
-
-source ~/JayBotsDT/env_files/set_ros_ip.bash
+source ~/JayBotsDT/env_files/rpi_startup.bash
 
 exec "$@"

@@ -1,1 +1,0 @@
-export ROS_MASTER_URI=http://$ROS_IP:11311
