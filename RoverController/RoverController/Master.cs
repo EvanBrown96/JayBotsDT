@@ -73,9 +73,9 @@ namespace RoverController
         /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (RoverContainer container in rovers)
+            while(rovers.Count > 0)
             {
-                container.simpleDestroy();
+                rovers[0].simpleDestroy();
             }
         }
        

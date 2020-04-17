@@ -21,7 +21,7 @@ namespace RoverController
     public class RoverContainer
     {
 
-        static readonly string uri = "ws://127.0.0.1:9090";
+        static readonly string uri = "ws://"+Environment.GetEnvironmentVariable("WS_ADDR")+":9090";
         private RosSocket ros_socket;
         private String cmd_pub_id;
 
@@ -89,12 +89,7 @@ namespace RoverController
 
             ros_socket.CallService<LaunchRoverRequest, LaunchRoverResponse>(
                 "/launch_rover", LaunchHandler, new LaunchRoverRequest(name, ip_addr));
-
-            //ros_socket.CallService<rosapi.NodesRequest, rosapi.NodesResponse, >
-            //new rosapi.NodesRequest();
-            // start connection thread
-            //conn_thread = new Thread(new ThreadStart(socket_code));
-            //conn_thread.Start();
+            // TODO; add error handling
         }
 
         private void LaunchHandler(LaunchRoverResponse response)
@@ -120,6 +115,7 @@ namespace RoverController
             else
             {
                 socket_lock.AcquireReaderLock(-1);
+                // TODO; add error handling
                 if (!killed) ros_socket.CallService<PollRoverRequest, PollRoverResponse>("/poll_rover", PollLoop, new PollRoverRequest(name));
                 socket_lock.ReleaseReaderLock();
             }
@@ -135,6 +131,7 @@ namespace RoverController
                 await Task.Delay(4000);
 
                 socket_lock.AcquireReaderLock(-1);
+                // TODO: add error handling
                 if(!killed) ros_socket.CallService<PollRoverRequest, PollRoverResponse>("/poll_rover", PollLoop, new PollRoverRequest(name));
                 socket_lock.ReleaseReaderLock();
             }

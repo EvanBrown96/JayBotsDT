@@ -12,4 +12,3 @@ jaybot_ws/devel/
 remote_ws/build/
 remote_ws/devel/*
 RoverController/packages/
-!remote_ws/devel/env_good.sh
