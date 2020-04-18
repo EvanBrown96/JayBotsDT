@@ -24,6 +24,8 @@ start /MIN cmd /C "c:\opt\ros\melodic\x64\setup.bat && rviz -d %~dp0\jaybot.rviz
 
 %~dp0\RoverController\bin\Release\RoverController.exe
 
+echo Waiting for ROS to close gracefully...
+
 docker stop %DOCKER_ID%
 
 @echo on
