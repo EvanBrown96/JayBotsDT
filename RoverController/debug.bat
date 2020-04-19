@@ -18,6 +18,8 @@ del %TEMP_LOC%
 echo ROS_MASTER_URI=%ROS_MASTER_URI%
 echo ROS_IP=%ROS_IP%
 
+timeout /t 7
+
 start /MIN cmd /C "c:\opt\ros\melodic\x64\setup.bat && rviz -d %~dp0\jaybot.rviz"
 
 start %~dp0\RoverController\bin\Release\RoverController.exe

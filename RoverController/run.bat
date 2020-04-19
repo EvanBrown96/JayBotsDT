@@ -18,7 +18,7 @@ set /P ROS_IP=<%TEMP_LOC%
 del %TEMP_LOC%
 
 echo Waiting for ROS to initialize...
-sleep 7
+timeout /t 7
 
 start /MIN cmd /C "c:\opt\ros\melodic\x64\setup.bat && rviz -d %~dp0\jaybot.rviz"
 
