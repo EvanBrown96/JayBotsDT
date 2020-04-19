@@ -15,7 +15,7 @@ set /P WS_ADDR=<%TEMP_LOC%
 set ROS_MASTER_URI=http://%WS_ADDR%:11311
 python -c "import socket; hostname=socket.gethostname(); print(socket.gethostbyname_ex(hostname)[-1][-1])" > %TEMP_LOC%
 set /P ROS_IP=<%TEMP_LOC%
-rm %TEMP_LOC%
+del %TEMP_LOC%
 
 echo Waiting for ROS to initialize...
 sleep 7
