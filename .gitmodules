@@ -1,3 +1,6 @@
 [submodule "RoverController/ros-sharp"]
 	path = RoverController/ros-sharp
 	url = https://github.com/siemens/ros-sharp
+[submodule "remote_ws/src/hector_slam"]
+	path = remote_ws/src/hector_slam
+	url = https://github.com/EvanBrown96/hector_slam
