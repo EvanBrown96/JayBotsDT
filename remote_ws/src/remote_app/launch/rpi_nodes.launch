@@ -12,5 +12,6 @@
 	<node name="sonar_array" pkg="jaybot" type="avoidance.py" />
 
 	<include file="$(find rplidar_ros)/launch/rplidar.launch" />
+	<include file="$(find raspicam_node)/launch/camerav2_410x308_30fps" />
 
 </launch>
