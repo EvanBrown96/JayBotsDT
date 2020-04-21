@@ -83,12 +83,11 @@ def setup_node():
 
     rospy.init_node('driver')
     rospy.loginfo('starting node')
-    rospy.Subscriber('/jayrover/vel_cmd', String, commandCallback)
-    rospy.loginfo('subscribed to /jayrover/vel_cmd')
+    rospy.Subscriber('vel_cmd', String, commandCallback)
+    rospy.loginfo('subscribed to vel_cmd')
     rospy.spin()
     rospy.loginfo('Shutting down: shutting motors off')
     motorsStop()
 
 if __name__ == '__main__':
     setup_node()
-

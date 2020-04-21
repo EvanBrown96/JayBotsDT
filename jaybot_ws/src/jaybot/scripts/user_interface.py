@@ -12,7 +12,7 @@ def start_node():
     sock.listen(0)
 
     rospy.init_node('user_interface')
-    pub = rospy.Publisher('/jayrover/user_cmd', String, queue_size=10)
+    pub = rospy.Publisher('user_cmd', String, queue_size=10)
 
     while not rospy.is_shutdown():
         conn, _ = sock.accept()
