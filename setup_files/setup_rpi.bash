@@ -7,6 +7,8 @@ sudo apt -y install ros-melodic-desktop-full python-rosdep python-rosinstall pyt
 sudo dpkg -i --force-all /var/cache/apt/archives/linux-firmware-raspi2_1.20190819-0ubuntu0.18.04.1_armhf.deb
 sudo apt -y full-upgrade
 
+echo "yaml https://raw.githubusercontent.com/UbiquityRobotics/rosdep/master/raspberry-pi.yaml" | sudo tee /etc/ros/rosdep/sources.list.d/30-ubiquity.list
+
 sudo rosdep init
 rosdep update
 
@@ -17,10 +19,11 @@ sudo systemctl start ssh.service
 sudo dpkg-reconfigure openssh-server
 
 cd ~/JayBotsDT/jaybot_ws
+rosdep install --from-paths src --ignore-src -y
 catkin_make
 
-sudo echo "#!/bin/bash" > /etc/rc.local
-sudo echo 'chmod 666 /dev/ttyUSB0' >> /etc/rc.local
+echo "#!/bin/bash" | sudo tee /etc/rc.local
+echo 'chmod 666 /dev/ttyUSB0' | sudo tee -a /etc/rc.local
 sudo chmod +x /etc/rc.local
 
 echo "source ~/JayBotsDT/env_files/rpi_startup.bash" >> ~/.bashrc

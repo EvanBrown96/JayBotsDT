@@ -3,15 +3,14 @@
 	<arg name="machine_name" />
 	<arg name="ip_addr" />
 
-
-
 	<machine name="$(arg machine_name)" address="$(arg ip_addr)" user="pmr" env-loader="~/JayBotsDT/jaybot_ws/devel/env_good.sh" default="true" />
+	<env name="ROS_NAMESPACE" value="$(arg machine_name)" />
 
 	<node name="driver" pkg="jaybot" type="driver_node.py" />
 	<node name="movement_logic" pkg="jaybot" type="movement_logic.py" />
 	<node name="sonar_array" pkg="jaybot" type="avoidance.py" />
 
 	<include file="$(find rplidar_ros)/launch/rplidar.launch" />
-	<include file="$(find raspicam_node)/launch/camerav2_410x308_30fps" />
+	<include file="$(dirname)/camera.launch" />
 
 </launch>
