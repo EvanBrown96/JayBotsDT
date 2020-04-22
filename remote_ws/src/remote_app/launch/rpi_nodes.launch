@@ -1,16 +1,26 @@
 <launch>
 
-	<arg name="machine_name" />
-	<arg name="ip_addr" />
+	<arg name="machine_name"/>
+	<arg name="ip_addr"/>
+	<!--<env name="ROS_NAMESPACE" value="$(arg machine_name)"/>-->
 
-	<machine name="$(arg machine_name)" address="$(arg ip_addr)" user="pmr" env-loader="~/JayBotsDT/jaybot_ws/devel/env_good.sh" default="true" />
-	<env name="ROS_NAMESPACE" value="$(arg machine_name)" />
+	<group ns="$(arg machine_name)">
+		<!-- launch hector_slam on local machine -->
+		<include file="$(dirname)/mapping_default.launch">
+			<arg name="machine_name" value="$(machine_name)"/>
+		</include>
 
-	<node name="driver" pkg="jaybot" type="driver_node.py" />
-	<node name="movement_logic" pkg="jaybot" type="movement_logic.py" />
-	<node name="sonar_array" pkg="jaybot" type="avoidance.py" />
+		<!-- everything else on remote machine -->
+		<machine name="$(arg machine_name)" address="$(arg ip_addr)" user="pmr" env-loader="~/JayBotsDT/jaybot_ws/devel/env_good.sh" default="true"/>
 
-	<include file="$(find rplidar_ros)/launch/rplidar.launch" />
-	<include file="$(dirname)/camera.launch" />
+		<node name="driver" pkg="jaybot" type="driver_node.py"/>
+		<node name="movement_logic" pkg="jaybot" type="movement_logic.py"/>
+		<node name="sonar_array" pkg="jaybot" type="avoidance.py"/>
+
+		<include file="$(dirname)/rplidar.launch">
+			<arg name="machine_name" value="$(machine_name)"/>
+		</include>
+		<include file="$(dirname)/camera.launch" pass_all_args="true"/>
+	</group>
 
 </launch>

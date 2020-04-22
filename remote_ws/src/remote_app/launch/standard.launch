@@ -7,6 +7,5 @@
     <arg name="address" value="$(env ROS_IP)" />
   </include>
   <node pkg="remote_app" type="launcher.py" name="launcher" required="true" />
-	<include file="$(dirname)/mapping_default.launch" />
 
 </launch>

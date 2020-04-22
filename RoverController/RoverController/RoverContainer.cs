@@ -85,7 +85,7 @@ namespace RoverController
             rover_tab.Show();
 
             ros_socket = new RosSocket(new RosSharp.RosBridgeClient.Protocols.WebSocketNetProtocol(uri));
-            cmd_pub_id = ros_socket.Advertise<std_msgs.String>("/jayrover/user_cmd");
+            cmd_pub_id = ros_socket.Advertise<std_msgs.String>("/"+name+"/user_cmd");
 
             ros_socket.CallService<LaunchRoverRequest, LaunchRoverResponse>(
                 "/launch_rover", LaunchHandler, new LaunchRoverRequest(name, ip_addr));
