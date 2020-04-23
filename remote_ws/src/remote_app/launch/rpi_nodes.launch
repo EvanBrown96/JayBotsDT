@@ -7,7 +7,7 @@
 	<group ns="$(arg machine_name)">
 		<!-- launch hector_slam on local machine -->
 		<include file="$(dirname)/mapping_default.launch">
-			<arg name="machine_name" value="$(machine_name)"/>
+			<arg name="machine_name" value="$(arg machine_name)"/>
 		</include>
 
 		<!-- everything else on remote machine -->
@@ -18,7 +18,7 @@
 		<node name="sonar_array" pkg="jaybot" type="avoidance.py"/>
 
 		<include file="$(dirname)/rplidar.launch">
-			<arg name="machine_name" value="$(machine_name)"/>
+			<arg name="machine_name" value="$(arg machine_name)"/>
 		</include>
 		<include file="$(dirname)/camera.launch" pass_all_args="true"/>
 	</group>
