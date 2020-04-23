@@ -8,11 +8,13 @@ from std_srvs.srv import Empty, EmptyResponse
 BLINKER_GPIO = 25
 led = None
 
-def start(Empty e):
+def start(_):
     led.blink()
+    return EmptyResponse()
 
-def stop(Empty e):
+def stop(_):
     led.off()
+    return EmptyResponse()
 
 def start_blinker():
     global led
