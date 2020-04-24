@@ -59,7 +59,7 @@ Visualization Manager:
       Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: jaybot/map
+      Topic: <machine_name>/map
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -75,12 +75,12 @@ Visualization Manager:
       Shaft Length: 1
       Shaft Radius: 0.05000000074505806
       Shape: Arrow
-      Topic: jaybot/slam_out_pose
+      Topic: <machine_name>/slam_out_pose
       Unreliable: false
       Value: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: jaybot/raspicam_node/image
+      Image Topic: <machine_name>/raspicam_node/image
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -94,7 +94,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: jaybot/map
+    Fixed Frame: <machine_name>/map
     Frame Rate: 30
   Name: root
   Tools:

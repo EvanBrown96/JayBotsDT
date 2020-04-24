@@ -20,8 +20,6 @@ del %TEMP_LOC%
 echo Waiting for ROS to initialize...
 timeout /t 7
 
-start /MIN cmd /C "c:\opt\ros\melodic\x64\setup.bat && rviz -d %~dp0\jaybot.rviz"
-
 %~dp0\RoverController\bin\Release\RoverController.exe
 
 echo Waiting for ROS to close gracefully...

@@ -37,7 +37,7 @@ namespace RoverController
             else mc.Hide();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void disconnect_Click(object sender, EventArgs e)
         {
             container.simpleDestroy();
         }
@@ -46,8 +46,23 @@ namespace RoverController
         {
             if((sender as RadioButton).Checked)
             {
-                container.enqueue_command("a");
+                //container.enqueue_command("a");
+                container.startMap();
             }
+            else
+            {
+                container.stopMap();
+            }
+        }
+
+        private void reset_Click(object sender, EventArgs e)
+        {
+            container.resetMap();
+        }
+
+        private void view_Click(object sender, EventArgs e)
+        {
+            container.viewMap();
         }
     }
 }

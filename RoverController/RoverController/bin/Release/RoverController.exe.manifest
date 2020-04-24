@@ -90,14 +90,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoverController.exe" size="51680">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoverController.exe" size="55776">
       <assemblyIdentity name="RoverController" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>XqWUZSeeXt6VP2TgyNYXkfe4KLI1fVkwQjkmuCyTxuc=</dsig:DigestValue>
+        <dsig:DigestValue>ma+fqcwd6ymndzUVJymTtMWD3gES8Wyk9XTThcv+/QQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

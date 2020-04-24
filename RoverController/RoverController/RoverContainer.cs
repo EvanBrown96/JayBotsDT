@@ -14,6 +14,9 @@ using RosSharp.RosBridgeClient.Protocols;
 using std_msgs = RosSharp.RosBridgeClient.MessageTypes.Std;
 using rosapi = RosSharp.RosBridgeClient.MessageTypes.Rosapi;
 using RosSharp.RosBridgeClient.MessageTypes.RemoteApp;
+using RosSharp.RosBridgeClient;
+using System.Diagnostics;
+using System.IO;
 
 
 namespace RoverController
@@ -21,9 +24,9 @@ namespace RoverController
     public class RoverContainer
     {
 
-        static readonly string uri = "ws://"+Environment.GetEnvironmentVariable("WS_ADDR")+":9090";
+        static readonly string uri = string.Format("ws://{0}:9090", Environment.GetEnvironmentVariable("WS_ADDR"));
         private RosSocket ros_socket;
-        private String cmd_pub_id;
+        private String cmd_pub_id, syscommand_id;
 
         private ReaderWriterLock socket_lock = new ReaderWriterLock();
         private volatile bool killed = false;
@@ -85,7 +88,8 @@ namespace RoverController
             rover_tab.Show();
 
             ros_socket = new RosSocket(new RosSharp.RosBridgeClient.Protocols.WebSocketNetProtocol(uri));
-            cmd_pub_id = ros_socket.Advertise<std_msgs.String>("/"+name+"/user_cmd");
+            cmd_pub_id = ros_socket.Advertise<std_msgs.String>(string.Format("/{0}/user_cmd", name));
+            syscommand_id = ros_socket.Advertise<std_msgs.String>(string.Format("/{0}/syscommand", name));
 
             ros_socket.CallService<LaunchRoverRequest, LaunchRoverResponse>(
                 "/launch_rover", LaunchHandler, new LaunchRoverRequest(name, ip_addr));
@@ -162,6 +166,126 @@ namespace RoverController
             
         }
 
+        public void resetMap()
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.Publish(syscommand_id, new std_msgs.String { data = "reset" });
+            socket_lock.ReleaseReaderLock();
+        }
+
+        public void viewMap()
+        {
+            string base_config = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)))) + "\\base.rviz";
+            string base_contents = File.ReadAllText(base_config);
+            string temp_contents = base_contents.Replace("<machine_name>", name);
+
+            string temp_config = string.Format("{0}\\AppData\\Local\\Temp\\{1}.rviz", Environment.GetEnvironmentVariable("USERPROFILE"), name);
+            File.WriteAllText(temp_config, temp_contents);
+
+            Process proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = string.Format("/C \"c:\\opt\\ros\\melodic\\x64\\setup.bat && rviz -d {0}\"", temp_config),
+                    UseShellExecute = false,
+                    RedirectStandardOutput = false,
+                    CreateNoWindow = false
+                }
+            };
+            proc.Start();
+        }
+
+        public void startMap()
+        {
+            //startMotor((std_msgs.EmptyResponse _) =>
+            //{
+                setMapParamsOn((rosapi.SetParamResponse _) =>
+                {
+                    refreshMapParams();
+                    startBlinker((std_msgs.EmptyResponse __) => { });
+                });
+            //});
+        }
+
+        public void stopMap()
+        {
+            setMapParamsOff((rosapi.SetParamResponse _) =>
+            {
+                refreshMapParams();
+                stopBlinker((std_msgs.EmptyResponse __) => { });
+            });
+        }
+
+        private void startMotor(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain) 
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService(string.Format("/{0}/start_motor", name), chain, new std_msgs.EmptyRequest());
+            socket_lock.ReleaseReaderLock();
+        }
+
+        private void stopMotor(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService(string.Format("/{0}/stop_motor", name), chain, new std_msgs.EmptyRequest());
+            socket_lock.ReleaseReaderLock();
+        }
+
+        private void startBlinker(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService(string.Format("/{0}/start_blinker", name), chain, new std_msgs.EmptyRequest());
+            socket_lock.ReleaseReaderLock();
+        }
+
+        private void stopBlinker(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService(string.Format("/{0}/stop_blinker", name), chain, new std_msgs.EmptyRequest());
+            socket_lock.ReleaseReaderLock();
+        }
+
+        private void setMapParamsOn(ServiceResponseHandler<rosapi.SetParamResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService("/rosapi/set_param",
+                (rosapi.SetParamResponse _) =>
+                {
+                    socket_lock.AcquireReaderLock(-1);
+                    if (!killed) ros_socket.CallService("/rosapi/set_param",
+                        chain,
+                        new rosapi.SetParamRequest(string.Format("/{0}/hector_mapping/update_factor_occupied", name), "0.9"));
+                    socket_lock.ReleaseReaderLock();
+                },
+                new rosapi.SetParamRequest(string.Format("/{0}/hector_mapping/update_factor_free", name), "0.4")
+                );
+            socket_lock.ReleaseReaderLock();
+        }
+
+        private void setMapParamsOff(ServiceResponseHandler<rosapi.SetParamResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService("/rosapi/set_param",
+                (rosapi.SetParamRequest __) =>
+                {
+                    socket_lock.AcquireReaderLock(-1);
+                    if (!killed) ros_socket.CallService("/rosapi/set_param",
+                        chain,
+                        new rosapi.SetParamRequest(string.Format("/{0}/hector_mapping/update_factor_occupied", name), "0.5"));
+                    socket_lock.ReleaseReaderLock();
+                },
+                new rosapi.SetParamRequest(string.Format("/{0}/hector_mapping/update_factor_free", name), "0.5")
+                );
+            socket_lock.ReleaseReaderLock();
+        }
+
+        private void refreshMapParams()
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.Publish(syscommand_id, new std_msgs.String { data = "refresh_update_factors" });
+            socket_lock.ReleaseReaderLock();
+        }
+
         public void simpleDestroy()
         {
             try
@@ -196,6 +320,7 @@ namespace RoverController
 
             ros_socket.CallService<KillRoverRequest, KillRoverResponse>("/kill_rover", (KillRoverResponse response) => { }, new KillRoverRequest(name));
             ros_socket.Unadvertise(cmd_pub_id);
+            ros_socket.Unadvertise(syscommand_id);
             ros_socket.Close();
 
             Master.rovers.Remove(this);
