@@ -15,7 +15,7 @@ right_spd = PWMOutputDevice(13, frequency=500)
 #motors off
 def motorsStop():
     left_spd.value = 0
-    left_fwd.on()
+    left_fwd.on()               #ignore this... they're actually being turned off
     left_bck.on()
     right_spd.value = 0
     right_fwd.on()
@@ -24,38 +24,38 @@ def motorsStop():
 #moving forward
 def motorsFwd():
     left_spd.value = 0.505
-    left_fwd.off()
-    left_bck.on()
+    left_fwd.on()
+    left_bck.off()
     right_spd.value = 0.5
-    right_fwd.off()
-    right_bck.on()
+    right_fwd.on()
+    right_bck.off()
 
 #moving backwards
 def motorsBck():
     left_spd.value = 0.5
-    left_fwd.on()
-    left_bck.off()
-    right_spd.value = 0.5
-    right_fwd.on()
-    right_bck.off()
-
-#turning left
-def motorsLeft():
-    left_spd.value = 0.5
-    left_fwd.on()
-    left_bck.off()
+    left_fwd.off()
+    left_bck.on()
     right_spd.value = 0.5
     right_fwd.off()
     right_bck.on()
 
-#turning right
-def motorsRight():
+#turning left
+def motorsLeft():
     left_spd.value = 0.5
     left_fwd.off()
     left_bck.on()
     right_spd.value = 0.5
     right_fwd.on()
     right_bck.off()
+
+#turning right
+def motorsRight():
+    left_spd.value = 0.5
+    left_fwd.on()
+    left_bck.off()
+    right_spd.value = 0.5
+    right_fwd.off()
+    right_bck.on()
 
 #message handler
 def commandCallback(commandMessage):
