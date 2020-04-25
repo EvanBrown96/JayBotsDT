@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>RoverController</RootNamespace>
     <AssemblyName>RoverController</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -28,6 +28,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,6 +62,17 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\ros-sharp\Libraries\RosBridgeClient\bin\Release\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ros-sharp\Libraries\RosBridgeClient\bin\Release\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="RosBridgeClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ros-sharp\Libraries\RosBridgeClient\bin\Release\RosBridgeClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -74,6 +86,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RosSharpMessages\RemoteApp\srv\KillRoverRequest.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\KillRoverResponse.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\LaunchRoverRequest.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\LaunchRoverResponse.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\PollRoverRequest.cs" />
+    <Compile Include="RosSharpMessages\RemoteApp\srv\PollRoverResponse.cs" />
     <Compile Include="RoverContainer.cs" />
     <Compile Include="Master.cs">
       <SubType>Form</SubType>
@@ -132,6 +150,7 @@
     <EmbeddedResource Include="ManualController.resx">
       <DependentUpon>ManualController.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

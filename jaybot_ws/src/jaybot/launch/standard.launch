@@ -1,6 +1,0 @@
-<launch>
-	<node name="driver" pkg="jaybot" type="driver_node.py" />
-	<node name="movement_logic" pkg="jaybot" type="movement_logic.py" />
-	<node name="sonar_array" pkg="jaybot" type="avoidance.py" />
-	<node name="user_interface" pkg="jaybot" type="user_interface.py" />
-</launch>

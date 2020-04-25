@@ -12,50 +12,50 @@ right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
 right_spd = PWMOutputDevice(13, frequency=500)
 
-blinker = LED(25)
+MULTIPLIER = 0.25
 
 #motors off
 def motorsStop():
     left_spd.value = 0
-    left_fwd.off()
-    left_bck.off()
+    left_fwd.on()               #ignore this... they're actually being turned off
+    left_bck.on()
     right_spd.value = 0
-    right_fwd.off()
-    right_bck.off()
+    right_fwd.on()
+    right_bck.on()
 
 #moving forward
 def motorsFwd():
-    left_spd.value = 0.505
+    left_spd.value = 1.1*MULTIPLIER
     left_fwd.on()
     left_bck.off()
-    right_spd.value = 0.5
+    right_spd.value = 1*MULTIPLIER
     right_fwd.on()
     right_bck.off()
 
 #moving backwards
 def motorsBck():
-    left_spd.value = 0.5
+    left_spd.value = 1*MULTIPLIER
     left_fwd.off()
     left_bck.on()
-    right_spd.value = 0.5
+    right_spd.value = 1*MULTIPLIER
     right_fwd.off()
     right_bck.on()
 
 #turning left
 def motorsLeft():
-    left_spd.value = 0.5
+    left_spd.value = 1*MULTIPLIER
     left_fwd.off()
     left_bck.on()
-    right_spd.value = 0.5
+    right_spd.value = 1*MULTIPLIER
     right_fwd.on()
     right_bck.off()
 
 #turning right
 def motorsRight():
-    left_spd.value = 0.5
+    left_spd.value = 1*MULTIPLIER
     left_fwd.on()
     left_bck.off()
-    right_spd.value = 0.5
+    right_spd.value = 1*MULTIPLIER
     right_fwd.off()
     right_bck.on()
 
@@ -84,9 +84,9 @@ def commandCallback(commandMessage):
 def setup_node():
 
     rospy.init_node('driver')
-    rospy.loginfo('Starting motor driver node')
-    blinker.on()
-    rospy.Subscriber('/jayrover/vel_cmd', String, commandCallback)
+    rospy.loginfo('starting node')
+    rospy.Subscriber('vel_cmd', String, commandCallback)
+    rospy.loginfo('subscribed to vel_cmd')
     rospy.spin()
     rospy.loginfo('Shutting down: shutting motors off')
     motorsStop()

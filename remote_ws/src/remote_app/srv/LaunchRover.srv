@@ -1,0 +1,4 @@
+string machine_name
+string ip_addr
+---
+string err

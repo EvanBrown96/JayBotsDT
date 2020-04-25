@@ -4,17 +4,17 @@
   <description asmv2:publisher="RoverController" asmv2:product="RoverController" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <deployment install="true" mapFileExtensions="true" />
   <compatibleFrameworks xmlns="urn:schemas-microsoft-com:clickonce.v2">
-    <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
+    <framework targetVersion="4.8" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="RoverController.exe.manifest" size="3890">
+    <dependentAssembly dependencyType="install" codebase="RoverController.exe.manifest" size="12906">
       <assemblyIdentity name="RoverController.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8AgTkTb5Qu4VYF9c7YLXdGOGV9JXxEKzysU/zl2NaJU=</dsig:DigestValue>
+        <dsig:DigestValue>yjcd8J43YpvPhE7jb29mivJndjh18DEzvOchNXKXuwc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

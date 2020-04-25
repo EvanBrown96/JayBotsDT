@@ -30,13 +30,39 @@ namespace RoverController
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked) mc.Show();
+            if ((sender as RadioButton).Checked) {
+                mc.Show();
+                container.enqueue_command("m-ss");
+            }
             else mc.Hide();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void disconnect_Click(object sender, EventArgs e)
         {
-            container.destroy();
+            container.simpleDestroy();
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if((sender as RadioButton).Checked)
+            {
+                //container.enqueue_command("a");
+                container.startMap();
+            }
+            else
+            {
+                container.stopMap();
+            }
+        }
+
+        private void reset_Click(object sender, EventArgs e)
+        {
+            container.resetMap();
+        }
+
+        private void view_Click(object sender, EventArgs e)
+        {
+            container.viewMap();
         }
     }
 }

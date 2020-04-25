@@ -15,7 +15,7 @@ class SonarDevice():
         self.fov = math.radians(angle_max_deg-angle_min_deg)
         self.sensor = DistanceSensor(echo=echo, trigger=trigger, max_distance=range_max)
 
-        topic_base = "/jayrover/sonar/{}"
+        topic_base = "sonar/{}"
 
         rate_topic_name = topic_base.format(name)
         self.rate_pub = rospy.Publisher(rate_topic_name, Range, queue_size=1)
@@ -29,7 +29,7 @@ class SonarDevice():
     def scan(self):
 
         range_val = self.sensor.distance
-        
+
         message = Range()
         message.radiation_type = 0
         message.field_of_view = self.fov

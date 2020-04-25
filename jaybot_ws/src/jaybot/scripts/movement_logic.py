@@ -4,7 +4,6 @@ import rospy
 from std_msgs.msg import String, Bool
 from threading import RLock
 
-
 class Mode:
     MANUAL = 0
     AUTONOMOUS = 1
@@ -26,7 +25,7 @@ def commandCallback(user_command):
     cmd = user_command.data
 
     if cmd[0] == 'm':
-        
+
         mode = Mode.MANUAL
         if cmd[2] == 'f':
             movement_state = 'forward'
@@ -38,7 +37,7 @@ def commandCallback(user_command):
             movement_state = 'left'
         else:
             movement_state = 'stop'
-        
+
         callback_lock.acquire()
         if movement_state == 'forward' and (left_avoiding or right_avoiding):
             vel_cmd_pub.publish('stop')
@@ -95,7 +94,7 @@ def rightAvoidance(right_status):
                 vel_cmd_pub.publish('stop')
             else:
                 vel_cmd_pub.publish(movement_state)
-                
+
     elif mode == Mode.AUTONOMOUS:
         autonomousSet()
 
@@ -105,13 +104,18 @@ def rightAvoidance(right_status):
 def setup_node():
     global vel_cmd_pub
 
+    rospy.loginfo("starting node")
     rospy.init_node('movement_logic')
 
-    rospy.Subscriber('/jayrover/user_cmd', String, commandCallback)
-    rospy.Subscriber('/jayrover/sonar/left_threshold', Bool, leftAvoidance)
-    rospy.Subscriber('/jayrover/sonar/right_threshold', Bool, rightAvoidance)
+    rospy.Subscriber('user_cmd', String, commandCallback)
+    rospy.loginfo("subscribed to user_cmd")
+    rospy.Subscriber('sonar/left_threshold', Bool, leftAvoidance)
+    rospy.loginfo("subscribed to sonar/left_threshold")
+    rospy.Subscriber('sonar/right_threshold', Bool, rightAvoidance)
+    rospy.loginfo("subscribed to sonar/right_threshold")
 
-    vel_cmd_pub = rospy.Publisher('/jayrover/vel_cmd', String, queue_size=10)
+    vel_cmd_pub = rospy.Publisher('vel_cmd', String, queue_size=10)
+    rospy.loginfo("published to vel_cmd")
 
     rospy.spin()
 

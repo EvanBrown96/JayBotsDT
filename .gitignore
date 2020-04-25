@@ -6,4 +6,11 @@ RoverController/RoverController/obj/
 RoverController/RoverController/bin/Debug/
 jaybot_ws/build/
 jaybot_ws/devel/
+hector_ws/build/
+hector_ws/devel/
+!jaybot_ws/devel/env_good.sh
 .vscode
+*.pyc
+remote_ws/build/
+remote_ws/devel/*
+RoverController/packages/
