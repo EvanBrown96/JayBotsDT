@@ -15,9 +15,16 @@ namespace RosSharp.RosBridgeClient.MessageTypes.RemoteApp
     {
         public const string RosMessageName = "remote_app/KillRover";
 
+        public string err { get; set; }
 
         public KillRoverResponse()
         {
+            this.err = "";
+        }
+
+        public KillRoverResponse(string err)
+        {
+            this.err = err;
         }
     }
 }
