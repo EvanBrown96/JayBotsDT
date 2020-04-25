@@ -8,7 +8,7 @@ BLINKER_GPIO = 25
 led = None
 
 def start(_):
-    led.blink()
+    led.blink(0.5, 2.5)
     return EmptyResponse()
 
 def stop(_):
