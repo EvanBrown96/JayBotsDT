@@ -46,7 +46,7 @@ namespace RoverController
         {
             if((sender as RadioButton).Checked)
             {
-                //container.enqueue_command("a");
+                container.enqueue_command("a");
                 container.startMap();
             }
             else

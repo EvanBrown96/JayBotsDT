@@ -203,7 +203,7 @@ namespace RoverController
                 setMapParamsOn((rosapi.SetParamResponse _) =>
                 {
                     refreshMapParams();
-                    startBlinker((std_msgs.EmptyResponse __) => { });
+                    //startBlinker((std_msgs.EmptyResponse __) => { });
                 });
             //});
         }
@@ -213,7 +213,7 @@ namespace RoverController
             setMapParamsOff((rosapi.SetParamResponse _) =>
             {
                 refreshMapParams();
-                stopBlinker((std_msgs.EmptyResponse __) => { });
+                //stopBlinker((std_msgs.EmptyResponse __) => { });
             });
         }
 
