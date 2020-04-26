@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 from threading import RLock
-from queue import Queue
+from Queue import Queue
 from threading import Thread
 from avoidance import start_sensors
 from driver_node import setup_driver
@@ -73,6 +73,8 @@ def autonomousSet():
 
 
 def thresh_handler(thresh_queue):
+    rospy.loginfo("starting thresh_handler")
+
     while not rospy.is_shutdown():
         thresh = thresh_queue.get()
 
@@ -88,6 +90,8 @@ def thresh_handler(thresh_queue):
 
         elif mode == Mode.AUTONOMOUS:
             autonomousSet()
+
+    rospy.loginfo("stopping thresh_handler")
 
 def update_stop_fwd_movement():
     global stop_fwd_movement
@@ -133,7 +137,7 @@ def update_stop_fwd_movement():
 def setup_node():
     global driver_queue, avoidance_queue, led
 
-    rospy.loginfo("starting node")
+    rospy.loginfo("starting movement_logic")
     rospy.init_node('movement_logic')
 
     rospy.Subscriber('user_cmd', String, commandCallback)
@@ -141,12 +145,17 @@ def setup_node():
 
     driver_queue = Queue()
     avoidance_queue = Queue()
-    Thread(target=setup_driver, args=(driver_queue, ))
-    Thread(target=start_sensors, args=(avoidance_queue, ))
+    Thread(target=setup_driver, args=(driver_queue, )).start()
+    Thread(target=start_sensors, args=(avoidance_queue, )).start()
+    Thread(target=thresh_handler, args=(avoidance_queue, )).start()
 
     led = LED(BLINKER_GPIO)
 
     rospy.spin()
+
+    driver_queue.put(None)
+
+    rospy.loginfo("stopping movement_logic")
 
 
 if __name__ == '__main__':
