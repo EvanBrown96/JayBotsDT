@@ -60,7 +60,8 @@ def motorsRight():
     right_bck.on()
 
 #message handler
-def commandCallback(command):
+def commandCallback(commandMessage):
+    command = commandMessage.data
     if command == 'forward':
         rospy.loginfo('Moving Forward')
         motorsFwd()
@@ -80,10 +81,15 @@ def commandCallback(command):
         rospy.logwarn('Invalid command, so stopping instead')
         motorsStop()
 
-def setup_driver(cmd_queue):
+def setup_node():
 
-    rospy.loginfo('starting motor driver')
-    while not rospy.is_shutdown():
-        commandCallback(cmd_queue.get())
+    rospy.init_node('driver')
+    rospy.loginfo('starting node')
+    rospy.Subscriber('vel_cmd', String, commandCallback)
+    rospy.loginfo('subscribed to vel_cmd')
+    rospy.spin()
     rospy.loginfo('Shutting down: shutting motors off')
     motorsStop()
+
+if __name__ == '__main__':
+    setup_node()

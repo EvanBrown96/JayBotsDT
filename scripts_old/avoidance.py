@@ -13,14 +13,14 @@ SONAR_LEFT_GPIO_ECHO         = 24
 
 MIN_RANGE = 0.02
 MAX_RANGE = 2.0
-THRESHOLD = 0.25
+THRESHOLD = 0.4
 
-def start_sensors(thresh_queue):
+def start_sensors():
 
-    #rospy.init_node('sonar_array')
+    rospy.init_node('sonar_array')
 
-    left = SonarDevice('left_us', SONAR_LEFT_GPIO_TRIGGER, SONAR_LEFT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15, thresh_queue)
-    right = SonarDevice('right_us', SONAR_RIGHT_GPIO_TRIGGER, SONAR_RIGHT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15, thresh_queue)
+    left = SonarDevice('left', SONAR_LEFT_GPIO_TRIGGER, SONAR_LEFT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15)
+    right = SonarDevice('right', SONAR_RIGHT_GPIO_TRIGGER, SONAR_RIGHT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15)
 
     rate = rospy.Rate(40)
     rospy.loginfo("Sensors Started...")
@@ -32,6 +32,9 @@ def start_sensors(thresh_queue):
         right.scan()
         rate.sleep()
 
-    thresh_queue.put(None)
-
     rospy.loginfo("Sensors Stopped")
+
+
+if __name__ == "__main__":
+
+    start_sensors()
