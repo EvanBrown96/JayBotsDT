@@ -10,6 +10,7 @@ from driver_node import setup_driver
 from gpiozero import LED
 from lidar_avoidance import start_lidar
 from jaybot.msg import Threshold
+import random
 
 BLINKER_GPIO = 25
 led = None
@@ -66,12 +67,25 @@ def commandCallback(user_command):
 
 
 def autonomousSet():
+    if sensors["left_us"] and sensors["right_us"]:
+        driver_queue.put(random.choice(['right', 'left']))
     if sensors["left_us"]:
         driver_queue.put('right')
     elif sensors["right_us"]:
         driver_queue.put('left')
     else:
-        driver_queue.put('forward')
+        if sensors["fwd_lidar"]:
+            if sensors["left_lidar"] and sensors["right_lidar"]:
+                driver_queue.put(random.choice(['right', 'left']))
+            elif sensors["left_lidar"]:
+                driver_queue.put('right')
+            elif sensors["right_lidar"]:
+                driver_queue.put('left')
+            else:
+                driver_queue.put(random.choice(['right', 'left']))
+        else:
+            driver_queue.put('forward')
+
 
 
 def thresh_handler(thresh_queue):
