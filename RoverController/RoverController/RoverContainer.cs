@@ -190,7 +190,7 @@ namespace RoverController
                     Arguments = string.Format("/C \"c:\\opt\\ros\\melodic\\x64\\setup.bat && rviz -d {0}\"", temp_config),
                     UseShellExecute = false,
                     RedirectStandardOutput = false,
-                    CreateNoWindow = false
+                    CreateNoWindow = true
                 }
             };
             proc.Start();
