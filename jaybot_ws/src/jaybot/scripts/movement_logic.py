@@ -79,6 +79,7 @@ def thresh_handler(thresh_queue):
         thresh = thresh_queue.get()
 
         sensors[thresh.sensor] = thresh.in_range
+        rospy.loginfo("sensor {} in range: {}".format(thresh.sensor, thresh.in_range))
 
         if mode == Mode.MANUAL:
             if movement_state == 'forward' and not stop_fwd_movement:

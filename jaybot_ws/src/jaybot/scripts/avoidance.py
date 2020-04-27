@@ -2,6 +2,7 @@
 
 from sonar_device import SonarDevice
 import rospy
+from jaybot.msg import Threshold
 
 #-- RIGHT
 SONAR_RIGHT_GPIO_TRIGGER     = 27
@@ -32,6 +33,6 @@ def start_sensors(thresh_queue):
         right.scan()
         rate.sleep()
 
-    thresh_queue.put(None)
+    thresh_queue.put(Threshold("", False))
 
     rospy.loginfo("Sensors Stopped")
