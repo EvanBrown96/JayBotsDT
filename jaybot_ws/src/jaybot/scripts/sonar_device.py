@@ -21,11 +21,11 @@ class SonarDevice():
 
         range_val = self.sensor.distance
 
-        if((not self.threshold_state) and range_val < self.threshold):
+        if (not self.threshold_state) and range_val < self.threshold:
             self.queue.put(Threshold(self.name, True))
             self.threshold_state = True
-        elif(self.threshold_state and range_val >= self.threshold):
+        elif self.threshold_state and range_val >= self.threshold:
             self.queue.put(Threshold(self.name, False))
             self.threshold_state = False
-        
+
         rospy.logdebug("Range {} [m]: {} (in threshold: {})".format(self.name, range_val, self.threshold_state))

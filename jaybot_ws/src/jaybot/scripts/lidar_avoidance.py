@@ -1,26 +1,38 @@
 #!/usr/bin/env python
 
 import rospy
+from sensor_msgs.msg import LaserScan
+from jaybot.msg import Threshold
 
 THRESHOLD = 0.25
 
-def start_lidar(thresh_queue):
+threshold_queue = None
 
-    #rospy.init_node('sonar_array')
+states = {"left_lidar": False,
+          "right_lidar": False,
+          "fwd_lidar": False
+}
 
-    left = SonarDevice('left', SONAR_LEFT_GPIO_TRIGGER, SONAR_LEFT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15, thresh_queue)
-    right = SonarDevice('right', SONAR_RIGHT_GPIO_TRIGGER, SONAR_RIGHT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15, thresh_queue)
+def scan_callback(scan_data):
+    mins = {}
+    mins["fwd_lidar"] = min(min(scan_data.ranges[:46]), min(scan_data.ranges[315:]))
+    mins["left_lidar"] = min(scan_data.ranges[46:91])
+    mins["right_lidar"] = min(scan_data.ranges[270:315])
+    
+    for s in states.keys():
+        if (not states[s]) and mins[s] < THRESHOLD:
+            threshold_queue.put(Threshold(s, True))
+            states[s] = True
+        elif states[s] and mins[s] >= THRESHOLD:
+            threshold_queue.put(Threshold(s, False))
+            states[s] = False
 
-    rate = rospy.Rate(40)
-    rospy.loginfo("Sensors Started...")
-
-    while not rospy.is_shutdown():
-        left.scan()
-        rate.sleep()
-
-        right.scan()
-        rate.sleep()
-
-    thresh_queue.put(None)
-
-    rospy.loginfo("Sensors Stopped")
+def start_lidar(t_q):
+    global threshold_queue
+    
+    rospy.loginfo("LiDAR avoidance started")
+    threshold_queue = t_q
+    rospy.Subscriber('scan', LaserScan, scan_callback)
+    rospy.spin()
+    rospy.loginfo("LiDAR avoidance stopped")
+    

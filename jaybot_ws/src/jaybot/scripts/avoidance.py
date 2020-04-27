@@ -33,6 +33,4 @@ def start_sensors(thresh_queue):
         right.scan()
         rate.sleep()
 
-    thresh_queue.put(Threshold("", False))
-
     rospy.loginfo("Sensors Stopped")

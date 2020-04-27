@@ -8,6 +8,8 @@ from threading import Thread
 from avoidance import start_sensors
 from driver_node import setup_driver
 from gpiozero import LED
+from lidar_avoidance import start_lidar
+from jaybot.msg import Threshold
 
 BLINKER_GPIO = 25
 led = None
@@ -100,43 +102,6 @@ def update_stop_fwd_movement():
     global stop_fwd_movement
     stop_fwd_movement = sensors["left_us"] or sensors["right_us"] or sensors["fwd_lidar"]
 
-# def leftAvoidance(left_status):
-#     global left_avoiding
-
-#     left_avoiding = left_status.data
-
-#     if mode == Mode.MANUAL:
-#         if movement_state == 'forward' and not right_avoiding:
-#             if left_avoiding:
-#                 vel_cmd_pub.publish('stop')
-#             else:
-#                 vel_cmd_pub.publish(movement_state)
-
-#     elif mode == Mode.AUTONOMOUS:
-#         autonomousSet()
-
-#     callback_lock.release()
-
-
-# def rightAvoidance(right_status):
-#     global right_avoiding
-
-#     callback_lock.acquire()
-
-#     right_avoiding = right_status.data
-
-#     if mode == Mode.MANUAL:
-#         if movement_state == 'forward' and not left_avoiding:
-#             if right_avoiding:
-#                 vel_cmd_pub.publish('stop')
-#             else:
-#                 vel_cmd_pub.publish(movement_state)
-
-#     elif mode == Mode.AUTONOMOUS:
-#         autonomousSet()
-
-#     callback_lock.release()
-
 def setup_node():
     global driver_queue, avoidance_queue, led
 
@@ -151,12 +116,14 @@ def setup_node():
     Thread(target=setup_driver, args=(driver_queue, )).start()
     Thread(target=start_sensors, args=(avoidance_queue, )).start()
     Thread(target=thresh_handler, args=(avoidance_queue, )).start()
+    Thread(target=start_lidar, args=(avoidance_queue, )).start()
 
     led = LED(BLINKER_GPIO)
 
     rospy.spin()
 
     driver_queue.put(None)
+    avoidance_queue.put(Threshold("", False))
 
     rospy.loginfo("stopping movement_logic")
 
