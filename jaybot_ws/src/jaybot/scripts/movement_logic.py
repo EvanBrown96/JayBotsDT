@@ -138,8 +138,8 @@ def update_stop_fwd_movement():
 def setup_node():
     global driver_queue, avoidance_queue, led
 
-    rospy.loginfo("starting movement_logic")
     rospy.init_node('movement_logic')
+    rospy.loginfo("starting movement_logic")
 
     rospy.Subscriber('user_cmd', String, commandCallback)
     rospy.loginfo("subscribed to user_cmd")
