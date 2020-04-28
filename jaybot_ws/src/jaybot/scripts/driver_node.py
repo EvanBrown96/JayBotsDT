@@ -12,7 +12,7 @@ right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
 right_spd = PWMOutputDevice(13, frequency=500)
 
-MULTIPLIER = 0.25
+MULTIPLIER = 0.2
 
 #motors off
 def motorsStop():

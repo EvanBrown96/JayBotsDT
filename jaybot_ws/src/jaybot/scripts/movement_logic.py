@@ -82,7 +82,14 @@ def autonomousSet():
         elif sensors["right_lidar"]:
             driver_queue.put('left')
     else:
-        driver_queue.put('forward')
+        if sensors["left_us"] and sensors["right_us"]):
+            driver_queue.put(random.choice(['right', 'left']))
+        elif sensors["left_us"]:
+            driver_queue.put('right')
+        elif sensors["right_us"]:
+            driver_queue.put('left')
+        else:
+            driver_queue.put('forward')
 
 def thresh_handler(thresh_queue):
     rospy.loginfo("starting thresh_handler")
