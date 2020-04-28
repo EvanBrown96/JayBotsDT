@@ -82,7 +82,7 @@ def autonomousSet():
         elif sensors["right_lidar"]:
             driver_queue.put('left')
     else:
-        if sensors["left_us"] and sensors["right_us"]):
+        if sensors["left_us"] and sensors["right_us"]:
             driver_queue.put(random.choice(['right', 'left']))
         elif sensors["left_us"]:
             driver_queue.put('right')
