@@ -65,28 +65,24 @@ def commandCallback(user_command):
         autonomousSet()
         led.blink(0.5, 2.5)
 
+def xor(a, b):
+    return (a and b) or not (a or b)
 
 def autonomousSet():
-    if sensors["left_us"] and sensors["right_us"]:
-        driver_queue.put(random.choice(['right', 'left']))
-    if sensors["left_us"]:
-        driver_queue.put('right')
-    elif sensors["right_us"]:
-        driver_queue.put('left')
-    else:
-        if sensors["fwd_lidar"]:
-            if sensors["left_lidar"] and sensors["right_lidar"]:
+    if sensors["fwd_lidar"]:
+        if xor(sensors["left_lidar"], sensors["right_lidar"]):
+            if xor(sensors["left_us"], sensors["right_us"]):
                 driver_queue.put(random.choice(['right', 'left']))
-            elif sensors["left_lidar"]:
+            elif sensors["left_us"]:
                 driver_queue.put('right')
-            elif sensors["right_lidar"]:
+            elif sensors["right_us"]:
                 driver_queue.put('left')
-            else:
-                driver_queue.put(random.choice(['right', 'left']))
-        else:
-            driver_queue.put('forward')
-
-
+        elif sensors["left_lidar"]:
+            driver_queue.put('right')
+        elif sensors["right_lidar"]:
+            driver_queue.put('left')
+    else:
+        driver_queue.put('forward')
 
 def thresh_handler(thresh_queue):
     rospy.loginfo("starting thresh_handler")
