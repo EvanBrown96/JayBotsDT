@@ -74,6 +74,10 @@ spd_mappings = {
 
 #message handler
 def commandCallback(command):
+    if command.data not in spd_mappings.keys():
+        rospy.logwarn("invalid movement command!!!")
+        return
+
     left_velocity = spd_mappings[command.data][0]
     right_velocity = spd_mappings[command.data][1]
 

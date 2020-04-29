@@ -60,7 +60,7 @@ def commandCallback(user_command):
         #     movement_state = 'stop'
 
         if movement_state[0] == 'f' and stop_fwd_movement:
-            driver_queue.put("stop")
+            driver_queue.put("ss")
         else:
             driver_queue.put(movement_state)
 
