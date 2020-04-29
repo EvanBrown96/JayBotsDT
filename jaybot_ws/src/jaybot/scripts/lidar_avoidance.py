@@ -7,7 +7,7 @@ from jaybot.msg import Threshold
 MINIMUM = 0.3
 GOAL = 0.4
 
-threshold_queue = None
+threshold_comm = None
 
 class Sensor:
     
@@ -18,7 +18,14 @@ class Sensor:
         self.state = False
 
     def calculate(self, data):
-        return self.calculation(data)
+        value = self.calculation(data)
+        if (not self.state) and value < self.threshold:
+            self.state = True
+            return Threshold(self.name, True)
+        elif self.state and value >= self.threshold:
+            self.state = False
+            return Threshold(self.name, False)
+        return None
 
 sensors = [
     Sensor("left_lidar", MINIMUM, lambda data: min(data.ranges[46:91])),
@@ -31,20 +38,32 @@ sensors = [
 def scan_callback(scan_data):
     
     for s in sensors:
-        value = s.calculate(scan_data)
-        if (not s.state) and value < s.threshold:
-            threshold_queue.put(Threshold(s.name, True))
-            s.state = True
-        elif s.state and value >= s.threshold:
-            threshold_queue.put(Threshold(s.name, False))
-            s.state = False
+        result = s.calculate(scan_data)
+        if result is not None:
+            threshold_comm(result)
 
-def start_lidar(t_q):
-    global threshold_queue
+
+def start_lidar(threshold_queue=None):
+    global threshold_comm
+
+    rospy.loginfo("LiDAR avoidance starting")
     
-    rospy.loginfo("LiDAR avoidance started")
-    threshold_queue = t_q
+    threshold_comm = lambda msg: threshold_queue.put(msg)
+
+    if threshold_queue is None:
+        rospy.init_node('lidar_avoidance')
+        rospy.loginfo("started node")
+        threshold_pub = rospy.Publisher('threshold', Threshold, queue_size=10)
+        rospy.loginfo("publishing to threshold")
+        threshold_comm = lambda msg: threshold_pub.publish(msg)
+    
     rospy.Subscriber('scan', LaserScan, scan_callback)
+    rospy.loginfo("subscribing to scan")
+
     rospy.spin()
-    rospy.loginfo("LiDAR avoidance stopped")
+
+    rospy.loginfo("LiDAR avoidance stopping")
     
+
+if __name__ == "__main__":
+    start_lidar()

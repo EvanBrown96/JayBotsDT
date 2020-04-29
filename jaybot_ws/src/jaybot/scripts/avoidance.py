@@ -16,21 +16,36 @@ MIN_RANGE = 0.02
 MAX_RANGE = 2.0
 THRESHOLD = 0.25
 
-def start_sensors(thresh_queue):
 
-    #rospy.init_node('sonar_array')
+def start_sensors(thresh_queue=None):
 
-    left = SonarDevice('left_us', SONAR_LEFT_GPIO_TRIGGER, SONAR_LEFT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15, thresh_queue)
-    right = SonarDevice('right_us', SONAR_RIGHT_GPIO_TRIGGER, SONAR_RIGHT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15, thresh_queue)
+    rospy.loginfo("starting sensors")
+    
+    sensors = [
+        SonarDevice('left_us', SONAR_LEFT_GPIO_TRIGGER, SONAR_LEFT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15),
+        SonarDevice('right_us', SONAR_RIGHT_GPIO_TRIGGER, SONAR_RIGHT_GPIO_ECHO, MIN_RANGE, THRESHOLD, MAX_RANGE, -15, 15)
+    ]
 
     rate = rospy.Rate(40)
-    rospy.loginfo("Sensors Started...")
+    
+    threshold_comm = lambda msg: thresh_queue.put(msg)
+
+    if thresh_queue is None:
+        rospy.init_node('avoidance')
+        rospy.loginfo("started node")
+        threshold_pub = rospy.Publisher('threshold', Threshold, queue_size=10)
+        rospy.loginfo("publishing to threshold")
+        threshold_comm = lambda msg: threshold_pub.publish(msg)
 
     while not rospy.is_shutdown():
-        left.scan()
+        for s in sensors:
+            result = s.scan()
+            if result is not None:
+                threshold_comm(result)
         rate.sleep()
 
-        right.scan()
-        rate.sleep()
+    rospy.loginfo("stopping sensors")
 
-    rospy.loginfo("Sensors Stopped")
+
+if __name__ == "__main__":
+    start_sensors()
