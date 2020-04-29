@@ -27,51 +27,6 @@ spd_mappings = {
 }
 
 
-# #motors off
-# def motorsStop():
-#     left_spd.value = 0
-#     left_fwd.on()               #ignore this... they're actually being turned off
-#     left_bck.on()
-#     right_spd.value = 0
-#     right_fwd.on()
-#     right_bck.on()
-
-# #moving forward
-# def motorsFwd():
-#     left_spd.value = 1.1*MULTIPLIER
-#     left_fwd.on()
-#     left_bck.off()
-#     right_spd.value = 1*MULTIPLIER
-#     right_fwd.on()
-#     right_bck.off()
-
-# #moving backwards
-# def motorsBck():
-#     left_spd.value = 1*MULTIPLIER
-#     left_fwd.off()
-#     left_bck.on()
-#     right_spd.value = 1*MULTIPLIER
-#     right_fwd.off()
-#     right_bck.on()
-
-# #turning left
-# def motorsLeft():
-#     left_spd.value = 1*MULTIPLIER
-#     left_fwd.off()
-#     left_bck.on()
-#     right_spd.value = 1*MULTIPLIER
-#     right_fwd.on()
-#     right_bck.off()
-
-# #turning right
-# def motorsRight():
-#     left_spd.value = 1*MULTIPLIER
-#     left_fwd.on()
-#     left_bck.off()
-#     right_spd.value = 1*MULTIPLIER
-#     right_fwd.off()
-#     right_bck.on()
-
 #message handler
 def commandCallback(command):
     if command.data not in spd_mappings.keys():
@@ -105,28 +60,22 @@ def commandCallback(command):
         right_bck.on()
 
 
-    # if command == 'forward':
-    #     rospy.loginfo('Moving Forward')
-    #     motorsFwd()
-    # elif command == 'backward':
-    #     rospy.loginfo('Moving Backward')
-    #     motorsBck()
-    # elif command == 'left':
-    #     rospy.loginfo('Turning Left')
-    #     motorsLeft()
-    # elif command =='right':
-    #     rospy.loginfo('Turning Right')
-    #     motorsRight()
-    # elif command == 'stop':
-    #     rospy.loginfo('Stopping')
-    #     motorsStop()
-    # else:
-    #     rospy.logwarn('Invalid command, so stopping instead')
-    #     motorsStop()
-
-def setup_driver(cmd_queue):
+def driver_setup(cmd_queue=None):
 
     rospy.loginfo('starting motor driver')
-    while not rospy.is_shutdown():
-        commandCallback(String(cmd_queue.get()))
-    rospy.loginfo('Shutting down: shutting motors off')
+    
+    if cmd_queue is None:
+        rospy.init_node('driver')
+        rospy.loginfo("started node")
+        rospy.Subscriber('vel_cmd', String, commandCallback)
+        rospy.loginfo("subscribed to vel_cmd")
+        rospy.spin()
+    else:
+        while not rospy.is_shutdown():
+            commandCallback(String(cmd_queue.get()))
+
+    rospy.loginfo('stopping motor driver')
+
+
+if __name__ == "__main__":
+    driver_setup()
