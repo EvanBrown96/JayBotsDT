@@ -23,7 +23,7 @@ class Mode:
     AUTONOMOUS = 1
 
 mode = Mode.MANUAL
-movement_state = 'stop'
+movement_state = 'ss'
 
 sensors = {
     "left_us": False,
@@ -46,18 +46,20 @@ def commandCallback(user_command):
     if cmd[0] == 'm':
         led.off()
         mode = Mode.MANUAL
-        if cmd[2] == 'f':
-            movement_state = 'forward'
-        elif cmd[2] == 'b':
-            movement_state = 'backward'
-        elif cmd[3] == 'r':
-            movement_state = 'right'
-        elif cmd[3] == 'l':
-            movement_state = 'left'
-        else:
-            movement_state = 'stop'
+        movement_state = cmd[2:4]
 
-        if movement_state == 'forward' and stop_fwd_movement:
+        # if cmd[2] == 'f':
+        #     movement_state = 'forward'
+        # elif cmd[2] == 'b':
+        #     movement_state = 'backward'
+        # elif cmd[3] == 'r':
+        #     movement_state = 'right'
+        # elif cmd[3] == 'l':
+        #     movement_state = 'left'
+        # else:
+        #     movement_state = 'stop'
+
+        if movement_state[0] == 'f' and stop_fwd_movement:
             driver_queue.put("stop")
         else:
             driver_queue.put(movement_state)
