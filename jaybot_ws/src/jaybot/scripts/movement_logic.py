@@ -107,6 +107,7 @@ def get_next_state():
             return "forward"
         elif sensors["right_bck_lidar"]:
             return "find_wall"
+    return state
 
 def autonomousSet():
     global state
