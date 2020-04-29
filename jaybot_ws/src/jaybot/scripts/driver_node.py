@@ -126,4 +126,3 @@ def setup_driver(cmd_queue):
     while not rospy.is_shutdown():
         commandCallback(String(cmd_queue.get()))
     rospy.loginfo('Shutting down: shutting motors off')
-    motorsStop()

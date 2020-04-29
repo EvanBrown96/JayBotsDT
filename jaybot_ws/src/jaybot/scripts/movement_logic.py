@@ -39,7 +39,7 @@ stop_fwd_movement = False
 state = None
 
 def commandCallback(user_command):
-    global mode, movement_state
+    global mode, movement_state, state
 
     cmd = user_command.data
 
@@ -157,9 +157,9 @@ def thresh_handler(thresh_queue):
         update_stop_fwd_movement()
 
         if mode == Mode.MANUAL:
-            if movement_state == 'forward' and not was_stopped:
+            if movement_state[0] == 'f' and not was_stopped:
                 if stop_fwd_movement:
-                    driver_queue.put("stop")
+                    driver_queue.put("ss")
                 else:
                     driver_queue.put(movement_state)
 
