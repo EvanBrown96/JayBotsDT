@@ -4,28 +4,40 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from jaybot.msg import Threshold
 
-THRESHOLD = 0.25
+MINIMUM = 0.3
+GOAL = 0.4
 
 threshold_queue = None
 
-states = {"left_lidar": False,
-          "right_lidar": False,
-          "fwd_lidar": False
-}
+class Sensor:
+    
+    def __init__(self, name, threshold, calculation):
+        self.name = name
+        self.threshold = threshold
+        self.calculation = calculation
+        self.state = False
+
+    def calculate(self, data):
+        return self.calculation(data)
+
+sensors = [
+    Sensor("left_lidar", MINIMUM, lambda data: min(data.ranges[46:91])),
+    Sensor("right_lidar", MINIMUM, lambda data: min(data.ranges[270:315])),
+    Sensor("fwd_lidar", MINIMUM, lambda data: min(min(data.ranges[:46]), min(data.ranges[315:]))),
+    Sensor("right_fwd_lidar", GOAL, lambda data: min(data.ranges[270:315])),
+    Sensor("right_bck_lidar", GOAL, lambda data: min(data.ranges[225:270]))
+]
 
 def scan_callback(scan_data):
-    mins = {}
-    mins["fwd_lidar"] = min(min(scan_data.ranges[:46]), min(scan_data.ranges[315:]))
-    mins["left_lidar"] = min(scan_data.ranges[46:91])
-    mins["right_lidar"] = min(scan_data.ranges[270:315])
     
-    for s in states.keys():
-        if (not states[s]) and mins[s] < THRESHOLD:
-            threshold_queue.put(Threshold(s, True))
-            states[s] = True
-        elif states[s] and mins[s] >= THRESHOLD:
-            threshold_queue.put(Threshold(s, False))
-            states[s] = False
+    for s in sensors:
+        value = s.calculate(scan_data)
+        if (not s.state) and value < s.threshold:
+            threshold_queue.put(Threshold(s.name, True))
+            s.state = True
+        elif s.state and value >= s.threshold:
+            threshold_queue.put(Threshold(s.name, False))
+            s.state = False
 
 def start_lidar(t_q):
     global threshold_queue

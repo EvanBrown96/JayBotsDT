@@ -30,10 +30,13 @@ sensors = {
     "right_us": False,
     "fwd_lidar": False,
     "left_lidar": False,
-    "right_lidar": False
+    "right_lidar": False,
+    "right_fwd_lidar": False,
+    "right_bck_lidar": False
 }
 
 stop_fwd_movement = False
+state = None
 
 def commandCallback(user_command):
     global mode, movement_state
@@ -62,34 +65,82 @@ def commandCallback(user_command):
     elif cmd[0] == 'a':
 
         mode = Mode.AUTONOMOUS
+        state = "find_wall"
         autonomousSet()
         led.blink(0.5, 2.5)
 
-def xor(a, b):
-    return (a and b) or not (a or b)
+# def xor(a, b):
+#     return (a and b) or not (a or b)
+
+def get_next_state():
+    
+    if state == "find_wall":
+        if sensors["fwd_lidar"]:
+            return "make_right"
+    elif state == "make_right":
+        if sensors["fwd_lidar"]:
+            return "forward"
+    elif state == "forward":
+        if sensors["fwd_lidar"]:
+            return "make_right"
+        elif sensors["right_lidar"]:
+            return "too_close"
+        elif not sensors["right_fwd_lidar"]:
+            return "too_far"
+    elif state == "too_close":
+        if sensors["fwd_lidar"]:
+            return "make_right"
+        elif not sensors["right_lidar"]:
+            return "forward"
+    elif state == "too_far":
+        if sensors["fwd_lidar"]:
+            return "make_right"
+        elif sensors["right_fwd_lidar"]:
+            return "forward"
+        elif sensors["right_bck_lidar"]:
+            return "find_wall"
 
 def autonomousSet():
-    if sensors["fwd_lidar"]:
-        if xor(sensors["left_lidar"], sensors["right_lidar"]):
-            if xor(sensors["left_us"], sensors["right_us"]):
-                driver_queue.put(random.choice(['right', 'left']))
-            elif sensors["left_us"]:
-                driver_queue.put('right')
-            elif sensors["right_us"]:
-                driver_queue.put('left')
-        elif sensors["left_lidar"]:
-            driver_queue.put('right')
-        elif sensors["right_lidar"]:
-            driver_queue.put('left')
-    else:
-        if sensors["left_us"] and sensors["right_us"]:
-            driver_queue.put(random.choice(['right', 'left']))
-        elif sensors["left_us"]:
-            driver_queue.put('right')
-        elif sensors["right_us"]:
-            driver_queue.put('left')
-        else:
-            driver_queue.put('forward')
+    global state
+
+    changed = False
+    while state != get_next_state():
+        state = get_next_state()
+        changed = True
+    
+    if not changed:
+        return
+
+    if state in ["find_wall", "forward"]:
+        driver_queue.put("fs")
+    elif state == "make_right":
+        driver_queue.put("sr")
+    elif state == "too_close":
+        driver_queue.put("fl")
+    elif state == "too_far":
+        driver_queue.put("fr")
+
+    # if sensors["fwd_lidar"]:
+    #     if xor(sensors["left_lidar"], sensors["right_lidar"]):
+    #         if xor(sensors["left_us"], sensors["right_us"]):
+    #             driver_queue.put(random.choice(['right', 'left']))
+    #         elif sensors["left_us"]:
+    #             driver_queue.put('right')
+    #         elif sensors["right_us"]:
+    #             driver_queue.put('left')
+    #     elif sensors["left_lidar"]:
+    #         driver_queue.put('right')
+    #     elif sensors["right_lidar"]:
+    #         driver_queue.put('left')
+    # else:
+    #     if sensors["left_us"] and sensors["right_us"]:
+    #         driver_queue.put(random.choice(['right', 'left']))
+    #     elif sensors["left_us"]:
+    #         driver_queue.put('right')
+    #     elif sensors["right_us"]:
+    #         driver_queue.put('left')
+    #     else:
+    #         driver_queue.put('forward')
 
 def thresh_handler(thresh_queue):
     rospy.loginfo("starting thresh_handler")
