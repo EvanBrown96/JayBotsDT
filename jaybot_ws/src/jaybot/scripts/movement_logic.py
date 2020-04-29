@@ -86,7 +86,7 @@ def get_next_state():
         if sensors["fwd_lidar"]:
             return "make_right"
     elif state == "make_right":
-        if sensors["fwd_lidar"]:
+        if not sensors["fwd_lidar"]:
             return "forward"
     elif state == "forward":
         if sensors["fwd_lidar"]:
