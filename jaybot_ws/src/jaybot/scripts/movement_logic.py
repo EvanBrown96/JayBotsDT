@@ -105,7 +105,7 @@ def get_next_state():
             return "make_right"
         elif sensors["right_fwd_lidar"]:
             return "forward"
-        elif sensors["right_bck_lidar"]:
+        elif not sensors["right_bck_lidar"]:
             return "find_wall"
     return state
 
