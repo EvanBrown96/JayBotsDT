@@ -25,6 +25,8 @@ class Mode:
 mode = Mode.MANUAL
 movement_state = 'ss'
 
+lock = RLock()
+
 sensors = {
     "left_us": False,
     "right_us": False,
@@ -42,6 +44,8 @@ def commandCallback(user_command):
     global mode, movement_state, state
 
     cmd = user_command.data
+
+    lock.acquire()
 
     if cmd[0] == 'm':
         led.off()
@@ -70,6 +74,8 @@ def commandCallback(user_command):
         state = "find_wall"
         autonomousSet()
         led.blink(0.5, 2.5)
+
+    lock.release()
 
 # def xor(a, b):
 #     return (a and b) or not (a or b)
@@ -105,18 +111,14 @@ def get_next_state():
 def autonomousSet():
     global state
 
-    changed = False
     while state != get_next_state():
         state = get_next_state()
-        changed = True
-    
-    if not changed:
-        return
+        rospy.loginfo("state changed to {}".format(state))
 
     if state in ["find_wall", "forward"]:
         driver_queue.put("fs")
     elif state == "make_right":
-        driver_queue.put("sr")
+        driver_queue.put("sl")
     elif state == "too_close":
         driver_queue.put("fl")
     elif state == "too_far":
@@ -153,6 +155,8 @@ def thresh_handler(thresh_queue):
         sensors[thresh.sensor] = thresh.in_range
         rospy.loginfo("sensor {} in range: {}".format(thresh.sensor, thresh.in_range))
 
+        lock.acquire()
+
         was_stopped = stop_fwd_movement
         update_stop_fwd_movement()
 
@@ -165,6 +169,8 @@ def thresh_handler(thresh_queue):
 
         elif mode == Mode.AUTONOMOUS:
             autonomousSet()
+
+        lock.release()
 
     rospy.loginfo("stopping thresh_handler")
 
