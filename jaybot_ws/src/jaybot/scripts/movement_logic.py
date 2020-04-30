@@ -132,10 +132,10 @@ def thresh_handler(thresh_queue):
     while not rospy.is_shutdown():
         thresh = thresh_queue.get()
 
+        lock.acquire()
+
         sensors[thresh.sensor] = thresh.in_range
         rospy.loginfo("sensor {} in range: {}".format(thresh.sensor, thresh.in_range))
-
-        lock.acquire()
 
         was_stopped = stop_fwd_movement
         update_stop_fwd_movement()
@@ -161,8 +161,10 @@ def update_stop_fwd_movement():
 def setup_node():
     global driver_queue, avoidance_queue, led
 
-    rospy.init_node('movement_logic')
     rospy.loginfo("starting movement_logic")
+
+    rospy.init_node('movement_logic')
+    rospy.loginfo("started node")
 
     rospy.Subscriber('user_cmd', String, commandCallback)
     rospy.loginfo("subscribed to user_cmd")

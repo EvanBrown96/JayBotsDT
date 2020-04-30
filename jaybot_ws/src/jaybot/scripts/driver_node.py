@@ -13,7 +13,7 @@ right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
 right_spd = PWMOutputDevice(13, frequency=500)
 
-multip = 0.2
+multiplier = 0.2
 
 spd_mappings = {
     "ss": (0, 0),
