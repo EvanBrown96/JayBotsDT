@@ -10,3 +10,6 @@
 [submodule "hector_ws/src/hector_slam"]
 	path = hector_ws/src/hector_slam
 	url = https://github.com/EvanBrown96/hector_slam
+[submodule "mexplore-ws/src/m-explore"]
+	path = mexplore-ws/src/m-explore
+	url = https://github.com/hrnr/m-explore
