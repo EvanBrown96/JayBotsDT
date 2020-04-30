@@ -110,8 +110,6 @@ namespace RoverController
                         MessageBox.Show(form_handle, "An error occurred launching ROS:\n" + response.err,
                             "Error Launching ROS", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
 
-                        Console.WriteLine("poo");
-
                         destroy();
                     });
                 }
@@ -219,10 +217,17 @@ namespace RoverController
 
         public void endChain(RosSharp.RosBridgeClient.Message msg) { }
 
-        public void setSpeed(byte speed, RosSharp.RosBridgeClient.ServiceResponseHandler<SetSpeedResponse> chain)
+        public void setSpeed(byte speed, ServiceResponseHandler<SetSpeedResponse> chain)
         {
             socket_lock.AcquireReaderLock(-1);
             if (!killed) ros_socket.CallService(string.Format("/{0}/set_speed", name), chain, new SetSpeedRequest(speed));
+            socket_lock.ReleaseReaderLock();
+        }
+
+        public void setAvoidance(bool enable, ServiceResponseHandler<std_msgs.SetBoolResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService(string.Format("/{0}/set_avoidance", name), chain, new std_msgs.SetBoolRequest(enable));
             socket_lock.ReleaseReaderLock();
         }
 
@@ -237,20 +242,6 @@ namespace RoverController
         {
             socket_lock.AcquireReaderLock(-1);
             if (!killed) ros_socket.CallService(string.Format("/{0}/stop_motor", name), chain, new std_msgs.EmptyRequest());
-            socket_lock.ReleaseReaderLock();
-        }
-
-        private void startBlinker(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain)
-        {
-            socket_lock.AcquireReaderLock(-1);
-            if (!killed) ros_socket.CallService(string.Format("/{0}/start_blinker", name), chain, new std_msgs.EmptyRequest());
-            socket_lock.ReleaseReaderLock();
-        }
-
-        private void stopBlinker(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain)
-        {
-            socket_lock.AcquireReaderLock(-1);
-            if (!killed) ros_socket.CallService(string.Format("/{0}/stop_blinker", name), chain, new std_msgs.EmptyRequest());
             socket_lock.ReleaseReaderLock();
         }
 

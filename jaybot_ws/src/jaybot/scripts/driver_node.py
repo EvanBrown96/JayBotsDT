@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 from gpiozero import DigitalOutputDevice, PWMOutputDevice, LED
-from jaybot.srv import SetSpeed
+from jaybot.srv import SetSpeed, SetSpeedResponse
 
 left_fwd = DigitalOutputDevice(20)
 left_bck = DigitalOutputDevice(21)
@@ -64,6 +64,7 @@ def commandCallback(command):
 def speed_callback(speed_cmd):
     global multiplier
     multiplier = speed_cmd.spd_pct/100
+    return SetSpeedResponse()
 
 
 def driver_setup(cmd_queue=None):

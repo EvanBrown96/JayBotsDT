@@ -10,6 +10,7 @@ from driver_node import setup_driver
 from gpiozero import LED
 from lidar_avoidance import start_lidar
 from jaybot.msg import Threshold
+from std_srvs.srv import SetBool, SetBoolResponse
 import random
 
 BLINKER_GPIO = 25
@@ -31,6 +32,7 @@ class AutoState:
 
 mode = Mode.MANUAL
 movement_state = 'ss'
+manual_avoidance = True
 
 lock = RLock()
 
@@ -59,7 +61,7 @@ def commandCallback(user_command):
         mode = Mode.MANUAL
         movement_state = cmd[2:4]
 
-        if movement_state[0] == 'f' and stop_fwd_movement:
+        if movement_state[0] == 'f' and stop_fwd_movement and manual_avoidance:
             driver_queue.put("ss")
         else:
             driver_queue.put(movement_state)
@@ -154,9 +156,17 @@ def thresh_handler(thresh_queue):
 
     rospy.loginfo("stopping thresh_handler")
 
+
 def update_stop_fwd_movement():
     global stop_fwd_movement
     stop_fwd_movement = sensors["left_us"] or sensors["right_us"] or sensors["fwd_lidar"]
+
+
+def set_avoidance(setbool):
+    global manual_avoidance
+    manual_avoidance = setbool.data
+    return SetBoolResponse(True, "")
+
 
 def setup_node():
     global driver_queue, avoidance_queue, led
@@ -168,6 +178,9 @@ def setup_node():
 
     rospy.Subscriber('user_cmd', String, commandCallback)
     rospy.loginfo("subscribed to user_cmd")
+
+    rospy.Service('set_avoidance', SetBool, set_avoidance)
+    rospy.loginfo("started service set_avoidance")
 
     driver_queue = Queue()
     avoidance_queue = Queue()
