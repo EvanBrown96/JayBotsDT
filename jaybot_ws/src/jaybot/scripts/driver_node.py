@@ -3,6 +3,7 @@
 import rospy
 from std_msgs.msg import String
 from gpiozero import DigitalOutputDevice, PWMOutputDevice, LED
+from jaybot.srv import SetSpeed
 
 left_fwd = DigitalOutputDevice(20)
 left_bck = DigitalOutputDevice(21)
@@ -12,7 +13,7 @@ right_fwd = DigitalOutputDevice(5)
 right_bck = DigitalOutputDevice(6)
 right_spd = PWMOutputDevice(13, frequency=500)
 
-MULTIPLIER = 0.2
+multip = 0.2
 
 spd_mappings = {
     "ss": (0, 0),
@@ -36,8 +37,8 @@ def commandCallback(command):
     left_velocity = spd_mappings[command.data][0]
     right_velocity = spd_mappings[command.data][1]
 
-    left_spd.value = MULTIPLIER*abs(left_velocity)
-    right_spd.value = MULTIPLIER*abs(right_velocity)
+    left_spd.value = multiplier*abs(left_velocity)
+    right_spd.value = multiplier*abs(right_velocity)
 
     if left_velocity > 0:
         left_fwd.on()
@@ -60,10 +61,17 @@ def commandCallback(command):
         right_bck.on()
 
 
+def speed_callback(speed_cmd):
+    global multiplier
+    multiplier = speed_cmd.spd_pct/100
+
+
 def driver_setup(cmd_queue=None):
 
     rospy.loginfo('starting motor driver')
     
+    rospy.Service('set_speed', SetSpeed, speed_callback)
+
     if cmd_queue is None:
         rospy.init_node('driver')
         rospy.loginfo("started node")

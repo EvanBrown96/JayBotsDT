@@ -30,11 +30,15 @@ namespace RoverController
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked) {
+            if ((sender as RadioButton).Checked)
+            {
                 mc.Show();
                 container.enqueue_command("m-ss");
             }
-            else mc.Hide();
+            else
+            {
+                mc.Hide();
+            }
         }
 
         private void disconnect_Click(object sender, EventArgs e)
@@ -46,12 +50,13 @@ namespace RoverController
         {
             if((sender as RadioButton).Checked)
             {
-                container.enqueue_command("a");
+                speed.Enabled = false;
                 container.startMap();
             }
             else
             {
                 container.stopMap();
+                speed_ValueChanged(sender, e);
             }
         }
 
@@ -63,6 +68,12 @@ namespace RoverController
         private void view_Click(object sender, EventArgs e)
         {
             container.viewMap();
+        }
+
+        private void speed_ValueChanged(object sender, EventArgs e)
+        {
+            byte speed_val = (byte)speed.Value;
+            container.setSpeed(speed_val, container.endChain);
         }
     }
 }

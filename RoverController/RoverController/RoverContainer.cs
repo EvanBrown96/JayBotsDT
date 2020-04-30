@@ -14,6 +14,7 @@ using RosSharp.RosBridgeClient.Protocols;
 using std_msgs = RosSharp.RosBridgeClient.MessageTypes.Std;
 using rosapi = RosSharp.RosBridgeClient.MessageTypes.Rosapi;
 using RosSharp.RosBridgeClient.MessageTypes.RemoteApp;
+using RosSharp.RosBridgeClient.MessageTypes.Jaybot;
 using RosSharp.RosBridgeClient;
 using System.Diagnostics;
 using System.IO;
@@ -198,14 +199,14 @@ namespace RoverController
 
         public void startMap()
         {
-            //startMotor((std_msgs.EmptyResponse _) =>
-            //{
-                setMapParamsOn((rosapi.SetParamResponse _) =>
+            setSpeed(20, (SetSpeedResponse _) =>
+            {
+                setMapParamsOn((rosapi.SetParamResponse __) =>
                 {
                     refreshMapParams();
-                    //startBlinker((std_msgs.EmptyResponse __) => { });
+                    enqueue_command("a");
                 });
-            //});
+            });
         }
 
         public void stopMap()
@@ -213,8 +214,16 @@ namespace RoverController
             setMapParamsOff((rosapi.SetParamResponse _) =>
             {
                 refreshMapParams();
-                //stopBlinker((std_msgs.EmptyResponse __) => { });
             });
+        }
+
+        public void endChain(RosSharp.RosBridgeClient.Message msg) { }
+
+        public void setSpeed(byte speed, RosSharp.RosBridgeClient.ServiceResponseHandler<SetSpeedResponse> chain)
+        {
+            socket_lock.AcquireReaderLock(-1);
+            if (!killed) ros_socket.CallService(string.Format("/{0}/set_speed", name), chain, new SetSpeedRequest(speed));
+            socket_lock.ReleaseReaderLock();
         }
 
         private void startMotor(RosSharp.RosBridgeClient.ServiceResponseHandler<std_msgs.EmptyResponse> chain) 
