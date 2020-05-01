@@ -63,14 +63,14 @@ def commandCallback(command):
 
 def speed_callback(speed_cmd):
     global multiplier
-    multiplier = speed_cmd.spd_pct/100
+    multiplier = float(speed_cmd.spd_pct)/100
     return SetSpeedResponse()
 
 
 def driver_setup(cmd_queue=None):
 
     rospy.loginfo('starting motor driver')
-    
+
     rospy.Service('set_speed', SetSpeed, speed_callback)
 
     if cmd_queue is None:
