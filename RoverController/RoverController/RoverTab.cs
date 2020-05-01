@@ -58,6 +58,8 @@ namespace RoverController
             {
                 container.stopMap();
                 speed_ValueChanged(sender, e);
+                speed.Enabled = true;
+                checkBox1.Enabled = true;
             }
         }
 

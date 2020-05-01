@@ -1,5 +1,7 @@
 EAGLE
-jaybot_ws
 prototyping
 RoverController
 setup_files
+rosbridge_suite
+.git
+.idea
