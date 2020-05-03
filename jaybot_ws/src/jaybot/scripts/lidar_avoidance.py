@@ -4,8 +4,9 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from jaybot.msg import Threshold
 
-MINIMUM = 0.3
-GOAL = 0.4
+MINIMUM = 0.25
+GOAL = 0.35
+RECOVER = 0.40
 
 threshold_comm = None
 
@@ -32,7 +33,7 @@ sensors = [
     Sensor("right_lidar", MINIMUM, lambda data: min(data.ranges[270:315])),
     Sensor("fwd_lidar", MINIMUM, lambda data: min(min(data.ranges[:46]), min(data.ranges[315:]))),
     Sensor("right_fwd_lidar", GOAL, lambda data: min(data.ranges[270:315])),
-    Sensor("right_bck_lidar", GOAL, lambda data: min(data.ranges[225:270]))
+    Sensor("right_bck_lidar", RECOVER, lambda data: min(data.ranges[225:270]))
 ]
 
 def scan_callback(scan_data):
