@@ -6,7 +6,7 @@ from threading import RLock
 from Queue import Queue
 from threading import Thread
 from avoidance import start_sensors
-from driver_node import setup_driver
+from driver_node import driver_setup
 from gpiozero import LED
 from lidar_avoidance import start_lidar
 from jaybot.msg import Threshold
@@ -184,7 +184,7 @@ def setup_node():
 
     driver_queue = Queue()
     avoidance_queue = Queue()
-    Thread(target=setup_driver, args=(driver_queue, )).start()
+    Thread(target=driver_setup, args=(driver_queue, )).start()
     Thread(target=start_sensors, args=(avoidance_queue, )).start()
     Thread(target=thresh_handler, args=(avoidance_queue, )).start()
     Thread(target=start_lidar, args=(avoidance_queue, )).start()
