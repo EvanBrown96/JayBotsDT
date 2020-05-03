@@ -34,6 +34,7 @@ namespace RoverController
             {
                 mc.Show();
                 container.enqueue_command("m-ss");
+                (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.joystick;
             }
             else
             {
@@ -53,6 +54,7 @@ namespace RoverController
                 speed.Enabled = false;
                 checkBox1.Enabled = false;
                 container.startMap();
+                (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.map;
             }
             else
             {
@@ -82,6 +84,14 @@ namespace RoverController
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             container.setAvoidance((sender as CheckBox).Checked, container.endChain);
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if((sender as RadioButton).Checked)
+            {
+                (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.path;
+            }
         }
     }
 }

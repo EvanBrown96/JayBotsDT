@@ -63,9 +63,19 @@ namespace RoverController.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap green {
+        internal static System.Drawing.Bitmap joystick {
             get {
-                object obj = ResourceManager.GetObject("green", resourceCulture);
+                object obj = ResourceManager.GetObject("joystick", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap map {
+            get {
+                object obj = ResourceManager.GetObject("map", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +93,9 @@ namespace RoverController.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap wifi {
+        internal static System.Drawing.Bitmap path {
             get {
-                object obj = ResourceManager.GetObject("wifi", resourceCulture);
+                object obj = ResourceManager.GetObject("path", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
