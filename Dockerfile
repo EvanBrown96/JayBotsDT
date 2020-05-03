@@ -31,4 +31,6 @@ WORKDIR remote_ws
 RUN rosdep install --from-paths src --ignore-src -r -y
 RUN /bin/bash -c 'source ../jaybot_ws/devel/setup.bash && catkin_make'
 
+RUN pip install pathfinding
+
 ENTRYPOINT ["/bin/bash", "-c", "source ../env_files/remote_startup.bash ; echo $ROS_IP ; roslaunch remote_app standard.launch"]
