@@ -55,7 +55,6 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::RoverController.Properties.Resources.nowifi;
             this.pictureBox1.Location = new System.Drawing.Point(2, 8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(30, 30);

@@ -90,14 +90,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoverController.exe" size="55776">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="RoverController.exe" size="116192">
       <assemblyIdentity name="RoverController" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Xx9gH2wNvRvRfPN+C7fibFMhmiDYxO0VwTItY3xa8z4=</dsig:DigestValue>
+        <dsig:DigestValue>iferNuFkz0TI4zSW29i0ney6UCgeREE6t0X2xXT26fY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -209,13 +209,40 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="attribution.txt" size="187">
+  <file name="attribution.txt" size="549">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>yyHFRojEe2WgIqu7dFS6XXMtddI1c1tWVrtpB/seSZc=</dsig:DigestValue>
+      <dsig:DigestValue>Ob7unYaAbl7x5sJvtdFMNI79XTmWmxJV+mQnE7uQw70=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\joystick.png" size="24086">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>3CsNSGnzFtWYfdQps6SS0uIrzsorr6gaDzS8QfRf9ts=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\map.png" size="34625">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>eNtD6VGH54HjysRuI1zhYa/mCuWp7A1BK3ayyuK3R5Y=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\path.png" size="16129">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>SAN/fK5Mww21yFqS+2ZTA3RllMK5J0qLQgMoGcTJzEQ=</dsig:DigestValue>
     </hash>
   </file>
   <file name="RoverController.exe.config" size="1231">

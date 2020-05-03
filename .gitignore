@@ -12,5 +12,7 @@ hector_ws/devel/
 .vscode
 *.pyc
 remote_ws/build/
-remote_ws/devel/*
+remote_ws/devel/
+mexplore-ws/build/
+mexplore-ws/devel/
 RoverController/packages/

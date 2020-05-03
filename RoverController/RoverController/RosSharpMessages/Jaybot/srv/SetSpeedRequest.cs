@@ -9,22 +9,22 @@
 
 
 
-namespace RosSharp.RosBridgeClient.MessageTypes.RemoteApp
+namespace RosSharp.RosBridgeClient.MessageTypes.Jaybot
 {
-    public class KillRoverResponse : Message
+    public class SetSpeedRequest : Message
     {
-        public const string RosMessageName = "remote_app/KillRover";
+        public const string RosMessageName = "jaybot/SetSpeed";
 
-        public string err { get; set; }
+        public byte spd_pct { get; set; }
 
-        public KillRoverResponse()
+        public SetSpeedRequest()
         {
-            this.err = "";
+            this.spd_pct = 0;
         }
 
-        public KillRoverResponse(string err)
+        public SetSpeedRequest(byte spd_pct)
         {
-            this.err = err;
+            this.spd_pct = spd_pct;
         }
     }
 }

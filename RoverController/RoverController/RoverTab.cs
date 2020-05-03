@@ -30,11 +30,16 @@ namespace RoverController
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked) {
+            if ((sender as RadioButton).Checked)
+            {
                 mc.Show();
                 container.enqueue_command("m-ss");
+                (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.joystick;
             }
-            else mc.Hide();
+            else
+            {
+                mc.Hide();
+            }
         }
 
         private void disconnect_Click(object sender, EventArgs e)
@@ -46,12 +51,17 @@ namespace RoverController
         {
             if((sender as RadioButton).Checked)
             {
-                //container.enqueue_command("a");
+                speed.Enabled = false;
+                checkBox1.Enabled = false;
                 container.startMap();
+                (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.map;
             }
             else
             {
                 container.stopMap();
+                speed_ValueChanged(sender, e);
+                speed.Enabled = true;
+                checkBox1.Enabled = true;
             }
         }
 
@@ -63,6 +73,25 @@ namespace RoverController
         private void view_Click(object sender, EventArgs e)
         {
             container.viewMap();
+        }
+
+        private void speed_ValueChanged(object sender, EventArgs e)
+        {
+            byte speed_val = (byte)speed.Value;
+            container.setSpeed(speed_val, container.endChain);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            container.setAvoidance((sender as CheckBox).Checked, container.endChain);
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if((sender as RadioButton).Checked)
+            {
+                (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.path;
+            }
         }
     }
 }

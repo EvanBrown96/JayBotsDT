@@ -7,14 +7,14 @@
     <framework targetVersion="4.8" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="RoverController.exe.manifest" size="12906">
+    <dependentAssembly dependencyType="install" codebase="RoverController.exe.manifest" size="14101">
       <assemblyIdentity name="RoverController.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>pq6rGIe8brGBZh9R5iogVIMSCoz9R9j7vq1ilY+jKsM=</dsig:DigestValue>
+        <dsig:DigestValue>vBv7VCH29YoFCTj0TSmN8PYKWTtvTAjr70McVPqV/Dg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

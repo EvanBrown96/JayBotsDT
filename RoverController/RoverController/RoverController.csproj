@@ -86,6 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RosSharpMessages\Jaybot\srv\SetSpeedRequest.cs" />
+    <Compile Include="RosSharpMessages\Jaybot\srv\SetSpeedResponse.cs" />
     <Compile Include="RosSharpMessages\RemoteApp\srv\KillRoverRequest.cs" />
     <Compile Include="RosSharpMessages\RemoteApp\srv\KillRoverResponse.cs" />
     <Compile Include="RosSharpMessages\RemoteApp\srv\LaunchRoverRequest.cs" />
@@ -173,6 +175,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="attribution.txt" />
+    <Content Include="Resources\map.png" />
+    <Content Include="Resources\path.png" />
+    <Content Include="Resources\joystick.png" />
     <None Include="Resources\nowifi.png" />
   </ItemGroup>
   <ItemGroup>
