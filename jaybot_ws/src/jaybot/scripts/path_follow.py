@@ -3,13 +3,15 @@ import rospy
 from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import String
+import math
+from tf.tranformations import euler_from_quaternion
 
 cur_pose = None
 path = None
 driver_queue = None
 
-DISTANCE_TOLERANCE = 0.1
-ANGLE_TOLERANCE = 5
+DISTANCE_TOLERANCE = 0.05
+ANGLE_TOLERANCE = 3
 
 def cancel_path(_=None):
     global path
@@ -17,7 +19,7 @@ def cancel_path(_=None):
 
 def path_update(new_path):
     global path
-    path = new_path
+    path = new_path.poses
 
 def adjust_path():
     global path
@@ -25,12 +27,21 @@ def adjust_path():
     if path is None or len(path) == 0:
         return
 
-    if True: # x and y are within range
+    # determine if next point in path has been reached
+    at_point = False
+    if abs(path[0].pose.point.x - cur_pose.pose.point.x) < DISTANCE_TOLERANCE and abs(path[0].pose.point.y - cur_pose.pose.point.y) < DISTANCE_TOLERANCE:
+        at_point = True
+
+    if at_point:
         path.pop(0)
 
-    if True: # angle is within range
+    desired_angle = math.degrees(math.atan((path[0].pose.point.y - cur_pose.pose.point.y)/(path[0].pose.point.x - cur_pose.pose.point.x + 0.0000001)))
+    actual_angle = math.degrees(euler_from_quaternion((cur_pose.pose.orientation.x, cur_pose.pose.orientation.y, cur_pose.pose.orientation.z, cur_pose.pose.orientation.w))[2])
+    angle_change = (desired_angle - actual_angle + 180) % 360 - 180 # math
+
+    if abs(angle_change) < ANGLE_TOLERANCE: # angle is within range
         driver_queue.put('fs')
-    elif True: # angle is greater -> need to turn left
+    elif angle_change > 0: # angle is greater -> need to turn left
         driver_queue.put('sl')
     else: # angle is smaller -> need to turn right
         driver_queue.put('sr')
