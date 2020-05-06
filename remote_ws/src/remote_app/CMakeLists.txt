@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
   nav_msgs
-  nav_srvs
   geometry_msgs
   message_generation
 )
@@ -79,7 +78,6 @@ generate_messages(
   std_msgs
   std_srvs
   nav_msgs
-  nav_srvs
   geometry_msgs
 )
 
@@ -115,7 +113,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES remote_app
-   CATKIN_DEPENDS roscpp rospy std_msgs std_srvs message_runtime nav_msgs nav_srvs geometry_msgs
+   CATKIN_DEPENDS roscpp rospy std_msgs std_srvs message_runtime nav_msgs geometry_msgs
 #  DEPENDS system_lib
 )
 
