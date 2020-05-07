@@ -12,16 +12,19 @@ from lidar_avoidance import start_lidar
 from jaybot.msg import Threshold
 from std_srvs.srv import SetBool, SetBoolResponse
 import random
+from path_follow import setup_path_follow
 
 BLINKER_GPIO = 25
 led = None
 
 driver_queue = None
+path_queue = None
 avoidance_queue = None
 
 class Mode:
     MANUAL = 0
     AUTONOMOUS = 1
+    PATHFINDING = 2
 
 class AutoState:
     FIND_WALL = 0
@@ -73,11 +76,14 @@ def commandCallback(user_command):
         autonomousSet()
         led.blink(0.5, 2.5)
 
+    elif cmd[0] == 'p':
+        mode = Mode.PATHFINDING
+
     lock.release()
 
 
 def get_next_state():
-    
+
     if state == AutoState.FIND_WALL:
         if stop_fwd_movement:
             return AutoState.MAKE_RIGHT
@@ -107,7 +113,7 @@ def get_next_state():
             return AutoState.FORWARD
         elif not sensors["right_bck_lidar"]:
             return AutoState.FIND_WALL
-            
+
     return state
 
 
@@ -167,9 +173,14 @@ def set_avoidance(setbool):
     manual_avoidance = setbool.data
     return SetBoolResponse(True, "")
 
+def forward_path():
+    while not rospy.is_shutdown():
+        cmd = path_queue.get()
+        if mode == Mode.PATHFINDING:
+            driver_queue.put(cmd)
 
 def setup_node():
-    global driver_queue, avoidance_queue, led
+    global driver_queue, avoidance_queue, path_queue, led
 
     rospy.loginfo("starting movement_logic")
 
@@ -183,17 +194,21 @@ def setup_node():
     rospy.loginfo("started service set_avoidance")
 
     driver_queue = Queue()
+    path_queue = Queue()
     avoidance_queue = Queue()
     Thread(target=driver_setup, args=(driver_queue, )).start()
     Thread(target=start_sensors, args=(avoidance_queue, )).start()
     Thread(target=thresh_handler, args=(avoidance_queue, )).start()
     Thread(target=start_lidar, args=(avoidance_queue, )).start()
+    Thread(target=setup_path_follow, args=(path_queue, )).start()
+    Thread(target=forward_path).start()
 
     led = LED(BLINKER_GPIO)
 
     rospy.spin()
 
     driver_queue.put(None)
+    path_queue.put(None)
     avoidance_queue.put(Threshold("", False))
 
     rospy.loginfo("stopping movement_logic")

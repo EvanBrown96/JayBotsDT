@@ -32,8 +32,11 @@ namespace RoverController
         {
             if ((sender as RadioButton).Checked)
             {
-                mc.Show();
+                speed.Enabled = true;
+                checkBox1.Enabled = true;
                 container.enqueue_command("m-ss");
+                mc.Show();
+                speed_ValueChanged(sender, e);
                 (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.joystick;
             }
             else
@@ -59,9 +62,6 @@ namespace RoverController
             else
             {
                 container.stopMap();
-                speed_ValueChanged(sender, e);
-                speed.Enabled = true;
-                checkBox1.Enabled = true;
             }
         }
 
@@ -90,6 +90,9 @@ namespace RoverController
         {
             if((sender as RadioButton).Checked)
             {
+                speed.Enabled = false;
+                checkBox1.Enabled = false;
+                container.startPathfinding();
                 (this.container.info_control.Controls.Find("pictureBox1", false)[0] as PictureBox).Image = Properties.Resources.path;
             }
         }
