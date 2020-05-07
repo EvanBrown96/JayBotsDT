@@ -10,8 +10,8 @@ cur_pose = None
 path = None
 driver_queue = None
 
-DISTANCE_TOLERANCE = 0.05
-ANGLE_TOLERANCE = 3
+DISTANCE_TOLERANCE = 0.1
+ANGLE_TOLERANCE = 10
 
 def cancel_path(_=None):
     global path
@@ -28,17 +28,19 @@ def adjust_path():
     if path is None or len(path) == 0:
         return
 
+    this_pose = cur_pose
+
     # determine if next point in path has been reached
     at_point = False
-    if abs(path[0].pose.position.x - cur_pose.pose.position.x) < DISTANCE_TOLERANCE and abs(path[0].pose.position.y - cur_pose.pose.position.y) < DISTANCE_TOLERANCE:
+    if abs(path[0].pose.position.x - this_pose.pose.position.x) < DISTANCE_TOLERANCE and abs(path[0].pose.position.y - this_pose.pose.position.y) < DISTANCE_TOLERANCE:
         at_point = True
 
     if at_point:
         path.pop(0)
 
-    desired_angle = math.degrees(math.atan((path[0].pose.position.y - cur_pose.pose.position.y)/(path[0].pose.position.x - cur_pose.pose.position.x + 0.0000001)))
-    actual_angle = math.degrees(euler_from_quaternion((cur_pose.pose.orientation.x, cur_pose.pose.orientation.y, cur_pose.pose.orientation.z, cur_pose.pose.orientation.w))[2])
-    rospy.loginfo("goal: {}, actual: {}".format(desired_angle, actual_angle))
+    rospy.loginfo("remaining steps: {}. goal: (x={} y={} angle={}), actual: (x={} y={} angle={})".format(len(path), path[0].pose.position.x, path[0].pose.position.y, desired_angle, this_pose.pose.position.x, this_pose.pose.position.y, actual_angle))
+    desired_angle = math.degrees(math.atan((path[0].pose.position.y - this_pose.pose.position.y)/(path[0].pose.position.x - this_pose.pose.position.x + 0.0000001)))
+    actual_angle = math.degrees(euler_from_quaternion((this_pose.pose.orientation.x, this_pose.pose.orientation.y, this_pose.pose.orientation.z, this_pose.pose.orientation.w))[2])
     angle_change = (desired_angle - actual_angle + 180) % 360 - 180 # math
 
     if abs(angle_change) < ANGLE_TOLERANCE: # angle is within range
