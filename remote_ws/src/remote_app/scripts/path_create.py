@@ -87,14 +87,14 @@ def create_path(occupancy_map, init_pos, final_pos):
     h.stamp = rospy.Time.now()
     h.frame_id = occupancy_map.header.frame_id
     for i in range(len(p)-1):
-        direction = (p[i+1][0]-p[i][0], p[i+1][1]-p[i][1])
+        #direction = (p[i+1][0]-p[i][0], p[i+1][1]-p[i][1])
         x = map_res*(p[i][0]-(map_width/2))
         y = map_res*(p[i][1]-(map_height/2))
         point = Point(x, y, 0)
-        yaw = math.atan(direction[1]/(direction[0]+0.00001)) # avoid divide by zero
-        quat_raw = quaternion_from_euler(0, 0, yaw)
-        quaternion = Quaternion(quat_raw[0], quat_raw[1], quat_raw[2], quat_raw[3])
-        pose = Pose(point, quaternion)
+        #yaw = math.atan(direction[1]/(direction[0]+0.00001)) # avoid divide by zero
+        #quat_raw = quaternion_from_euler(0, 0, yaw)
+        #quaternion = Quaternion(quat_raw[0], quat_raw[1], quat_raw[2], quat_raw[3])
+        pose = Pose(point, Quaternion(0, 0, 0, 0))
         pose_stamped = PoseStamped(h, pose)
         pose_path.append(pose_stamped)
 

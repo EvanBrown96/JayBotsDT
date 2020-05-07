@@ -215,6 +215,14 @@ namespace RoverController
             });
         }
 
+        public void startPathfinding()
+        {
+            setSpeed(15, (SetSpeedResponse _) =>
+            {
+                enqueue_command("p");
+            });
+        }
+
         public void endChain(RosSharp.RosBridgeClient.Message msg) { }
 
         public void setSpeed(byte speed, ServiceResponseHandler<SetSpeedResponse> chain)
