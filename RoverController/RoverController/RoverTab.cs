@@ -32,6 +32,8 @@ namespace RoverController
         {
             if ((sender as RadioButton).Checked)
             {
+                speed.Enabled = true;
+                checkBox1.Enabled = true;
                 container.enqueue_command("m-ss");
                 mc.Show();
                 speed_ValueChanged(sender, e);
