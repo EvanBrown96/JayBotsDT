@@ -20,6 +20,7 @@ def cancel_path(_=None):
 def path_update(new_path):
     global path
     path = new_path.poses
+    rospy.loginfo("got updated path")
 
 def adjust_path():
     global path
@@ -29,14 +30,15 @@ def adjust_path():
 
     # determine if next point in path has been reached
     at_point = False
-    if abs(path[0].pose.point.x - cur_pose.pose.point.x) < DISTANCE_TOLERANCE and abs(path[0].pose.point.y - cur_pose.pose.point.y) < DISTANCE_TOLERANCE:
+    if abs(path[0].pose.position.x - cur_pose.pose.position.x) < DISTANCE_TOLERANCE and abs(path[0].pose.position.y - cur_pose.pose.position.y) < DISTANCE_TOLERANCE:
         at_point = True
 
     if at_point:
         path.pop(0)
 
-    desired_angle = math.degrees(math.atan((path[0].pose.point.y - cur_pose.pose.point.y)/(path[0].pose.point.x - cur_pose.pose.point.x + 0.0000001)))
+    desired_angle = math.degrees(math.atan((path[0].pose.position.y - cur_pose.pose.position.y)/(path[0].pose.position.x - cur_pose.pose.position.x + 0.0000001)))
     actual_angle = math.degrees(euler_from_quaternion((cur_pose.pose.orientation.x, cur_pose.pose.orientation.y, cur_pose.pose.orientation.z, cur_pose.pose.orientation.w))[2])
+    rospy.loginfo("goal: {}, actual: {}".format(desired_angle, actual_angle))
     angle_change = (desired_angle - actual_angle + 180) % 360 - 180 # math
 
     if abs(angle_change) < ANGLE_TOLERANCE: # angle is within range
