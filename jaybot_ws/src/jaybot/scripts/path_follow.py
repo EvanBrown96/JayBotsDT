@@ -4,7 +4,7 @@ from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import String
 import math
-from tf.tranformations import euler_from_quaternion
+from tf.transformations import euler_from_quaternion
 
 cur_pose = None
 path = None
@@ -55,7 +55,7 @@ def setup_path_follow(queue=None):
     global driver_queue
     driver_queue = queue
 
-    rospy.Subscriber('path', Path, path_updated)
+    rospy.Subscriber('path', Path, path_update)
     rospy.loginfo("subscribed to path")
 
     rospy.Subscriber('slam_out_pose', PoseStamped, update_pose)
