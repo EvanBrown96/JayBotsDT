@@ -86,7 +86,7 @@ def create_path(occupancy_map, init_pos, final_pos):
     h = Header()
     h.stamp = rospy.Time.now()
     h.frame_id = occupancy_map.header.frame_id
-    for i in range(1, len(p)-1):
+    for i in range(1, len(p)):
         # cur_dir = (p[i][0]-p[i-1][0], p[i][1]-p[i-1][1])
         # if direction == cur_dir:
         #     continue # don't add point if it's moving in the same direction
@@ -101,8 +101,6 @@ def create_path(occupancy_map, init_pos, final_pos):
         pose = Pose(point, Quaternion(0, 0, 0, 0))
         pose_stamped = PoseStamped(h, pose)
         pose_path.append(pose_stamped)
-
-    pose_path.append(p[-1])
 
     return Path(h, pose_path)
 
