@@ -37,8 +37,8 @@ def create_path(occupancy_map, init_pos, final_pos):
                 new_map[i][j] = 1
             elif val == 100:
                 #new_map[i][j] = -1
-                for k in range(max(0, i-5), min(map_width, i+6)):
-                    for l in range(max(0, j-5), min(map_height, j+6)):
+                for k in range(max(0, i-6), min(map_width, i+7)):
+                    for l in range(max(0, j-6), min(map_height, j+7)):
                         new_map[k][l] = -1
 
     rospy.loginfo("creating grid")
