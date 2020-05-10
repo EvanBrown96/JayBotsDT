@@ -37,13 +37,13 @@ def adjust_path():
 
     if at_point:
         path.pop(0)
-        if len(path) == 0:
-            driver_queue.put("ss")
-            return
 
-    desired_angle = math.degrees(math.atan((path[0].pose.position.y - this_pose.pose.position.y)/(path[0].pose.position.x - this_pose.pose.position.x + 0.0000001)))
-    actual_angle = math.degrees(euler_from_quaternion((this_pose.pose.orientation.x, this_pose.pose.orientation.y, this_pose.pose.orientation.z, this_pose.pose.orientation.w))[2])
     rospy.loginfo("remaining steps: {}. goal: (x={} y={} angle={}), actual: (x={} y={} angle={})".format(len(path), path[0].pose.position.x, path[0].pose.position.y, desired_angle, this_pose.pose.position.x, this_pose.pose.position.y, actual_angle))
+    desired_angle = math.degrees(math.atan((path[0].pose.position.y - this_pose.pose.position.y)/(path[0].pose.position.x - this_pose.pose.position.x + 0.0000001)))
+    if path[0].pose.position.x - this_pos.pose.position.x < 0:
+        # account for atan only giving values between pi and -pi
+        desired_angle += 180
+    actual_angle = math.degrees(euler_from_quaternion((this_pose.pose.orientation.x, this_pose.pose.orientation.y, this_pose.pose.orientation.z, this_pose.pose.orientation.w))[2])
     angle_change = (desired_angle - actual_angle + 180) % 360 - 180 # math
 
     if abs(angle_change) < ANGLE_TOLERANCE: # angle is within range
