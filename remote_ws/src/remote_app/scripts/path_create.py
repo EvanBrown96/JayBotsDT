@@ -36,34 +36,13 @@ def create_path(occupancy_map, init_pos, final_pos):
             if val == 0:
                 new_map[i][j] = 1
             elif val == 100:
-                new_map[i][j] = -1
-                #for k in range(max(0, i-5), min(map_width, i+6)):
-                #    for l in range(max(0, j-5), min(map_height, j+6)):
-                #        new_map[k][l] = -1
+                #new_map[i][j] = -1
+                for k in range(max(0, i-5), min(map_width, i+6)):
+                    for l in range(max(0, j-5), min(map_height, j+6)):
+                        new_map[k][l] = -1
 
     rospy.loginfo("creating grid")
     grid = Grid(matrix=new_map)
-
-    #rospy.loginfo("publishing new map")
-    ##########3
-
-    # test = []
-    # for row in new_map:
-    #     test += row
-    #
-    # occupancy_map.data = test
-    # h = Header()
-    # h.stamp = rospy.Time.now()
-    # h.frame_id = occupancy_map.header.frame_id
-    # occupancy_map.header = h
-    # rospy.loginfo(occupancy_map.header)
-    # rospy.loginfo(occupancy_map.info)
-    # rate = rospy.Rate(0.5)
-    # while not rospy.is_shutdown():
-    #     path_pub.publish(occupancy_map)
-    #     rate.sleep()
-
-    ###########
 
     rospy.loginfo("running A*")
     # get indices of start and end positions
@@ -88,16 +67,13 @@ def create_path(occupancy_map, init_pos, final_pos):
     h.frame_id = occupancy_map.header.frame_id
     for i in range(1, len(p)):
         # cur_dir = (p[i][0]-p[i-1][0], p[i][1]-p[i-1][1])
-        # if direction == cur_dir:
+        # if direction == cur_dir and i < len(p)-1:
         #     continue # don't add point if it's moving in the same direction
         # direction = cur_dir
 
         x = map_res*(p[i][0]-(map_width/2))
         y = map_res*(p[i][1]-(map_height/2))
         point = Point(x, y, 0)
-        #yaw = math.atan(direction[1]/(direction[0]+0.00001)) # avoid divide by zero
-        #quat_raw = quaternion_from_euler(0, 0, yaw)
-        #quaternion = Quaternion(quat_raw[0], quat_raw[1], quat_raw[2], quat_raw[3])
         pose = Pose(point, Quaternion(0, 0, 0, 0))
         pose_stamped = PoseStamped(h, pose)
         pose_path.append(pose_stamped)
@@ -133,9 +109,6 @@ def setup_pathfinding():
     rospy.loginfo("subscribing to /clicked_point")
     rospy.Subscriber('slam_out_pose', PoseStamped, set_current)
     rospy.loginfo("subscribing to slam_out_pose")
-    #goal_pub = rospy.Publisher('goal', IDK, queue_size=1)
-    #rospy.loginfo("publishing to goal")
-    # path_pub = rospy.Publisher('new_map', OccupancyGrid, queue_size=1)
     rospy.spin()
     rospy.loginfo("stopping pathfinding")
 
