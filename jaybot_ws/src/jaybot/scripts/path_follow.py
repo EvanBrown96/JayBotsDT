@@ -13,7 +13,7 @@ cancel = False
 
 # tolerances for deciding if a position has been accurately matched
 DISTANCE_TOLERANCE = 0.1
-ANGLE_TOLERANCE = 10
+ANGLE_TOLERANCE = 15
 
 # max time to move before rechecking position
 MAX_PHASE_TIME = 1.0
@@ -36,7 +36,9 @@ def path_update(new_path):
     rospy.loginfo("got updated path")
 
 def follow_path():
-    global path
+    global path, cancel, ang_vel_estimate, linear_vel_estimate, vel_sample_time
+
+    rospy.loginfo("entering pathfinding mode")
 
     cancel = False
     last_pose = None
@@ -55,6 +57,7 @@ def follow_path():
                 ang_vel_estimate = (ang_vel_estimate*vel_sample_time + angle_moved*phase_time)/(vel_sample_time+phase_time)
                 linear_vel_estimate = (linear_vel_estimate*vel_sample_time + distance_moved*phase_time)/(vel_sample_time+phase_time)
                 vel_sample_time += phase_time
+            rospy.loginfo("{}, {}".format(ang_vel_estimate, linear_vel_estimate))
             last_pose = cur_pose
 
             # calculate distances to move in both dimensions
@@ -75,7 +78,7 @@ def follow_path():
             if x_off < 0:
                 # account for atan only giving values between pi and -pi
                 desired_angle += 180
-            #rospy.loginfo("remaining steps: {}. goal: (x={} y={} angle={}), actual: (x={} y={} angle={})".format(len(path), path[0].pose.position.x, path[0].pose.position.y, desired_angle, this_pose.pose.position.x, this_pose.pose.position.y, actual_angle))
+            rospy.loginfo("remaining steps: {}. goal: (x={} y={} angle={}), actual: (x={} y={} angle={})".format(len(path), path[0].pose.position.x, path[0].pose.position.y, desired_angle, this_pose.pose.position.x, this_pose.pose.position.y, cur_angle))
             angle_change = (desired_angle - cur_angle + 180) % 360 - 180 # math
 
             if abs(angle_change) < ANGLE_TOLERANCE:
@@ -83,20 +86,25 @@ def follow_path():
                 driver_queue.put('fs')
                 # calculate distance to move and time to go forward based on estimated linear velocity
                 pos_change = math.sqrt(math.pow(x_off, 2) + math.pow(y_off, 2))
-                rospy.sleep(min(pos_change/linear_vel_estimate, MAX_PHASE_TIME))
+                phase_time = min(abs(pos_change/linear_vel_estimate), MAX_PHASE_TIME)
+                #rospy.sleep(min(pos_change/linear_vel_estimate, MAX_PHASE_TIME))
             else:
                 if angle_change > 0:
                     driver_queue.put('sl')
                 else:
                     driver_queue.put('sr')
                 # calculate angle to move based on estimated angular velocity
-                rospy.sleep(min(angle_change/ang_vel_estimate, MAX_PHASE_TIME))
+                phase_time = min(abs(angle_change/ang_vel_estimate), MAX_PHASE_TIME)
+                #rospy.sleep(min(angle_change/ang_vel_estimate, MAX_PHASE_TIME))
+            rospy.loginfo(phase_time)
+            rospy.sleep(phase_time)
 
         # stop and wait for slam pose to stabilize
         driver_queue.put('ss')
         rospy.sleep(STATIONARY_TIME)
 
     path = []
+    rospy.loginfo("leaving pathfinding mode")
 
 
     # if path is None or len(path) == 0:

@@ -54,7 +54,7 @@ state = None
 
 def commandCallback(user_command):
     global mode, movement_state, state
-
+    rospy.loginfo(user_command)
     cmd = user_command.data
 
     lock.acquire()
@@ -78,9 +78,9 @@ def commandCallback(user_command):
 
     elif cmd[0] == 'p':
         mode = Mode.PATHFINDING
+        Thread(target=follow_path).start()
         lock.release()
-        follow_path()
-        lock.acquire()
+        return
 
     cancel_path()
     lock.release()
@@ -212,8 +212,8 @@ def setup_node():
     rospy.spin()
 
     driver_queue.put(None)
-    path_queue.put(None)
     avoidance_queue.put(Threshold("", False))
+    cancel_path()
 
     rospy.loginfo("stopping movement_logic")
 
