@@ -37,7 +37,7 @@ def path_update(new_path):
     rospy.loginfo("got updated path")
 
 def follow_path():
-    global path, cancel, ang_vel_estimate, linear_vel_estimate, vel_sample_time
+    global path, cancel, ang_vel_estimate, linear_vel_estimate, ang_vel_sample_time, linear_vel_sample_time
 
     rospy.loginfo("entering pathfinding mode")
 
