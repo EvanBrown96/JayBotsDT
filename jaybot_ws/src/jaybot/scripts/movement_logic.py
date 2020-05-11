@@ -12,7 +12,7 @@ from lidar_avoidance import start_lidar
 from jaybot.msg import Threshold
 from std_srvs.srv import SetBool, SetBoolResponse
 import random
-from path_follow import setup_path_follow
+from path_follow import setup_path_follow, follow_path, cancel_path
 
 BLINKER_GPIO = 25
 led = None
@@ -78,7 +78,11 @@ def commandCallback(user_command):
 
     elif cmd[0] == 'p':
         mode = Mode.PATHFINDING
+        lock.release()
+        follow_path()
+        lock.acquire()
 
+    cancel_path()
     lock.release()
 
 
