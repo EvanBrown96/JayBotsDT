@@ -29,13 +29,17 @@ def create_path(occupancy_map, init_pos, final_pos):
         map_data.append(occupancy_map.data[(i*map_width):((i+1)*map_width)])
 
     rospy.loginfo("expanding walls")
-    # first expand walls to prevent rover from running into them while following path
-    new_map = [[-1 for _ in range(map_width)] for _ in range(map_height)]
+    # preserve known empty space
+    new_map = [[(1 if val == 0 else -1) for val in row] for row in map_data]
+    # for i, row in enumerate(map_data):
+    #     for j, val in enumerate(row):
+    #         if val == 0:
+    #             new_map[i][j] = 1
+
+    # expand walls to prevent rover from running into them while following path
     for i, row in enumerate(map_data):
         for j, val in enumerate(row):
-            if val == 0:
-                new_map[i][j] = 1
-            elif val == 100:
+            if val == 100:
                 #new_map[i][j] = -1
                 for k in range(max(0, i-6), min(map_width, i+7)):
                     for l in range(max(0, j-6), min(map_height, j+7)):
