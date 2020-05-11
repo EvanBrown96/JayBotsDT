@@ -18,7 +18,7 @@ BLINKER_GPIO = 25
 led = None
 
 driver_queue = None
-path_queue = None
+# path_queue = None
 avoidance_queue = None
 
 class Mode:
@@ -177,11 +177,11 @@ def set_avoidance(setbool):
     manual_avoidance = setbool.data
     return SetBoolResponse(True, "")
 
-def forward_path():
-    while not rospy.is_shutdown():
-        cmd = path_queue.get()
-        if mode == Mode.PATHFINDING:
-            driver_queue.put(cmd)
+# def forward_path():
+#     while not rospy.is_shutdown():
+#         cmd = path_queue.get()
+#         if mode == Mode.PATHFINDING:
+#             driver_queue.put(cmd)
 
 def setup_node():
     global driver_queue, avoidance_queue, path_queue, led
@@ -198,14 +198,14 @@ def setup_node():
     rospy.loginfo("started service set_avoidance")
 
     driver_queue = Queue()
-    path_queue = Queue()
+    # path_queue = Queue()
     avoidance_queue = Queue()
     Thread(target=driver_setup, args=(driver_queue, )).start()
     Thread(target=start_sensors, args=(avoidance_queue, )).start()
     Thread(target=thresh_handler, args=(avoidance_queue, )).start()
     Thread(target=start_lidar, args=(avoidance_queue, )).start()
-    Thread(target=setup_path_follow, args=(path_queue, )).start()
-    Thread(target=forward_path).start()
+    Thread(target=setup_path_follow, args=(driver_queue, )).start()
+    # Thread(target=forward_path).start()
 
     led = LED(BLINKER_GPIO)
 

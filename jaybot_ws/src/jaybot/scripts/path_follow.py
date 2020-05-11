@@ -41,57 +41,62 @@ def follow_path():
     cancel = False
     last_pose = None
     phase_time = None
-    while not cancel and len(path) > 0:
-        this_pose = cur_pose
+    while not cancel:
+        if len(path) > 0:
+            this_pose = cur_pose
 
-        x_off = path[0].pose.position.x - this_pose.pose.position.x
-        y_off = path[0].pose.position.y - this_pose.pose.position.y
+            # update velocity estimates based on distance moved and phase time
+            cur_angle = math.degrees(euler_from_quaternion((this_pose.pose.orientation.x, this_pose.pose.orientation.y, this_pose.pose.orientation.z, this_pose.pose.orientation.w))[2])
+            if last_pose is not None:
+                distance_moved = math.sqrt(math.pow(this_pose.pose.position.x - last_pose.pose.position.x, 2) + math.pow(this_pose.pose.position.y - last_pose.pose.position.y, 2))
+                last_angle = math.degrees(euler_from_quaternion((last_pose.pose.orientation.x, last_pose.pose.orientation.y, last_pose.pose.orientation.z, last_pose.pose.orientation.w))[2])
+                angle_moved = abs((cur_angle - last_angle + 180) % 360 - 180) # math
 
-        if abs(x_off) < DISTANCE_TOLERANCE and abs(y_off) < DISTANCE_TOLERANCE:
-            at_point = True
+                ang_vel_estimate = (ang_vel_estimate*vel_sample_time + angle_moved*phase_time)/(vel_sample_time+phase_time)
+                linear_vel_estimate = (linear_vel_estimate*vel_sample_time + distance_moved*phase_time)/(vel_sample_time+phase_time)
+                vel_sample_time += phase_time
+            last_pose = cur_pose
 
-        if at_point:
-            path.pop(0)
-            if len(path) == 0:
-                break
-            # recalculate x_off and y_off
+            # calculate distances to move in both dimensions
             x_off = path[0].pose.position.x - this_pose.pose.position.x
             y_off = path[0].pose.position.y - this_pose.pose.position.y
 
-        cur_angle = math.degrees(euler_from_quaternion((this_pose.pose.orientation.x, this_pose.pose.orientation.y, this_pose.pose.orientation.z, this_pose.pose.orientation.w))[2])
+            # test if reached next location successfully
+            if abs(x_off) < DISTANCE_TOLERANCE and abs(y_off) < DISTANCE_TOLERANCE:
+                path.pop(0)
+                if len(path) == 0:
+                    continue
+                # recalculate x_off and y_off
+                x_off = path[0].pose.position.x - this_pose.pose.position.x
+                y_off = path[0].pose.position.y - this_pose.pose.position.y
 
-        if last_pose is not None:
-            # update velocity estimates based on distance moved and phase time
-            distance_moved = math.sqrt(math.pow(this_pose.pose.position.x - last_pose.pose.position.x, 2) + math.pow(this_pose.pose.position.y - last_pose.pose.position.y, 2))
-            last_angle = math.degrees(euler_from_quaternion((last_pose.pose.orientation.x, last_pose.pose.orientation.y, last_pose.pose.orientation.z, last_pose.pose.orientation.w))[2])
-            angle_moved = abs((cur_angle - last_angle + 180) % 360 - 180) # math
+            # calculate anglular change needed
+            desired_angle = math.degrees(math.atan(y_off/(x_off + 0.0000001)))
+            if x_off < 0:
+                # account for atan only giving values between pi and -pi
+                desired_angle += 180
+            #rospy.loginfo("remaining steps: {}. goal: (x={} y={} angle={}), actual: (x={} y={} angle={})".format(len(path), path[0].pose.position.x, path[0].pose.position.y, desired_angle, this_pose.pose.position.x, this_pose.pose.position.y, actual_angle))
+            angle_change = (desired_angle - cur_angle + 180) % 360 - 180 # math
 
-            ang_vel_estimate = (ang_vel_estimate*vel_sample_time + angle_moved*phase_time)/(vel_sample_time+phase_time)
-            linear_vel_estimate = (linear_vel_estimate*vel_sample_time + distance_moved*phase_time)/(vel_sample_time+phase_time)
-            vel_sample_time += phase_time
-
-        last_pose = cur_pose
-
-        desired_angle = math.degrees(math.atan(y_off/(x_off + 0.0000001)))
-        if x_off < 0:
-            # account for atan only giving values between pi and -pi
-            desired_angle += 180
-        #rospy.loginfo("remaining steps: {}. goal: (x={} y={} angle={}), actual: (x={} y={} angle={})".format(len(path), path[0].pose.position.x, path[0].pose.position.y, desired_angle, this_pose.pose.position.x, this_pose.pose.position.y, actual_angle))
-        angle_change = (desired_angle - cur_angle + 180) % 360 - 180 # math
-
-        if abs(angle_change) < ANGLE_TOLERANCE: # angle is within range
-            driver_queue.put('fs')
-            pos_change = math.sqrt(math.pow(x_off, 2) + math.pow(y_off, 2))
-            rospy.sleep(min(pos_change/linear_vel_estimate, MAX_PHASE_TIME))
-        else:
-            if angle_change > 0:
-                driver_queue.put('sl')
+            if abs(angle_change) < ANGLE_TOLERANCE:
+                # angle is within range, move forward
+                driver_queue.put('fs')
+                # calculate distance to move and time to go forward based on estimated linear velocity
+                pos_change = math.sqrt(math.pow(x_off, 2) + math.pow(y_off, 2))
+                rospy.sleep(min(pos_change/linear_vel_estimate, MAX_PHASE_TIME))
             else:
-                driver_queue.put('sr')
-            rospy.sleep(min(angle_change/ang_vel_estimate, MAX_PHASE_TIME))
+                if angle_change > 0:
+                    driver_queue.put('sl')
+                else:
+                    driver_queue.put('sr')
+                # calculate angle to move based on estimated angular velocity
+                rospy.sleep(min(angle_change/ang_vel_estimate, MAX_PHASE_TIME))
 
+        # stop and wait for slam pose to stabilize
         driver_queue.put('ss')
         rospy.sleep(STATIONARY_TIME)
+
+    path = []
 
 
     # if path is None or len(path) == 0:
