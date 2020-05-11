@@ -23,8 +23,9 @@ STATIONARY_TIME = 2.0
 
 # velocity estimations, in degree/s and m/s
 ang_vel_estimate = 45.0
+ang_vel_sample_time = 0.0
 linear_vel_estimate = 0.5
-vel_sample_time = 0.0
+linear_vel_sample_time = 0.0
 
 def cancel_path(_=None):
     global cancel
@@ -43,20 +44,22 @@ def follow_path():
     cancel = False
     last_pose = None
     phase_time = None
+    last_move = None
     while not cancel:
         if len(path) > 0:
             this_pose = cur_pose
 
             # update velocity estimates based on distance moved and phase time
             cur_angle = math.degrees(euler_from_quaternion((this_pose.pose.orientation.x, this_pose.pose.orientation.y, this_pose.pose.orientation.z, this_pose.pose.orientation.w))[2])
-            if last_pose is not None:
+            if last_move == "linear":
                 distance_moved = math.sqrt(math.pow(this_pose.pose.position.x - last_pose.pose.position.x, 2) + math.pow(this_pose.pose.position.y - last_pose.pose.position.y, 2))
+                linear_vel_estimate = (linear_vel_estimate*linear_vel_sample_time + distance_moved*phase_time)/(linear_vel_sample_time+phase_time)
+                linear_vel_sample_time += phase_time
+            elif last_move == "ang":
                 last_angle = math.degrees(euler_from_quaternion((last_pose.pose.orientation.x, last_pose.pose.orientation.y, last_pose.pose.orientation.z, last_pose.pose.orientation.w))[2])
                 angle_moved = abs((cur_angle - last_angle + 180) % 360 - 180) # math
-
-                ang_vel_estimate = (ang_vel_estimate*vel_sample_time + angle_moved*phase_time)/(vel_sample_time+phase_time)
-                linear_vel_estimate = (linear_vel_estimate*vel_sample_time + distance_moved*phase_time)/(vel_sample_time+phase_time)
-                vel_sample_time += phase_time
+                ang_vel_estimate = (ang_vel_estimate*ang_vel_sample_time + angle_moved*phase_time)/(ang_vel_sample_time+phase_time)
+                ang_vel_sample_time += phase_time
             rospy.loginfo("{}, {}".format(ang_vel_estimate, linear_vel_estimate))
             last_pose = cur_pose
 
@@ -87,6 +90,7 @@ def follow_path():
                 # calculate distance to move and time to go forward based on estimated linear velocity
                 pos_change = math.sqrt(math.pow(x_off, 2) + math.pow(y_off, 2))
                 phase_time = min(abs(pos_change/linear_vel_estimate), MAX_PHASE_TIME)
+                last_move = "linear"
                 #rospy.sleep(min(pos_change/linear_vel_estimate, MAX_PHASE_TIME))
             else:
                 if angle_change > 0:
@@ -95,6 +99,7 @@ def follow_path():
                     driver_queue.put('sr')
                 # calculate angle to move based on estimated angular velocity
                 phase_time = min(abs(angle_change/ang_vel_estimate), MAX_PHASE_TIME)
+                last_move = "ang"
                 #rospy.sleep(min(angle_change/ang_vel_estimate, MAX_PHASE_TIME))
             rospy.loginfo(phase_time)
             rospy.sleep(phase_time)
