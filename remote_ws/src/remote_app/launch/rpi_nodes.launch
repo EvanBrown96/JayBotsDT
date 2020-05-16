@@ -2,13 +2,15 @@
 
 	<arg name="machine_name"/>
 	<arg name="ip_addr"/>
-	<!--<env name="ROS_NAMESPACE" value="$(arg machine_name)"/>-->
 
 	<group ns="$(arg machine_name)">
 		<!-- launch hector_slam on local machine -->
 		<include file="$(dirname)/mapping_default.launch">
 			<arg name="machine_name" value="$(arg machine_name)"/>
 		</include>
+
+		<!-- launch path_create on local machine -->
+		<node name="path_create" pkg="remote_app" type="path_create.py"/>
 
 		<!-- everything else on remote machine -->
 		<machine name="$(arg machine_name)" address="$(arg ip_addr)" user="pmr" env-loader="~/JayBotsDT/jaybot_ws/devel/env_good.sh" default="true"/>
