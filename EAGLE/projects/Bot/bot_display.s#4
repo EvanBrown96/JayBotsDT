@@ -11959,7 +11959,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </sheet>
 </sheets>
 </module>
-<module name="RASPBERRY_PI_3B+" prefix="" dx="25.4" dy="76.2">
+<module name="RASPBERRY_PI_3B+" prefix="P" dx="25.4" dy="76.2">
 <ports>
 <port name="GPIO17" side="left" coord="27.94" direction="io"/>
 <port name="GPIO18" side="left" coord="25.4" direction="io"/>
@@ -12099,11 +12099,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="-132.08" y="48.26" size="1.778" layer="91">PWR -</text>
 </plain>
 <moduleinsts>
-<moduleinst name="TXS0108E1" module="TXS0108E" x="-81.28" y="-93.98" rot="R90">
-<attribute name="NAME" x="-83.82" y="-93.98" size="2.032" layer="95" rot="R90" align="bottom-center"/>
+<moduleinst name="TXS0108E" module="TXS0108E" x="-81.28" y="-93.98" rot="R90">
+<attribute name="NAME" value="TXS0108E" x="-83.82" y="-93.98" size="2.032" layer="95" rot="R90" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="MONSTER_MOTO_SHIELD1" module="MONSTER_MOTO_SHIELD" x="2.54" y="-91.44">
-<attribute name="NAME" x="2.54" y="-88.9" size="2.032" layer="95" rot="R270" align="bottom-center"/>
+<moduleinst name="MONSTER_MOTO_SHIELD" module="MONSTER_MOTO_SHIELD" x="2.54" y="-91.44">
+<attribute name="NAME" value="MONSTER_MOTO_SHIELD" x="2.54" y="-88.9" size="2.032" layer="95" rot="R270" align="bottom-center"/>
 </moduleinst>
 <moduleinst name="RASPBERRY_PI_3B+" module="RASPBERRY_PI_3B+" x="-45.72" y="2.54">
 <attribute name="NAME" value="RASPBERRY_PI_3B+" x="-43.18" y="2.54" size="2.032" layer="95" rot="R90" align="bottom-center"/>
@@ -12205,7 +12205,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <net name="PWR+" class="0">
 <segment>
 <wire x1="-104.14" y1="-5.08" x2="-121.92" y2="-5.08" width="0.1524" layer="91"/>
-<label x="-121.92" y="-5.08" size="1.778" layer="95"/>
 <pinref part="LED2" gate="G$1" pin="A"/>
 <wire x1="-104.14" y1="12.7" x2="-121.92" y2="12.7" width="0.1524" layer="91"/>
 <label x="-129.54" y="12.7" size="1.778" layer="95"/>
@@ -12219,8 +12218,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="0" y1="-59.69" x2="0" y2="-58.42" width="0.1524" layer="91"/>
 <wire x1="0" y1="-58.42" x2="-17.78" y2="-58.42" width="0.1524" layer="91"/>
 <label x="-17.78" y="-58.42" size="1.778" layer="95"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="PWR+"/>
-<junction x="0" y="-59.69"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="PWR+"/>
 </segment>
 <segment>
 <pinref part="JP2" gate="G$1" pin="2"/>
@@ -12262,12 +12260,12 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-60.96" y1="-104.14" x2="-58.42" y2="-106.68" width="0.1524" layer="91"/>
 <wire x1="-58.42" y1="-106.68" x2="-58.42" y2="-111.76" width="0.1524" layer="91"/>
 <pinref part="X_8" gate="G$1" pin="0"/>
-<portref moduleinst="TXS0108E1" port="GND"/>
+<portref moduleinst="TXS0108E" port="GND"/>
 <wire x1="-66.04" y1="-104.14" x2="-60.96" y2="-104.14" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="X_3" gate="G$1" pin="0"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="GND"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="GND"/>
 <wire x1="20.32" y1="-104.14" x2="22.86" y2="-104.14" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="-104.14" x2="22.86" y2="-111.76" width="0.1524" layer="91"/>
 </segment>
@@ -12277,8 +12275,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="5.08" y1="-58.42" x2="12.7" y2="-58.42" width="0.1524" layer="91"/>
 <pinref part="X_7" gate="G$1" pin="0"/>
 <wire x1="12.7" y1="-58.42" x2="12.7" y2="-60.96" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="PWR-"/>
-<junction x="5.08" y="-59.69"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="PWR-"/>
 </segment>
 <segment>
 <pinref part="JP2" gate="G$1" pin="1"/>
@@ -12313,7 +12310,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-63.5" y1="-10.16" x2="-76.2" y2="-10.16" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<portref moduleinst="TXS0108E1" port="A5"/>
+<portref moduleinst="TXS0108E" port="A5"/>
 <wire x1="-96.52" y1="-93.98" x2="-109.22" y2="-93.98" width="0.1524" layer="91"/>
 <label x="-109.22" y="-93.98" size="1.778" layer="95"/>
 </segment>
@@ -12325,7 +12322,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-63.5" y1="-12.7" x2="-76.2" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<portref moduleinst="TXS0108E1" port="A6"/>
+<portref moduleinst="TXS0108E" port="A6"/>
 <wire x1="-96.52" y1="-96.52" x2="-109.22" y2="-96.52" width="0.1524" layer="91"/>
 <label x="-109.22" y="-96.52" size="1.778" layer="95"/>
 </segment>
@@ -12337,7 +12334,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-63.5" y1="7.62" x2="-76.2" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<portref moduleinst="TXS0108E1" port="A2"/>
+<portref moduleinst="TXS0108E" port="A2"/>
 <wire x1="-96.52" y1="-86.36" x2="-109.22" y2="-86.36" width="0.1524" layer="91"/>
 <label x="-109.22" y="-86.36" size="1.778" layer="95"/>
 </segment>
@@ -12349,7 +12346,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-63.5" y1="5.08" x2="-76.2" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<portref moduleinst="TXS0108E1" port="A7"/>
+<portref moduleinst="TXS0108E" port="A7"/>
 <wire x1="-96.52" y1="-99.06" x2="-109.22" y2="-99.06" width="0.1524" layer="91"/>
 <label x="-109.22" y="-99.06" size="1.778" layer="95"/>
 </segment>
@@ -12363,7 +12360,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <wire x1="-15.24" y1="-88.9" x2="-55.88" y2="-88.9" width="0.1524" layer="91"/>
 <label x="-55.88" y="-88.9" size="1.778" layer="95"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="D5"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="D5"/>
 </segment>
 </net>
 <net name="R_SPD" class="0">
@@ -12375,15 +12372,15 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <wire x1="-15.24" y1="-91.44" x2="-55.88" y2="-91.44" width="0.1524" layer="91"/>
 <label x="-55.88" y="-91.44" size="1.778" layer="95"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="D6"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="D6"/>
 </segment>
 </net>
 <net name="PI_3V3" class="0">
 <segment>
-<portref moduleinst="TXS0108E1" port="OE"/>
+<portref moduleinst="TXS0108E" port="OE"/>
 <wire x1="-96.52" y1="-104.14" x2="-127" y2="-104.14" width="0.1524" layer="91"/>
 <wire x1="-127" y1="-104.14" x2="-127" y2="-81.28" width="0.1524" layer="91"/>
-<portref moduleinst="TXS0108E1" port="VA"/>
+<portref moduleinst="TXS0108E" port="VA"/>
 <wire x1="-127" y1="-81.28" x2="-96.52" y2="-81.28" width="0.1524" layer="91"/>
 <label x="-127" y="-81.28" size="1.778" layer="95"/>
 </segment>
@@ -12459,11 +12456,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="U$2" gate="G$1" pin="VCC"/>
 </segment>
 <segment>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="A0"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="A0"/>
 <wire x1="20.32" y1="-73.66" x2="22.86" y2="-73.66" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="5V"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="5V"/>
 <wire x1="22.86" y1="-96.52" x2="20.32" y2="-96.52" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="A1"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="A1"/>
 <wire x1="22.86" y1="-76.2" x2="20.32" y2="-76.2" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="-76.2" x2="22.86" y2="-96.52" width="0.1524" layer="91"/>
 <junction x="22.86" y="-76.2"/>
@@ -12473,7 +12470,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="27.94" y="-73.66" size="1.778" layer="95"/>
 <wire x1="-22.86" y1="-53.34" x2="22.86" y2="-53.34" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="-53.34" x2="22.86" y2="-73.66" width="0.1524" layer="91"/>
-<portref moduleinst="TXS0108E1" port="VB"/>
+<portref moduleinst="TXS0108E" port="VB"/>
 <wire x1="-66.04" y1="-81.28" x2="-22.86" y2="-81.28" width="0.1524" layer="91"/>
 <wire x1="-22.86" y1="-81.28" x2="-22.86" y2="-53.34" width="0.1524" layer="91"/>
 </segment>
@@ -12517,30 +12514,30 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </net>
 <net name="N$13" class="0">
 <segment>
-<portref moduleinst="TXS0108E1" port="B2"/>
+<portref moduleinst="TXS0108E" port="B2"/>
 <wire x1="-66.04" y1="-86.36" x2="-15.24" y2="-86.36" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="D4"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="D4"/>
 </segment>
 </net>
 <net name="N$14" class="0">
 <segment>
-<portref moduleinst="TXS0108E1" port="B5"/>
+<portref moduleinst="TXS0108E" port="B5"/>
 <wire x1="-66.04" y1="-93.98" x2="-15.24" y2="-93.98" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="D7"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="D7"/>
 </segment>
 </net>
 <net name="N$15" class="0">
 <segment>
-<portref moduleinst="TXS0108E1" port="B6"/>
+<portref moduleinst="TXS0108E" port="B6"/>
 <wire x1="-66.04" y1="-96.52" x2="-15.24" y2="-96.52" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="D8"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="D8"/>
 </segment>
 </net>
 <net name="N$16" class="0">
 <segment>
-<portref moduleinst="TXS0108E1" port="B7"/>
+<portref moduleinst="TXS0108E" port="B7"/>
 <wire x1="-66.04" y1="-99.06" x2="-15.24" y2="-99.06" width="0.1524" layer="91"/>
-<portref moduleinst="MONSTER_MOTO_SHIELD1" port="D9"/>
+<portref moduleinst="MONSTER_MOTO_SHIELD" port="D9"/>
 </segment>
 </net>
 <net name="N$3" class="0">

@@ -19,6 +19,8 @@ WORKDIR mexplore-ws
 run rosdep install --from-paths src --ignore-src -r -y
 RUN /bin/bash -c 'source ../hector_ws/devel/setup.bash && catkin_make'
 
+RUN pip install pathfinding
+
 WORKDIR /root
 COPY jaybot_ws jaybot_ws
 WORKDIR jaybot_ws

@@ -197,13 +197,10 @@ namespace RoverController
 
         public void startMap()
         {
-            setSpeed(20, (SetSpeedResponse _) =>
+            setMapParamsOn((rosapi.SetParamResponse __) =>
             {
-                setMapParamsOn((rosapi.SetParamResponse __) =>
-                {
-                    refreshMapParams();
-                    enqueue_command("a");
-                });
+                refreshMapParams();
+                enqueue_command("a");
             });
         }
 
@@ -213,6 +210,11 @@ namespace RoverController
             {
                 refreshMapParams();
             });
+        }
+
+        public void startPathfinding()
+        {
+            enqueue_command("p");
         }
 
         public void endChain(RosSharp.RosBridgeClient.Message msg) { }

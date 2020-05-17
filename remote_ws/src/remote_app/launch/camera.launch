@@ -18,7 +18,7 @@
     <param name="width" value="512"/>
     <param name="height" value="384"/>
 
-    <param name="framerate" value="15"/>
+    <param name="framerate" value="4"/>
     <param name="exposure_mode" value="antishake"/>
     <param name="shutter_speed" value="0"/>
   </node>
