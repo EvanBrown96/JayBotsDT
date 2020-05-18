@@ -4,9 +4,6 @@
 [submodule "jaybot_ws/src/raspicam_node"]
 	path = jaybot_ws/src/raspicam_node
 	url = https://github.com/UbiquityRobotics/raspicam_node
-[submodule "rosbridge_suite"]
-	path = rosbridge_suite
-	url = https://github.com/RobotWebTools/rosbridge_suite
 [submodule "hector_ws/src/hector_slam"]
 	path = hector_ws/src/hector_slam
 	url = https://github.com/EvanBrown96/hector_slam
